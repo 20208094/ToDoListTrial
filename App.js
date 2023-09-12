@@ -1,9 +1,13 @@
 import { StatusBar } from 'expo-status-bar';
-import React from 'react';
+import React, { Component } from 'react';
 import { StyleSheet, Text, View, SafeAreaView } from 'react-native';
+import SplashScreen from 'react-native-splash-screen'
 import TodoScreen from './src/screen/TodoScreen';
+import {NavigationContainer} from '@react-navigation/native';
 
 export default function App() {
+  
+  const Stack = createNativeStackNavigator();
   return (
     // <SafeAreaView>
     //   <View>
@@ -13,13 +17,12 @@ export default function App() {
     //     <ListView />
     //   </View>
     // </SafeAreaView>
-
-    <SafeAreaView>
-      <View>
-        <StatusBar style="auto" />
-        <TodoScreen />
-      </View>
-    </SafeAreaView>
+    <NavigationContainer>
+      <Stack.Navigator screenOptions={{headerShown: false}}>
+        <Stack.Screen name="Home" component={HomeScreen} />
+        <Stack.Screen name="Details" component={DetailScreen} />
+      </Stack.Navigator>
+  </NavigationContainer>
 
   );
 }

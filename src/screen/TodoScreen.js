@@ -78,31 +78,31 @@ const TodoScreen = () => {
     }
 
     return (
-        <View style={{ marginHorizontal: 16, marginTop: 50 }}>
-            {/* <Text>TodoScreen</Text> */}
+        <View style={{ marginHorizontal: 16, marginTop: 50, gap: 20}}>
+            <View style={styles.inputContainer}>
+                {/* <Text>TodoScreen</Text> */}
 
-            <TextInput style={{ borderWidth: 2, borderColor: "#1e90ff", borderRadius: 6, paddingVertical: 6, paddingHorizontal: 16, }}
-                placeholder='Add a Task'
-                value={todo}
-                onChangeText={(userText) => setTodo(userText)}
-            />
+                <TextInput style={{ borderWidth: 2, borderColor: "#1e90ff", borderRadius: 6, paddingVertical: 6, paddingHorizontal: 16, width: 300}}
+                    placeholder='Add a Task'
+                    value={todo}
+                    onChangeText={(userText) => setTodo(userText)}
+                />
 
-            
+                {
+                    editedTodo ? <TouchableOpacity
+                        style={{ backgroundColor: "#000", borderRadius: 6, paddingVertical: 12, marginVertical: 34, alignItems: "center" }}
+                        onPress={() => handleUpdateTodo()}
+                    >
+                        <Text style={{ color: "#fff", fontWeight: "bold", fontSize: 20 }}>Save</Text>
+                    </TouchableOpacity> :
+                        <TouchableOpacity style={styles.addButton} onPress={() => handleAddTodo()}>
+                            <Text style={styles.plusSign}>+</Text>
+                        </TouchableOpacity>
+                        
+                }
 
-            {
-                editedTodo ? <TouchableOpacity
-                    style={{ backgroundColor: "#000", borderRadius: 6, paddingVertical: 12, marginVertical: 34, alignItems: "center" }}
-                    onPress={() => handleUpdateTodo()}
-                >
-                    <Text style={{ color: "#fff", fontWeight: "bold", fontSize: 20 }}>Save</Text>
-                </TouchableOpacity> :
-                    <TouchableOpacity style={styles.addButton} onPress={() => handleAddTodo()}>
-                        <Text style={styles.plusSign}>+</Text>
-                    </TouchableOpacity>
-                    
-            }
-
-            {/* RENDER TO DO LIST */}
+                {/* RENDER TO DO LIST */}
+            </View>
             <FlatList data={todoList} renderItem={renderTodos} />
         </View>
 
@@ -114,23 +114,16 @@ export default TodoScreen
 
 const styles = StyleSheet.create({
 
-    addButton: {
-        position: 'absolute',
-        bottom: 1,
-        right: 1,
-        backgroundColor: '#FC5858',
-        width: 60,
-        height: 60,
-        borderRadius: 30,
-        alignItems: 'center',
+    inputContainer: {
+        gap: 20,
         justifyContent: 'center',
-        borderWidth: 2,
-        borderColor: 'white',
-        position: 'absolute',
-        bottom: 20,
-        right: 20,
+        width: '100%',
+        flexDirection: 'row'
     },
     plusSign: {
+        backgroundColor: 'red',
+        paddingHorizontal: 10,
+        borderRadius: 10,
         fontSize: 44,
         color: 'white',
     },
