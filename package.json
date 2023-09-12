@@ -7,7 +7,7 @@
     "android": "expo run:android",
     "ios": "expo run:ios",
     "web": "expo start --web",
-    "generate": "npx react-native generate-bootsplash ./src/assets/splash.gif --background-color=2EE59D   --logo-width=100 --assets-path=./src/assets --flavor=main"
+    "generate": "npx react-native generate-bootsplash ./src/assets/pencil.png --background-color=2EE59D  --logo-width=100 --assets-path=./src/assets --flavor=main"
   },
   "dependencies": {
     "@react-navigation/native": "^6.1.7",
@@ -27,5 +27,4 @@
     "@babel/core": "^7.20.0"
   },
   "private": true
-  
 }

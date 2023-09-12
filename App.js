@@ -4,6 +4,7 @@ import { StyleSheet, Text, View, SafeAreaView } from 'react-native';
 import SplashScreen from 'react-native-splash-screen'
 import TodoScreen from './src/screen/TodoScreen';
 import {NavigationContainer} from '@react-navigation/native';
+import {createNativeStackNavigator} from '@react-navigation/native-stack';
 
 export default function App() {
   
@@ -19,8 +20,7 @@ export default function App() {
     // </SafeAreaView>
     <NavigationContainer>
       <Stack.Navigator screenOptions={{headerShown: false}}>
-        <Stack.Screen name="Home" component={HomeScreen} />
-        <Stack.Screen name="Details" component={DetailScreen} />
+        <Stack.Screen name="Home" component={TodoScreen} />
       </Stack.Navigator>
   </NavigationContainer>
 
