@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { FlatList, StyleSheet, Text, TextInput, Touchable, TouchableOpacity, View, CheckBox } from 'react-native';
+import { FlatList, StyleSheet, Text, TextInput, Touchable, TouchableOpacity, View, } from 'react-native';
 import { IconButton } from 'react-native-paper';
 import Fallback from "../components/Fallback";
 
@@ -15,8 +15,6 @@ import Fallback from "../components/Fallback";
 
 
 // console.log(Date.now().toString())
-
-const [isSelected, setSelection] = useState(false);
 
 const TodoScreen = () => {
     // Init Local States
@@ -121,18 +119,6 @@ const TodoScreen = () => {
             <FlatList data={todoList} renderItem={renderTodos} />
 
             {todoList.length <= 0 && <Fallback />}
-
-            <View style={styles.container}>
-                <View style={styles.checkboxContainer}>
-                    <CheckBox
-                    value={isSelected}
-                    onValueChange={setSelection}
-                    style={styles.checkbox}
-                    />
-                    <Text style={styles.label}>Do you like React Native?</Text>
-                </View>
-                <Text>Is CheckBox selected: {isSelected ? '👍' : '👎'}</Text>
-            </View>
         </View>
 
         
@@ -142,19 +128,4 @@ const TodoScreen = () => {
 export default TodoScreen
 
 const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        alignItems: 'center',
-        justifyContent: 'center',
-      },
-      checkboxContainer: {
-        flexDirection: 'row',
-        marginBottom: 20,
-      },
-      checkbox: {
-        alignSelf: 'center',
-      },
-      label: {
-        margin: 8,
-      },
 });
