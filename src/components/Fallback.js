@@ -18,7 +18,7 @@ const Fallback = () => {
 					shadowOffset: { width: 0, height: 2 },
 					shadowOpacity: 0.8,
 					shadowRadius: 3,
-					marginTop: 550,
+					marginTop: 250,
 				}}
 			>
 				<Text style={{ color: "#fff" }}>Start Adding Your Task</Text>
