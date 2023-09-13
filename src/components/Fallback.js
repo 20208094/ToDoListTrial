@@ -20,7 +20,7 @@ const Fallback = () => {
 					shadowRadius: 4,
 				}}
 			>
-				<Text style={{ color: "black" }}>Start Adding Your Task</Text>
+				<Text style={{ color: "black", fontSize: 20}}>Start Adding Your Task</Text>
 			</View>
 		</View>
 	);
