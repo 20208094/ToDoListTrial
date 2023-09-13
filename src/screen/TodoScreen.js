@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { FlatList, StyleSheet, Text, TextInput, Touchable, TouchableOpacity, View, Modal, Pressable } from 'react-native';
+import { FlatList, StyleSheet, Text, TextInput, Touchable, TouchableOpacity, View, Modal, Pressable, Image } from 'react-native';
 import { IconButton, Checkbox } from 'react-native-paper';
 import Fallback from "../components/Fallback";
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -113,17 +113,18 @@ const TodoScreen = () => {
                     <View style={{ justifyContent: 'center', alignItems: 'center' }}>
                         <View style={{
                             margin: 20,
-                            marginTop: 300,
+                            marginTop: 310,
                             width: 390,
                             height: 270,
                             backgroundColor: 'white',
-                            borderRadius: 20,
                             padding: 35,
                             alignItems: 'center',
                             elevation: 10,
                             fontSize: 20,
-                            borderColor: 'black',
-                            borderWidth: 2
+                            borderColor: '#FC5858',
+                            borderTopRightRadius: 50,
+                            borderBottomLeftRadius: 50,
+                            borderWidth: 5
                         }}>
                             <Text style={{fontSize: 30, backgroundColor:'white', fontWeight:'bold', padding:5, width:300, textAlign:'center', borderRadius: 20, marginTop:20, borderColor: '#FC5858', borderWidth:3, marginBottom:25}}>Do you really want to delete this task?</Text>
                             
@@ -144,15 +145,22 @@ const TodoScreen = () => {
     }
 
     return (
-        <View style={{ marginHorizontal: 16, marginTop: 50, fontSize: 20}}>
+        <View style={{ marginHorizontal: 16, marginTop: 250, fontSize: 20}}>
+            <View style={{flexDirection: 'row', borderColor: '#FC5858', backgroundColor: '#dbdbdb', borderWidth: 8, marginStart: -30, paddingStart: 65, alignItems: 'center', borderTopRightRadius: 50, borderBottomRightRadius: 50, justifyContent: 'center', width: 340, marginTop: -150}}>
+                <Text style={{fontSize: 30, fontWeight: 'bold'}}>Assigment App</Text>
+                <Image
+                    source={require("../../assets/splash.png")}
+                    style={{ height: 80, width: 80, marginBottom: 10, marginEnd: 20}}
+                />
+            </View>
             <View>
-                <Text style={{ fontSize: 50, textAlign: 'center', fontWeight: 'bold', marginVertical: 17 }}>
+                <Text style={{ fontSize: 50, textAlign: 'center', fontWeight: 'bold', marginBottom: 17, marginTop: 75 }}>
                     Tasks
                 </Text>
             </View>
-            <View style={{ backgroundColor: '#FC5858', borderRadius: 10, borderBottomRightRadius: 20, borderBottomLeftRadius: 20, height: 650, marginTop: 5, padding: 20, fontSize: 20}}>
+            <View style={{ backgroundColor: '#FC5858', borderTopRightRadius: 40, borderBottomLeftRadius: 40, height: 650, marginTop: 5, padding: 20, fontSize: 20}}>
 
-                <View style={{ backgroundColor: '#dbdbdb', padding: 10, height: 600, borderRadius: 6 }}>
+                <View style={{ backgroundColor: '#dbdbdb', padding: 10, height: 610, borderRadius: 6 }}>
                     {todoList.length <= 0 && <Fallback />}
 
                     {/* RENDER TO DO LIST */}
@@ -176,13 +184,14 @@ const TodoScreen = () => {
                             width: 390,
                             height: 470,
                             backgroundColor: 'white',
-                            borderRadius: 20,
                             padding: 35,
                             alignItems: 'center',
                             elevation: 10,
                             fontSize: 20,
-                            borderColor: 'black',
-                            borderWidth: 2
+                            borderColor: '#FC5858',
+                            borderTopRightRadius: 50,
+                            borderBottomLeftRadius: 50,
+                            borderWidth: 5
                         }}>
                             <Text style={{fontSize: 40, backgroundColor:'#FC5858', fontWeight:'bold', padding:5, width:230, textAlign:'center', borderRadius: 20, marginTop:20}}>Add Task</Text>
 
@@ -227,13 +236,14 @@ const TodoScreen = () => {
                             width: 390,
                             height: 470,
                             backgroundColor: 'white',
-                            borderRadius: 20,
                             padding: 35,
                             alignItems: 'center',
                             elevation: 10,
                             fontSize: 20,
-                            borderColor: 'black',
-                            borderWidth: 2
+                            borderColor: '#FC5858',
+                            borderTopRightRadius: 50,
+                            borderBottomLeftRadius: 50,
+                            borderWidth: 5
                         }}>
                             <Text style={{fontSize: 40, backgroundColor:'#FC5858', fontWeight:'bold', padding:5, width:230, textAlign:'center', borderRadius: 20, marginTop:20}}>Edit Task</Text>
 
@@ -270,10 +280,10 @@ const TodoScreen = () => {
                         borderRadius: 80,
                         alignItems: 'center',
                         justifyContent: 'center',
-                        borderWidth: 3,
+                        borderWidth: 7,
                         borderColor: 'white',
-                        bottom: 20,
-                        right: 10,}}>
+                        bottom: 8,
+                        right: 8,}}>
                     <Text style={{fontSize: 50, color: 'white',}}>+</Text>
                     </View>
                 </Pressable>
