@@ -147,27 +147,6 @@ const TodoScreen = () => {
         )
     }
 
-    const renderChecked = ({ item, index }) => {
-        return (
-            <View style={{ backgroundColor: "white", borderRadius: 6, paddingHorizontal: 6, paddingVertical: 6, marginBottom: 12, flexDirection: 'row', alignItems: "center", paddingLeft: 15, marginTop:12 }}>
-                <Checkbox
-                        status={checkedItems[item.id] ? 'checked' : 'unchecked'}
-                        onPress={() => {
-                            const newCheckedItems = { ...checkedItems };
-                            newCheckedItems[item.id] = !checkedItems[item.id];
-                            setCheckedItems(newCheckedItems);
-                            saveCheckedItemsToStorage(newCheckedItems); // Save the updated checkedItems
-                        }}
-                />
-                <Text style={{ color: 'black', fontSize: 20, fontWeight: '800', flex: 1, marginHorizontal: 10 }} numberOfLines={2} ellipsizeMode="tail">{item.title}</Text>
-
-                <IconButton icon="pencil" iconColor='darkblue' onPress={() => handleEditTodo(item)} />
-                {/* <IconButton icon="trash-can" iconColor='red' onPress={() => handleDeleteTodo(item.id)} /> */}
-                <IconButton icon="trash-can" iconColor='red' onPress={() => handleDeleteConfirmTodo(item)} />
-            </View>
-        )
-    }
-
     return (
         <View style={{ marginHorizontal: 16, marginTop: 200, fontSize: 20}}>
             <View style={{flexDirection: 'row', borderColor: '#FC5858', backgroundColor: '#dbdbdb', borderWidth: 8, marginStart: -30, paddingStart: 40, alignItems: 'center', borderTopRightRadius: 50, borderBottomRightRadius: 50, justifyContent: 'center', width: 340, marginTop: -150}}>
@@ -182,9 +161,24 @@ const TodoScreen = () => {
                     Tasks
                 </Text>
             </View>
-            <View style={{ backgroundColor: '#FC5858', borderTopRightRadius: 40, borderBottomLeftRadius: 40, height: 500, marginTop: 5, padding: 20, fontSize: 20}}>
+            <View style={{ backgroundColor: '#FC5858', borderTopRightRadius: 40, borderBottomLeftRadius: 40, height: 440, marginTop: 5, padding: 20, fontSize: 20}}>
 
-                <View style={{ backgroundColor: '#dbdbdb', padding: 10, height: 450, borderRadius: 6, borderColor: '#fff', borderWidth: 5 }}>
+                <View style={{ backgroundColor: '#dbdbdb', padding: 10, height: 400, borderRadius: 6, borderColor: '#fff', borderWidth: 5 }}>
+                    {todoList.length <= 0 && <Fallback />}
+
+                    {/* RENDER TO DO LIST */}
+                    <FlatList data={todoList} renderItem={renderTodos} />
+                </View>
+            </View>
+
+            <View>
+                <Text style={{ fontSize: 30, textAlign: 'center', fontWeight: 'bold', marginBottom: 17, marginTop: 25 }}>
+                    Done Tasks
+                </Text>
+            </View>
+            <View style={{ backgroundColor: '#FC5858', borderTopRightRadius: 40, borderBottomLeftRadius: 40, height: 300, marginTop: 5, padding: 20, fontSize: 20}}>
+
+                <View style={{ backgroundColor: '#dbdbdb', padding: 10, height: 260, borderRadius: 6, borderColor: '#fff', borderWidth: 5 }}>
                     {todoList.length <= 0 && <Fallback />}
 
                     {/* RENDER TO DO LIST */}
@@ -344,7 +338,7 @@ const TodoScreen = () => {
                         justifyContent: 'center',
                         borderWidth: 7,
                         borderColor: 'white',
-                        bottom: 8,
+                        bottom: 390,
                         right: 8,}}>
                     <Text style={{fontSize: 50, color: 'white',}}>+</Text>
                     </View>
