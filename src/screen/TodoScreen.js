@@ -125,27 +125,46 @@ const TodoScreen = () => {
 
     //render todo
     const renderTodos = ({ item, index }) => {
-        return (
-            <View style={{ backgroundColor: "white", borderRadius: 6, paddingHorizontal: 6, paddingVertical: 6, marginBottom: 12, flexDirection: 'row', alignItems: "center", paddingLeft: 15 }}>
-                <Checkbox
-                        status={checkedItems[item.id] ? 'checked' : 'unchecked'}
+        // Check if the item is checked or not
+        const isChecked = checkedItems[item.id];
+
+        if (!isChecked) {
+            // Render unchecked items in the task list
+            return (
+                <View style={{ backgroundColor: "white", borderRadius: 6, paddingHorizontal: 6, paddingVertical: 6, marginBottom: 12, flexDirection: 'row', alignItems: "center", paddingLeft: 15 }}>
+                    <Checkbox
+                        status={isChecked ? 'checked' : 'unchecked'}
                         onPress={() => {
                             const newCheckedItems = { ...checkedItems };
-                            newCheckedItems[item.id] = !checkedItems[item.id];
+                            newCheckedItems[item.id] = !isChecked;
                             setCheckedItems(newCheckedItems);
                             saveCheckedItemsToStorage(newCheckedItems); // Save the updated checkedItems
                         }}
-                />
-                <Text style={{ color: 'black', fontSize: 20, fontWeight: '800', flex: 1, marginHorizontal: 10 }} numberOfLines={2} ellipsizeMode="tail">{item.title}</Text>
-
-
-
-                <IconButton icon="pencil" iconColor='darkblue' onPress={() => handleEditTodo(item)} />
-                {/* <IconButton icon="trash-can" iconColor='red' onPress={() => handleDeleteTodo(item.id)} /> */}
-                <IconButton icon="trash-can" iconColor='red' onPress={() => handleDeleteConfirmTodo(item)} />
-            </View>
-        )
+                    />
+                    <Text style={{ color: 'black', fontSize: 20, fontWeight: '800', flex: 1, marginHorizontal: 10 }} numberOfLines={2} ellipsizeMode="tail">{item.title}</Text>
+                    <IconButton icon="pencil" iconColor='darkblue' onPress={() => handleEditTodo(item)} />
+                    <IconButton icon="trash-can" iconColor='red' onPress={() => handleDeleteConfirmTodo(item)} />
+                </View>
+            );
+        } else {
+            // Render checked items in the "Done Tasks" section
+            return (
+                <View style={{ backgroundColor: "lightgreen", borderRadius: 6, paddingHorizontal: 6, paddingVertical: 6, marginBottom: 12, flexDirection: 'row', alignItems: "center", paddingLeft: 15 }}>
+                    <Checkbox
+                        status={isChecked ? 'checked' : 'unchecked'}
+                        onPress={() => {
+                            const newCheckedItems = { ...checkedItems };
+                            newCheckedItems[item.id] = !isChecked;
+                            setCheckedItems(newCheckedItems);
+                            saveCheckedItemsToStorage(newCheckedItems); // Save the updated checkedItems
+                        }}
+                    />
+                    <Text style={{ color: 'black', fontSize: 20, fontWeight: '800', flex: 1, marginHorizontal: 10, textDecorationLine: 'line-through', color: 'gray' }} numberOfLines={2} ellipsizeMode="tail">{item.title}</Text>
+                </View>
+            );
+        }
     }
+
 
     return (
         <View style={{ marginHorizontal: 16, marginTop: 200, fontSize: 20}}>
@@ -171,20 +190,6 @@ const TodoScreen = () => {
                 </View>
             </View>
 
-            <View>
-                <Text style={{ fontSize: 30, textAlign: 'center', fontWeight: 'bold', marginBottom: 17, marginTop: 25 }}>
-                    Done Tasks
-                </Text>
-            </View>
-            <View style={{ backgroundColor: '#FC5858', borderTopRightRadius: 40, borderBottomLeftRadius: 40, height: 300, marginTop: 5, padding: 20, fontSize: 20}}>
-
-                <View style={{ backgroundColor: '#dbdbdb', padding: 10, height: 260, borderRadius: 6, borderColor: '#fff', borderWidth: 5 }}>
-                    {todoList.length <= 0 && <Fallback />}
-
-                    {/* RENDER TO DO LIST */}
-                    <FlatList data={todoList} renderItem={renderTodos} />
-                </View>
-            </View>
             {/* DELETE MODAL */}
             <Modal
                     transparent={true}
