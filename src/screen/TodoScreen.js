@@ -9,6 +9,7 @@ const TodoScreen = () => {
     const [todo, setTodo] = useState("");
     const [todoList, setTodoList] = useState([])
     const [editedTodo, setEditedTodo] = useState(null);
+    const [deleteConfirmTodo, setDeleteConfirmTodo] = useState(null);
     const [checkedItems, setCheckedItems] = React.useState({});
     const [modalAddVisible, setModalAddVisible] = useState(false);
     const [modalEditVisible, setModalEditVisible] = useState(false);
@@ -42,7 +43,7 @@ const TodoScreen = () => {
         if (todo === "") {
             return;
         }
-        const newTodo = { id: Date.now().toString(), title: todo };
+        const newTodo = { id: Date.now().toString(), title: todo, check:"check" };
         setTodoList([...todoList, newTodo]);
         setTodo("");
         saveTodoListToStorage([...todoList, newTodo]); // Save the updated list
@@ -50,6 +51,15 @@ const TodoScreen = () => {
         // Close the modal after adding a todo item
         setModalAddVisible(false)
     };
+
+    // Handle Delete confirmation Todo
+    const handleDeleteConfirmTodo = (todo) => {
+        setDeleteConfirmTodo(todo);
+        setTodo(todo.id);
+        // Now, you can perform any additional actions related to editing 'item' here.
+        // For example, you can open a modal for editing.
+        setModalDeleteVisible(true);
+    }
 
     // Handle Delete Todo
     const handleDeleteTodo = (id) => {
@@ -59,12 +69,6 @@ const TodoScreen = () => {
         // Close the modal after deleting a todo item
         setModalDeleteVisible(false)
     }
-
-    // Handle Edit Todo
-    // const handleEditTodo = (todo) => {
-    //     setEditedTodo(todo);
-    //     setTodo(todo.title);
-    // }
 
     // Handle Edit Todo
     const handleEditTodo = (todo) => {
@@ -77,6 +81,10 @@ const TodoScreen = () => {
 
     // Handle Update Todo
     const handleUpdateTodo = () => {
+        
+        if (todo === "") {
+            return;
+        }
         const updatedTodos = todoList.map((item) => {
             if (item.id === editedTodo.id) {
                 return { ...item, title: todo };
@@ -100,10 +108,36 @@ const TodoScreen = () => {
                 <Text style={{ color: 'black', fontSize: 20, fontWeight: '800', flex: 1, marginHorizontal: 10 }} numberOfLines={2} ellipsizeMode="tail">{item.title}</Text>
                 <IconButton icon="pencil" iconColor='darkblue' onPress={() => handleEditTodo(item)} />
                 {/* <IconButton icon="trash-can" iconColor='red' onPress={() => handleDeleteTodo(item.id)} /> */}
-                <IconButton icon="trash-can" iconColor='red' onPress={() => setModalDeleteVisible(true)} />
-                
-                {/* DELETE MODAL */}
-                <Modal
+                <IconButton icon="trash-can" iconColor='red' onPress={() => handleDeleteConfirmTodo(item)} />
+            </View>
+        )
+    }
+
+    return (
+        <View style={{ marginHorizontal: 16, marginTop: 200, fontSize: 20}}>
+            <View style={{flexDirection: 'row', borderColor: '#FC5858', backgroundColor: '#dbdbdb', borderWidth: 8, marginStart: -30, paddingStart: 40, alignItems: 'center', borderTopRightRadius: 50, borderBottomRightRadius: 50, justifyContent: 'center', width: 340, marginTop: -150}}>
+                <Text style={{fontSize: 30, fontWeight: 'bold'}}>Assigment App</Text>
+                <Image
+                    source={require("../../assets/splash.png")}
+                    style={{ height: 80, width: 80, marginBottom: 10, marginEnd: 20}}
+                />
+            </View>
+            <View>
+                <Text style={{ fontSize: 30, textAlign: 'center', fontWeight: 'bold', marginBottom: 17, marginTop: 25 }}>
+                    Tasks
+                </Text>
+            </View>
+            <View style={{ backgroundColor: '#FC5858', borderTopRightRadius: 40, borderBottomLeftRadius: 40, height: 500, marginTop: 5, padding: 20, fontSize: 20}}>
+
+                <View style={{ backgroundColor: '#dbdbdb', padding: 10, height: 450, borderRadius: 6, borderColor: '#fff', borderWidth: 5 }}>
+                    {todoList.length <= 0 && <Fallback />}
+
+                    {/* RENDER TO DO LIST */}
+                    <FlatList data={todoList} renderItem={renderTodos} />
+                </View>
+            </View>
+            {/* DELETE MODAL */}
+            <Modal
                     transparent={true}
                     visible={modalDeleteVisible}
                     onRequestClose={() => {
@@ -129,7 +163,7 @@ const TodoScreen = () => {
                             <Text style={{fontSize: 30, backgroundColor:'white', fontWeight:'bold', padding:5, width:300, textAlign:'center', borderRadius: 20, marginTop:20, borderColor: '#FC5858', borderWidth:3, marginBottom:25}}>Do you really want to delete this task?</Text>
                             
                             <View style={{flexDirection: 'row', justifyContent: 'space-between', alignContent: 'center', overflow: 'hidden', paddingStart:30}}>
-                                <Pressable style={{backgroundColor: '#FB3854',width: '60%',height: 40,justifyContent: 'center',alignItems: 'center',borderRadius: 30,zIndex: 1}} onPress={() => handleDeleteTodo(item.id)}>
+                                <Pressable style={{backgroundColor: '#FB3854',width: '60%',height: 40,justifyContent: 'center',alignItems: 'center',borderRadius: 30,zIndex: 1}} onPress={() => handleDeleteTodo(todo)}>
                                 <Text style={{color: 'white', fontWeight: 'bold'}}>Delete</Text>
                                 </Pressable>
 
@@ -140,33 +174,6 @@ const TodoScreen = () => {
                         </View>
                     </View>
                 </Modal>
-            </View>
-        )
-    }
-
-    return (
-        <View style={{ marginHorizontal: 16, marginTop: 250, fontSize: 20}}>
-            <View style={{flexDirection: 'row', borderColor: '#FC5858', backgroundColor: '#dbdbdb', borderWidth: 8, marginStart: -30, paddingStart: 65, alignItems: 'center', borderTopRightRadius: 50, borderBottomRightRadius: 50, justifyContent: 'center', width: 340, marginTop: -150}}>
-                <Text style={{fontSize: 30, fontWeight: 'bold'}}>Assigment App</Text>
-                <Image
-                    source={require("../../assets/splash.png")}
-                    style={{ height: 80, width: 80, marginBottom: 10, marginEnd: 20}}
-                />
-            </View>
-            <View>
-                <Text style={{ fontSize: 50, textAlign: 'center', fontWeight: 'bold', marginBottom: 17, marginTop: 75 }}>
-                    Tasks
-                </Text>
-            </View>
-            <View style={{ backgroundColor: '#FC5858', borderTopRightRadius: 40, borderBottomLeftRadius: 40, height: 650, marginTop: 5, padding: 20, fontSize: 20}}>
-
-                <View style={{ backgroundColor: '#dbdbdb', padding: 10, height: 610, borderRadius: 6 }}>
-                    {todoList.length <= 0 && <Fallback />}
-
-                    {/* RENDER TO DO LIST */}
-                    <FlatList data={todoList} renderItem={renderTodos} />
-                </View>
-            </View>
             <View>
                 {/* ADD MODAL */}
                 <Modal

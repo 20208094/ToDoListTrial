@@ -6,7 +6,7 @@ const Fallback = () => {
 		<View style={{ alignItems: "center" }}>
 			<Image
 				source={require("../../assets/to-do-list.png")}
-				style={{ height: 300, width: 300 }}
+				style={{ height: 230, width: 230 }}
 			/>
 			<View
 				style={{
