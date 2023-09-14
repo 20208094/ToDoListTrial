@@ -29,6 +29,20 @@ const TodoScreen = () => {
             });
     }, []); // Empty dependency array means this effect runs once when the component mounts
 
+        // Load the checkedItems from AsyncStorage when the component mounts
+        useEffect(() => {
+            AsyncStorage.getItem('checkedItems')
+                .then((storedCheckedItems) => {
+                    if (storedCheckedItems) {
+                        const parsedCheckedItems = JSON.parse(storedCheckedItems);
+                        setCheckedItems(parsedCheckedItems);
+                    }
+                })
+                .catch((error) => {
+                    console.error('Error loading checkedItems: ', error);
+                });
+        }, []);
+
     // Function to save the todoList to AsyncStorage
     const saveTodoListToStorage = async (list) => {
         try {
@@ -38,12 +52,21 @@ const TodoScreen = () => {
         }
     };
 
+    // Function to save the checkedItems to AsyncStorage
+    const saveCheckedItemsToStorage = async (items) => {
+        try {
+            await AsyncStorage.setItem('checkedItems', JSON.stringify(items));
+        } catch (error) {
+            console.error('Error saving checkedItems: ', error);
+        }
+    };
+
     // Handle Add Todo
     const handleAddTodo = () => {
         if (todo === "") {
             return;
         }
-        const newTodo = { id: Date.now().toString(), title: todo, check:"check" };
+        const newTodo = { id: Date.now().toString(), title: todo };
         setTodoList([...todoList, newTodo]);
         setTodo("");
         saveTodoListToStorage([...todoList, newTodo]); // Save the updated list
@@ -104,8 +127,40 @@ const TodoScreen = () => {
     const renderTodos = ({ item, index }) => {
         return (
             <View style={{ backgroundColor: "white", borderRadius: 6, paddingHorizontal: 6, paddingVertical: 6, marginBottom: 12, flexDirection: 'row', alignItems: "center", paddingLeft: 15 }}>
-                <Checkbox status={checkedItems[item.id] ? 'checked' : 'unchecked'} onPress={() => { const newCheckedItems = { ...checkedItems }; newCheckedItems[item.id] = !checkedItems[item.id]; setCheckedItems(newCheckedItems); }} />
+                <Checkbox
+                        status={checkedItems[item.id] ? 'checked' : 'unchecked'}
+                        onPress={() => {
+                            const newCheckedItems = { ...checkedItems };
+                            newCheckedItems[item.id] = !checkedItems[item.id];
+                            setCheckedItems(newCheckedItems);
+                            saveCheckedItemsToStorage(newCheckedItems); // Save the updated checkedItems
+                        }}
+                />
                 <Text style={{ color: 'black', fontSize: 20, fontWeight: '800', flex: 1, marginHorizontal: 10 }} numberOfLines={2} ellipsizeMode="tail">{item.title}</Text>
+
+
+
+                <IconButton icon="pencil" iconColor='darkblue' onPress={() => handleEditTodo(item)} />
+                {/* <IconButton icon="trash-can" iconColor='red' onPress={() => handleDeleteTodo(item.id)} /> */}
+                <IconButton icon="trash-can" iconColor='red' onPress={() => handleDeleteConfirmTodo(item)} />
+            </View>
+        )
+    }
+
+    const renderChecked = ({ item, index }) => {
+        return (
+            <View style={{ backgroundColor: "white", borderRadius: 6, paddingHorizontal: 6, paddingVertical: 6, marginBottom: 12, flexDirection: 'row', alignItems: "center", paddingLeft: 15, marginTop:12 }}>
+                <Checkbox
+                        status={checkedItems[item.id] ? 'checked' : 'unchecked'}
+                        onPress={() => {
+                            const newCheckedItems = { ...checkedItems };
+                            newCheckedItems[item.id] = !checkedItems[item.id];
+                            setCheckedItems(newCheckedItems);
+                            saveCheckedItemsToStorage(newCheckedItems); // Save the updated checkedItems
+                        }}
+                />
+                <Text style={{ color: 'black', fontSize: 20, fontWeight: '800', flex: 1, marginHorizontal: 10 }} numberOfLines={2} ellipsizeMode="tail">{item.title}</Text>
+
                 <IconButton icon="pencil" iconColor='darkblue' onPress={() => handleEditTodo(item)} />
                 {/* <IconButton icon="trash-can" iconColor='red' onPress={() => handleDeleteTodo(item.id)} /> */}
                 <IconButton icon="trash-can" iconColor='red' onPress={() => handleDeleteConfirmTodo(item)} />
