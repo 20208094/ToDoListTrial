@@ -178,7 +178,7 @@ const TodoScreen = () => {
                 />
             </View>
             <View>
-                <Text style={{ fontSize: 30, textAlign: 'center', fontWeight: 'bold', marginBottom: 17, marginTop: 25 }}>
+                <Text style={{ fontSize: 50, textAlign: 'center', fontWeight: 'bold', marginBottom: 10, marginTop: 15 }}>
                     Tasks
                 </Text>
             </View>

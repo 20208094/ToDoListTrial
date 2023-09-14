@@ -4,3 +4,23 @@ npm install react-native-paper = free icons for buttons/texts
 
 
 https://www.youtube.com/watch?v=cmXZNGXjXPM
+
+
+export to apk guide:
+https://www.youtube.com/watch?v=V52RteeXLrI
+
+npm install -g eas-cli 
+eas build -p android
+    it will ask for login
+    press Ctrl C if que started
+
+go to https://docs.expo.dev/build-reference/apk/
+    look for eas.json
+    copy "build" to "preview3"
+
+go to eas.json file
+    paste changes 
+
+go back to https://docs.expo.dev/build-reference/apk/
+    run the terminal code:
+    eas build -p android --profile preview
