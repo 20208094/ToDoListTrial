@@ -3,6 +3,10 @@ SafeAreaView = para di masakop pati notif bar sa taas ng phone
 npm install react-native-paper = free icons for buttons/texts
 
 
+
+
+
+
 https://www.youtube.com/watch?v=cmXZNGXjXPM
 
 
