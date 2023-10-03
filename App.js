@@ -1,8 +1,8 @@
 import { StatusBar } from 'expo-status-bar';
 import React from 'react';
 import { StyleSheet, Text, View, SafeAreaView } from 'react-native';
-import TodoScreen from './src/screen/TodoScreen';
-
+import { NavigationContainer } from '@react-navigation/native';
+import BottomTab from './src/navigation/BottomTab';
 export default function App() {
   return (
     // <SafeAreaView>
@@ -13,13 +13,9 @@ export default function App() {
     //     <ListView />
     //   </View>
     // </SafeAreaView>
-
-    <SafeAreaView>
-      <View>
-        <StatusBar style="auto" />
-        <TodoScreen />
-      </View>
-    </SafeAreaView>
+    <NavigationContainer>
+      <BottomTab/>
+    </NavigationContainer>
 
   );
 }
