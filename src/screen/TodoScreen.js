@@ -91,6 +91,16 @@ const TodoScreen = () => {
         setModalEditVisible(false)
     }
 
+    // Function to save the todoList to AsyncStorage
+    const saveTodoListToStorage = async (list) => {
+        try {
+            await AsyncStorage.setItem('todoList', JSON.stringify(list));
+        } catch (error) {
+            console.error('Error saving todoList: ', error);
+        }
+    };
+
+
     //render todo
     const renderTodos = ({ item, index }) => {
         return (

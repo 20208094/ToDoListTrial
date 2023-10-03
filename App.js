@@ -13,9 +13,8 @@ export default function App() {
     //     <ListView />
     //   </View>
     // </SafeAreaView>
-    <NavigationContainer>
-      <BottomTab/>
-    </NavigationContainer>
+    <BottomTab/>
+
 
   );
 }

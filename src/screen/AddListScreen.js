@@ -16,15 +16,6 @@ const AddListScreen = ({navigation}) => {
     const [modalDeleteVisible, setModalDeleteVisible] = useState(false);
 
     
-    // Function to save the todoList to AsyncStorage
-    const saveTodoListToStorage = async (list) => {
-        try {
-            await AsyncStorage.setItem('todoList', JSON.stringify(list));
-        } catch (error) {
-            console.error('Error saving todoList: ', error);
-        }
-    };
-
     // Function to save the checkedItems to AsyncStorage
     const saveCheckedItemsToStorage = async (items) => {
         try {
@@ -33,7 +24,7 @@ const AddListScreen = ({navigation}) => {
             console.error('Error saving checkedItems: ', error);
         }
     };
-
+    
 
        // Handle Add Todo
        const handleAddTodo = () => {
@@ -45,7 +36,9 @@ const AddListScreen = ({navigation}) => {
         setTodo("");
         saveTodoListToStorage([...todoList, newTodo]); // Save the updated list
 
-        navigation.navigate()
+        navigation.navigate('Home', {
+            todo,
+          })
 
     };
 
