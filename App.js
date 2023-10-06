@@ -1,26 +1,27 @@
 import { StatusBar } from 'expo-status-bar';
 import React from 'react';
 import { StyleSheet, Text, View, SafeAreaView } from 'react-native';
+import { NavigationContainer } from '@react-navigation/native';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+//Imported Screens
 import TodoScreen from './src/screen/TodoScreen';
+import AddScreen from './src/screen/AddScreen';
+import EditScreen from './src/screen/EditScreen';
+import AnalyticsScreen from './src/screen/AnalyticsScreen';
+
+const Stack = createNativeStackNavigator();
 
 export default function App() {
   return (
-    // <SafeAreaView>
-    //   <View>
-    //     {/* <Text>Open up App.js to start working on your app!</Text>
-    //     <StatusBar style="auto" /> */}
-    //     {/* <TodoScreen/> */}
-    //     <ListView />
-    //   </View>
-    // </SafeAreaView>
-
-    <SafeAreaView>
-      <View>
-        <StatusBar style="auto" />
-        <TodoScreen />
-      </View>
-    </SafeAreaView>
-
+    <NavigationContainer>
+      <Stack.Navigator>
+        <Stack.Screen name="Todo" component={TodoScreen} options={{ headerShown: false }} />
+        <Stack.Screen name="Add" component={AddScreen} options={{ headerShown: false }} />
+        <Stack.Screen name="Edit" component={EditScreen} options={{ headerShown: false }} />
+        <Stack.Screen name="Analytics" component={AnalyticsScreen} options={{ headerShown: false }} />
+      </Stack.Navigator>
+      <StatusBar style="auto" />
+    </NavigationContainer>
   );
 }
 

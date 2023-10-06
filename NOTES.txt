@@ -1,6 +1,12 @@
 SafeAreaView = para di masakop pati notif bar sa taas ng phone
 
-npm install react-native-paper = free icons for buttons/texts
+npm install react-native-paper
+
+npx expo install react-native-screens react-native-safe-area-context
+npm install @react-navigation/native @react-navigation/native-stack
+
+npm install react-native-chart-kit
+
 
 
 https://www.youtube.com/watch?v=cmXZNGXjXPM
