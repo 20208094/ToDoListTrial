@@ -9,11 +9,6 @@
     "splash": {
       "image": "./assets/splash.png",
       "resizeMode": "contain"
-    },
-    "extra": {
-      "eas": {
-        "projectId": "b02b1d81-fcb8-4a90-9a64-e4fd8d11e95d"
-      }
     }
   },
   "name": "ToDoList"

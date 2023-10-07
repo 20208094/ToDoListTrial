@@ -76,14 +76,14 @@ const TodoScreen = ({ navigation }) => {
     };
 
     const handleEditPress = (item) => {
-        navigation.navigate('Edit', { nestedObject: { id: item.id, title: item.title } });
+        navigation.navigate('Edit', { nestedObject: { id: item.id, title: item.title, due: item.due, desc: item.desc } });
     };
 
     const renderTodos = ({ item, index }) => {
       // Check if the item is unchecked
       if (!checkedItems[item.id]) {
           return (
-              <View style={{ backgroundColor: "white", borderRadius: 6, paddingHorizontal: 6, paddingVertical: 6, marginBottom: 12, flexDirection: 'row', alignItems: "center", paddingLeft: 15 }}>
+              <View style={{ backgroundColor: "white", borderRadius: 6, paddingHorizontal: 6, paddingVertical: 6, marginBottom: 12, flexDirection: 'row', alignItems: "center", paddingLeft: 15, justifyContent: 'space-between' }}>
                   <Checkbox
                       status={checkedItems[item.id] ? 'checked' : 'unchecked'}
                       onPress={() => {
@@ -93,7 +93,11 @@ const TodoScreen = ({ navigation }) => {
                           saveCheckedItemsToStorage(newCheckedItems);
                       }}
                   />
-                  <Text style={{ color: 'black', fontSize: 20, fontWeight: '800', flex: 1, marginHorizontal: 10 }} numberOfLines={2} ellipsizeMode="tail">{item.title}</Text>
+                 <View>
+                  <Text style={{textAlign: 'center'}}>{item.due}</Text>
+                    <Text style={{ color: 'black', fontSize: 20, fontWeight: '800', flex: 1, marginHorizontal: 10 }} numberOfLines={2} ellipsizeMode="tail">{item.title}, {item.desc} </Text>
+                 </View>
+
                   <IconButton icon="pencil" iconColor='darkblue' onPress={() => handleEditPress(item)} />
                   <IconButton icon="trash-can" iconColor='red' onPress={() => handleDeleteConfirmTodo(item)} />
               </View>

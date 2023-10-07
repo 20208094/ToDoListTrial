@@ -1,25 +1,33 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, StyleSheet, Pressable } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import BottomNavigation from '../navigation/BottomNav';
+import DateTimePicker from "@react-native-community/datetimepicker";
 import { useRoute } from '@react-navigation/native';
 
 const EditScreen = ({ navigation }) => {
   const [todo, setTodo] = useState("");
+  const [due, setDue] = useState(new Date());
+  const [desc, setDesc] = useState("");
+  const [showPicker, setShowPicker] = useState(false);
   const [todoList, setTodoList] = useState([]);
   const [editedTodo, setEditedTodo] = useState(null);
 
   const route = useRoute();
   const taskId = route.params?.nestedObject?.id;
   const taskTitle = route.params?.nestedObject?.title;
-  
+  const taskDue = route.params?.nestedObject?.due;
+  const taskDesc = route.params?.nestedObject?.desc;
 
   useEffect(() => {
-    if (taskId !== undefined && taskTitle !== undefined) {
+    if (taskId !== undefined && taskTitle !== undefined && taskDue !== undefined && taskDesc !== undefined) {
       setTodo(taskTitle);
-      setEditedTodo({ id: taskId, title: taskTitle });
+      setDue(taskDue)
+      setDesc(taskDesc);
+      setEditedTodo({ id: taskId, title: taskTitle, due: taskDue, desc: taskDesc });
     }
-  }, [taskId, taskTitle]);
+  }, [taskId, taskTitle, taskDue, taskDesc]);
+  
 
   useEffect(() => {
     const fetchTodoList = async () => {
@@ -36,6 +44,35 @@ const EditScreen = ({ navigation }) => {
     fetchTodoList();
   }, []);
 
+  const toggleDatePicker = () =>{
+    setShowPicker(!showPicker)
+  };
+
+  const onChange = ({ type }, selectedDate) => {
+    if (type === "set") {
+      const currentDate = selectedDate || due;
+      setDue(currentDate);
+  
+      if (Platform.OS === "android") {
+        toggleDatePicker();
+        setDue(formatDate(currentDate));
+      }
+    } else {
+      toggleDatePicker();
+    }
+  };
+
+  const formatDate = (rawDate) =>{
+    let date = new Date(rawDate)
+
+    let year = date.getFullYear();
+    let month = date.getMonth() + 1;
+    let day = date.getDate()
+
+    return `${day}/${month}/${year}`;
+  }
+  
+
   const saveTodoListToStorage = async (list) => {
     try {
       await AsyncStorage.setItem('todoList', JSON.stringify(list));
@@ -51,7 +88,7 @@ const EditScreen = ({ navigation }) => {
 
     const updatedTodos = todoList.map((item) => {
       if (item.id === editedTodo.id) {
-        return { ...item, title: todo };
+        return { ...item, title: todo, due: due, desc: desc };
       }
       return item;
     });
@@ -77,12 +114,33 @@ const EditScreen = ({ navigation }) => {
         <TextInput style={styles.input} value={todo} onChangeText={(userText) => setTodo(userText)} />
 
         <Text style={[styles.subtitle, { marginTop: 10 }]}>Due:</Text>
-        <TextInput style={styles.input} />
+            
+            {showPicker && (
+              <DateTimePicker 
+              mode='date'
+              display='spinner'
+              value={new Date()}
+              onChange={onChange}
+              style={styles.datePicker}
+              maximumDate={new Date(Date.now())}
+            />
+            )}
+
+          {!showPicker && (
+            <Pressable onPress={toggleDatePicker}>
+              <TextInput style={styles.input} 
+              value={due} 
+              onChangeText={setDue}
+              editable={false}
+              onPressIn={toggleDatePicker} />
+          </Pressable>
+          )}
 
         <Text style={[styles.subtitle, { marginTop: 10 }]}>Task Description:</Text>
         <TextInput
           style={[styles.input, { height: 100, textAlignVertical: 'top' }]}
           multiline={true}
+          value={desc} onChangeText={(userText) => setDesc(userText)}
         />
 
         <View style={styles.buttonsContainer}>
@@ -139,6 +197,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     padding: 10,
     marginBottom: 10,
+    color: 'black'
   },
   buttonsContainer: {
     flexDirection: 'row',

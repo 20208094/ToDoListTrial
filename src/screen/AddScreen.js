@@ -1,12 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet, DatePickerIOS} from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, StyleSheet, DatePickerIOS, Pressable, Platform} from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import BottomNavigation from '../navigation/BottomNav';
 import DateTimePicker from "@react-native-community/datetimepicker";
 
 const AddScreen = ({ navigation }) => {
   const [todo, setTodo] = useState("");
-  const [title, setTitle] = useState("");
   const [due, setDue] = useState(new Date());
   const [desc, setDesc] = useState("");
   const [showPicker, setShowPicker] = useState(false);
@@ -39,14 +38,20 @@ const AddScreen = ({ navigation }) => {
     setShowPicker(!showPicker)
   };
 
-  const onChange = ({type}, selectedDate) =>{
-    if(type == "set"){
-      const currentDate = selectedDate;
-      setDate(currentDate);
-    }else{
+  const onChange = ({ type }, selectedDate) => {
+    if (type === "set") {
+      const currentDate = selectedDate || due;
+      setDue(currentDate);
+  
+      if (Platform.OS === "android") {
+        toggleDatePicker();
+        setDue(currentDate.toDateString());
+      }
+    } else {
       toggleDatePicker();
     }
   };
+  
 
   const handleAddTodo = async () => {
   if (todo === "") {
@@ -70,7 +75,7 @@ const AddScreen = ({ navigation }) => {
     setTodoList(updatedTodoList);
 
     // Navigate back to TodoScreen
-    navigation.goBack();
+    navigation.navigate('Todo');
   } catch (error) {
     console.error('Error adding todo: ', error);
   }
@@ -97,12 +102,22 @@ const AddScreen = ({ navigation }) => {
           <DateTimePicker 
           mode='date'
           display='spinner'
-          value={due}
+          value={new Date()}
           onChange={onChange}
+          style={styles.datePicker}
+          maximumDate={new Date(Date.now())}
         />
         )}
 
-        <TextInput style={styles.input} value={due} onChangeText={(userText) => setDue(userText)} />
+       {!showPicker && (
+        <Pressable onPress={toggleDatePicker}>
+          <TextInput style={styles.input} 
+          value={due} 
+          onChangeText={setDue}
+          editable={false}
+          onPressIn={toggleDatePicker} />
+       </Pressable>
+       )}
 
         {/* Task Description */}
         <Text style={[styles.subtitle, { marginTop: 10 }]}>Task Description:</Text>
@@ -170,6 +185,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     padding: 10,
     marginBottom: 10,
+    color: 'black'
   },
   buttonsContainer: {
     flexDirection: 'row',
@@ -197,6 +213,10 @@ const styles = StyleSheet.create({
   cancelbuttonText: {
     color: 'black',
   },
+  datePicker: {
+    height: 120,
+    marginTop: -10
+  }
 });
 
 export default AddScreen;
