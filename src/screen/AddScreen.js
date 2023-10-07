@@ -2,9 +2,14 @@ import React, { useState, useEffect } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, DatePickerIOS} from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import BottomNavigation from '../navigation/BottomNav';
+import DateTimePicker from "@react-native-community/datetimepicker";
 
 const AddScreen = ({ navigation }) => {
   const [todo, setTodo] = useState("");
+  const [title, setTitle] = useState("");
+  const [due, setDue] = useState(new Date());
+  const [desc, setDesc] = useState("");
+  const [showPicker, setShowPicker] = useState(false);
   const [todoList, setTodoList] = useState([]);
 
   useEffect(() => {
@@ -30,12 +35,25 @@ const AddScreen = ({ navigation }) => {
     }
   };
 
+  const toggleDatePicker = () =>{
+    setShowPicker(!showPicker)
+  };
+
+  const onChange = ({type}, selectedDate) =>{
+    if(type == "set"){
+      const currentDate = selectedDate;
+      setDate(currentDate);
+    }else{
+      toggleDatePicker();
+    }
+  };
+
   const handleAddTodo = async () => {
   if (todo === "") {
     return;
   }
 
-  const newTodo = { id: Date.now().toString(), title: todo };
+  const newTodo = { id: Date.now().toString(), title: todo, due: due, desc: desc };
 
   try {
     // Fetch the current todoList from AsyncStorage
@@ -52,7 +70,7 @@ const AddScreen = ({ navigation }) => {
     setTodoList(updatedTodoList);
 
     // Navigate back to TodoScreen
-    navigation.navigate('Todo');
+    navigation.goBack();
   } catch (error) {
     console.error('Error adding todo: ', error);
   }
@@ -74,13 +92,24 @@ const AddScreen = ({ navigation }) => {
 
         {/* Due */}
         <Text style={[styles.subtitle, { marginTop: 10 }]}>Due:</Text>
-        <TextInput style={styles.input} />
+        
+        {showPicker && (
+          <DateTimePicker 
+          mode='date'
+          display='spinner'
+          value={due}
+          onChange={onChange}
+        />
+        )}
+
+        <TextInput style={styles.input} value={due} onChangeText={(userText) => setDue(userText)} />
 
         {/* Task Description */}
         <Text style={[styles.subtitle, { marginTop: 10 }]}>Task Description:</Text>
         <TextInput
           style={[styles.input, { height: 100, textAlignVertical: 'top' }]}
           multiline={true}
+          value={desc} onChangeText={(userText) => setDesc(userText)} 
         />
 
         {/* Buttons Container */}
