@@ -80,23 +80,29 @@ const ArchiveScreen = ({ navigation }) => {
     };
 
     const renderTodos = ({ item, index }) => {
-        return (
-            <View style={{ backgroundColor: "white", borderRadius: 6, paddingHorizontal: 6, paddingVertical: 6, marginBottom: 12, flexDirection: 'row', alignItems: "center", paddingLeft: 15 }}>
-                <Checkbox
-                    status={checkedItems[item.id] ? 'checked' : 'unchecked'}
-                    onPress={() => {
-                        const newCheckedItems = { ...checkedItems };
-                        newCheckedItems[item.id] = !checkedItems[item.id];
-                        setCheckedItems(newCheckedItems);
-                        saveCheckedItemsToStorage(newCheckedItems);
-                    }}
-                />
-                <Text style={{ color: 'black', fontSize: 20, fontWeight: '800', flex: 1, marginHorizontal: 10 }} numberOfLines={2} ellipsizeMode="tail">{item.title}</Text>
-                <IconButton icon="pencil" iconColor='darkblue' onPress={() => handleEditPress(item)} />
-                <IconButton icon="trash-can" iconColor='red' onPress={() => handleDeleteConfirmTodo(item)} />
-            </View>
-        );
+        // Check if the item is unchecked
+        if (checkedItems[item.id]) {
+            return (
+                <View style={{ backgroundColor: "white", borderRadius: 6, paddingHorizontal: 6, paddingVertical: 6, marginBottom: 12, flexDirection: 'row', alignItems: "center", paddingLeft: 15 }}>
+                    <Checkbox
+                        status={checkedItems[item.id] ? 'checked' : 'unchecked'}
+                        onPress={() => {
+                            const newCheckedItems = { ...checkedItems };
+                            newCheckedItems[item.id] = !checkedItems[item.id];
+                            setCheckedItems(newCheckedItems);
+                            saveCheckedItemsToStorage(newCheckedItems);
+                        }}
+                    />
+                    <Text style={{ color: 'black', fontSize: 20, fontWeight: '800', flex: 1, marginHorizontal: 10 }} numberOfLines={2} ellipsizeMode="tail">{item.title}</Text>
+                    <IconButton icon="pencil" iconColor='darkblue' onPress={() => handleEditPress(item)} />
+                    <IconButton icon="trash-can" iconColor='red' onPress={() => handleDeleteConfirmTodo(item)} />
+                </View>
+            );
+        } else {
+            return null; // Don't render checked tasks
+        }
     };
+  
 
     return (
         <>

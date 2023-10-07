@@ -58,12 +58,12 @@ const EditScreen = ({ navigation }) => {
 
     setTodoList(updatedTodos);
     saveTodoListToStorage(updatedTodos);
-    navigation.navigate('Todo');
+    navigation.goBack();
   };
 
   const handleCancel = () => {
-    // Navigate back to Todo screen without making any changes
-    navigation.navigate('Todo');
+    // Navigate back to the previous screen
+    navigation.goBack();
   };
 
   return (
