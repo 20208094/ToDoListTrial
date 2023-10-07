@@ -122,7 +122,6 @@ const EditScreen = ({ navigation }) => {
               value={new Date()}
               onChange={onChange}
               style={styles.datePicker}
-              maximumDate={new Date(Date.now())}
             />
             )}
 
