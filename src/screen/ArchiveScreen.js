@@ -76,14 +76,14 @@ const ArchiveScreen = ({ navigation }) => {
     };
 
     const handleEditPress = (item) => {
-        navigation.navigate('Edit', { nestedObject: { id: item.id, title: item.title } });
+        navigation.navigate('Edit', { nestedObject: { id: item.id, title: item.title, due: item.due, desc: item.desc } });
     };
 
     const renderTodos = ({ item, index }) => {
         // Check if the item is unchecked
         if (checkedItems[item.id]) {
             return (
-                <View style={{ backgroundColor: "white", borderRadius: 6, paddingHorizontal: 1, paddingTop: 15, marginBottom: 12}}>
+                <View style={{ backgroundColor: "lightgreen", borderRadius: 6, paddingTop: 15, marginBottom: 12}} numberOfLines={1} ellipsizeMode="tail">
                     <View>
                         <Text style={{ color: 'black', fontSize: 15, fontWeight: '800', flex: 1, marginLeft: 10, marginTop: -10, marginBottom: -20}}>{item.title}</Text>
                     </View>
@@ -97,12 +97,11 @@ const ArchiveScreen = ({ navigation }) => {
                                 saveCheckedItemsToStorage(newCheckedItems);
                             }}
                         />
-                        <Text style={{ color: 'black', fontSize: 12, fontWeight: '800', flex: 1, marginHorizontal: 1 }} numberOfLines={2} ellipsizeMode="tail">{item.title}</Text>
-                        <IconButton icon="pencil" iconColor='darkblue' onPress={() => handleEditPress(item)} />
-                        <IconButton icon="trash-can" iconColor='red' onPress={() => handleDeleteConfirmTodo(item)} />
+                        <Text style={{ color: 'black', fontSize: 12, fontWeight: '800', flex: 1}} numberOfLines={2} ellipsizeMode="tail">{item.desc}</Text>
+                        <IconButton style={{marginLeft: 1}} icon="trash-can" iconColor='red' onPress={() => handleDeleteConfirmTodo(item)} />
                     </View>
                     <View>
-                        <Text style={{ color: 'gray', fontSize: 8, fontWeight: '800', flex: 1, marginLeft: 37, marginTop: -10, marginBottom: 2}}>{item.title}</Text>
+                        <Text style={{ color: 'gray', fontSize: 8, flex: 1, marginLeft: 37, marginTop: -10, marginBottom: 2}}>{item.due}</Text>
                     </View>
                 </View>
             );
@@ -147,10 +146,10 @@ const ArchiveScreen = ({ navigation }) => {
           }}>
           <View style={{ justifyContent: 'center', alignItems: 'center' }}>
             <View style={{
-              margin: 20,
-              marginTop: 310,
-              width: 390,
-              height: 270,
+              margin: 10,
+              marginTop: 290,
+              width: 330,
+              height: 220,
               backgroundColor: 'white',
               padding: 35,
               alignItems: 'center',
@@ -161,7 +160,7 @@ const ArchiveScreen = ({ navigation }) => {
               borderBottomLeftRadius: 50,
               borderWidth: 5
             }}>
-              <Text style={{ fontSize: 30, backgroundColor: 'white', fontWeight: 'bold', padding: 5, width: 300, textAlign: 'center', borderRadius: 20, marginTop: 20, borderColor: '#FC5858', borderWidth: 3, marginBottom: 25 }}>Do you really want to delete this task?</Text>
+              <Text style={{ fontSize: 20, backgroundColor: 'white', fontWeight: 'bold', padding: 5, width: 300, textAlign: 'center', borderRadius: 20, marginTop: 20, borderColor: '#FC5858', borderWidth: 3, marginBottom: 25 }}>Do you really want to delete this task?</Text>
 
               <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignContent: 'center', overflow: 'hidden', paddingStart: 30 }}>
                 <Pressable style={{ backgroundColor: '#FB3854', width: '60%', height: 40, justifyContent: 'center', alignItems: 'center', borderRadius: 30, zIndex: 1 }} onPress={() => handleDeleteTodo()}>

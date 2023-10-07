@@ -83,20 +83,28 @@ const TodoScreen = ({ navigation }) => {
       // Check if the item is unchecked
       if (!checkedItems[item.id]) {
           return (
-              <View style={{ backgroundColor: "white", borderRadius: 6, paddingHorizontal: 6, paddingVertical: 6, marginBottom: 12, flexDirection: 'row', alignItems: "center", paddingLeft: 15, justifyContent: 'space-between' }}>
-                  <Checkbox
-                      status={checkedItems[item.id] ? 'checked' : 'unchecked'}
-                      onPress={() => {
-                          const newCheckedItems = { ...checkedItems };
-                          newCheckedItems[item.id] = !checkedItems[item.id];
-                          setCheckedItems(newCheckedItems);
-                          saveCheckedItemsToStorage(newCheckedItems);
-                      }}
-                  />
-                  <Text style={{ color: 'black', fontSize: 12, fontWeight: '800', flex: 1, marginHorizontal: 10 }} numberOfLines={2} ellipsizeMode="tail">{item.title}</Text>
-                  <IconButton icon="pencil" iconColor='darkblue' onPress={() => handleEditPress(item)} />
-                  <IconButton icon="trash-can" iconColor='red' onPress={() => handleDeleteConfirmTodo(item)} />
-              </View>
+            <View style={{ backgroundColor: "white", borderRadius: 6, paddingTop: 15, marginBottom: 12}} numberOfLines={1} ellipsizeMode="tail">
+                <View>
+                    <Text style={{ color: 'black', fontSize: 15, fontWeight: '800', flex: 1, marginLeft: 10, marginTop: -10, marginBottom: -20}}>{item.title}</Text>
+                </View>
+                <View style={{flexDirection: 'row', alignItems: "center"}}>
+                    <Checkbox
+                        status={checkedItems[item.id] ? 'checked' : 'unchecked'}
+                        onPress={() => {
+                            const newCheckedItems = { ...checkedItems };
+                            newCheckedItems[item.id] = !checkedItems[item.id];
+                            setCheckedItems(newCheckedItems);
+                            saveCheckedItemsToStorage(newCheckedItems);
+                        }}
+                    />
+                    <Text style={{ color: 'black', fontSize: 12, fontWeight: '800', flex: 1}} numberOfLines={2} ellipsizeMode="tail">{item.desc}</Text>
+                    <IconButton style={{marginHorizontal: 5}} icon="pencil" iconColor='darkblue' onPress={() => handleEditPress(item)} />
+                    <IconButton style={{marginLeft: -15}} icon="trash-can" iconColor='red' onPress={() => handleDeleteConfirmTodo(item)} />
+                </View>
+                <View>
+                    <Text style={{ color: 'gray', fontSize: 8, flex: 1, marginLeft: 37, marginTop: -10, marginBottom: 2}}>{item.due}</Text>
+                </View>
+            </View>
           );
       } else {
           return null; // Don't render checked tasks
@@ -138,10 +146,10 @@ const TodoScreen = ({ navigation }) => {
           }}>
           <View style={{ justifyContent: 'center', alignItems: 'center' }}>
             <View style={{
-              margin: 20,
-              marginTop: 310,
-              width: 390,
-              height: 270,
+              margin: 10,
+              marginTop: 290,
+              width: 330,
+              height: 220,
               backgroundColor: 'white',
               padding: 35,
               alignItems: 'center',
@@ -152,7 +160,7 @@ const TodoScreen = ({ navigation }) => {
               borderBottomLeftRadius: 50,
               borderWidth: 5
             }}>
-              <Text style={{ fontSize: 30, backgroundColor: 'white', fontWeight: 'bold', padding: 5, width: 300, textAlign: 'center', borderRadius: 20, marginTop: 20, borderColor: '#FC5858', borderWidth: 3, marginBottom: 25 }}>Do you really want to delete this task?</Text>
+              <Text style={{ fontSize: 20, backgroundColor: 'white', fontWeight: 'bold', padding: 5, width: 300, textAlign: 'center', borderRadius: 20, marginTop: 20, borderColor: '#FC5858', borderWidth: 3, marginBottom: 25 }}>Do you really want to delete this task?</Text>
 
               <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignContent: 'center', overflow: 'hidden', paddingStart: 30 }}>
                 <Pressable style={{ backgroundColor: '#FB3854', width: '60%', height: 40, justifyContent: 'center', alignItems: 'center', borderRadius: 30, zIndex: 1 }} onPress={() => handleDeleteTodo()}>
