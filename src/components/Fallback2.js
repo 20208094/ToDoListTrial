@@ -1,7 +1,7 @@
 import { StyleSheet, Text, View, Image } from "react-native";
 import React from "react";
 
-const Fallback = () => {
+const Fallback2 = () => {
 	return (
 		<View style={{ alignItems: "center" }}>
 			<Image
@@ -20,12 +20,12 @@ const Fallback = () => {
 					shadowRadius: 4,
 				}}
 			>
-				<Text style={{ color: "black", fontSize: 20, textAlign: "center"}}>Start Adding Your Task</Text>
+				<Text style={{ color: "black", fontSize: 20, textAlign: "center"}}>Task Archived here!</Text>
 			</View>
 		</View>
 	);
 };
 
-export default Fallback;
+export default Fallback2;
 
 const styles = StyleSheet.create({});

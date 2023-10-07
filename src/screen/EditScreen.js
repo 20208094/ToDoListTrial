@@ -110,7 +110,7 @@ const EditScreen = ({ navigation }) => {
       </View>
 
       <View style={styles.newContainer}>
-        <Text style={styles.subtitle}>Title:</Text>
+        <Text style={styles.subtitle}>Title</Text>
         <TextInput style={styles.input} value={todo} onChangeText={(userText) => setTodo(userText)} />
 
         <Text style={[styles.subtitle, { marginTop: 10 }]}>Due:</Text>
@@ -136,7 +136,7 @@ const EditScreen = ({ navigation }) => {
           </Pressable>
           )}
 
-        <Text style={[styles.subtitle, { marginTop: 10 }]}>Task Description:</Text>
+        <Text style={[styles.subtitle, { marginTop: 10 }]}>Task Description</Text>
         <TextInput
           style={[styles.input, { height: 100, textAlignVertical: 'top' }]}
           multiline={true}
