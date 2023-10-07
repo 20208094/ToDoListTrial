@@ -3,12 +3,17 @@ import { View, TouchableOpacity, Image, StyleSheet } from 'react-native';
 import houseImage from '../../assets/house.png';
 import addImage from '../../assets/add.png';
 import graphImage from '../../assets/graph.png';
+import doubleCheck from '../../assets/doubleCheck.png';
 
 const BottomNavigation = ({ navigation }) => {
   return (
     <View style={styles.bottomContainer}>
       <TouchableOpacity style={styles.ButtonContainer} onPress={() => navigation.navigate('Analytics')}>
         <Image source={graphImage} style={styles.icon} />
+      </TouchableOpacity>
+
+      <TouchableOpacity style={styles.ButtonContainer} onPress={() => navigation.navigate('Archive')}>
+        <Image source={doubleCheck} style={styles.icon} />
       </TouchableOpacity>
 
       <TouchableOpacity style={styles.ButtonContainer} onPress={() => navigation.navigate('Todo')}>

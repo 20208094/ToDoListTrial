@@ -6,7 +6,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import BottomNavigation from '../navigation/BottomNav';
 import { useIsFocused } from '@react-navigation/native';
 
-const TodoScreen = ({ navigation }) => {
+const ArchiveScreen = ({ navigation }) => {
     const [todo, setTodo] = useState("");
     const [todoList, setTodoList] = useState([]);
     const [deleteConfirmTodo, setDeleteConfirmTodo] = useState(null);
@@ -110,7 +110,7 @@ const TodoScreen = ({ navigation }) => {
             </View>
             <View>
                 <Text style={{ fontSize: 50, textAlign: 'center', fontWeight: 'bold', marginBottom: 10, marginTop: 15 }}>
-                    Tasks
+                    Archive
                 </Text>
             </View>
             <View style={{ backgroundColor: '#FC5858', borderTopRightRadius: 40, borderBottomLeftRadius: 40, height: 500, marginTop: 5, padding: 20, fontSize: 20}}>
@@ -172,6 +172,6 @@ const TodoScreen = ({ navigation }) => {
 const styles = StyleSheet.create({
 });
 
-export default TodoScreen
+export default ArchiveScreen
 
 
