@@ -8,20 +8,20 @@ import doubleCheck from '../../assets/doubleCheck.png';
 const BottomNavigation = ({ navigation }) => {
   return (
     <View style={styles.bottomContainer}>
+      <TouchableOpacity style={styles.ButtonContainer} onPress={() => navigation.navigate('Todo')}>
+        <Image source={houseImage} style={styles.icon} />
+      </TouchableOpacity>
+      
+      <TouchableOpacity style={styles.ButtonContainer} onPress={() => navigation.navigate('Add')}>
+        <Image source={addImage} style={styles.icon} />
+      </TouchableOpacity>
+
       <TouchableOpacity style={styles.ButtonContainer} onPress={() => navigation.navigate('Analytics')}>
         <Image source={graphImage} style={styles.icon} />
       </TouchableOpacity>
 
       <TouchableOpacity style={styles.ButtonContainer} onPress={() => navigation.navigate('Archive')}>
         <Image source={doubleCheck} style={styles.icon} />
-      </TouchableOpacity>
-
-      <TouchableOpacity style={styles.ButtonContainer} onPress={() => navigation.navigate('Todo')}>
-        <Image source={houseImage} style={styles.icon} />
-      </TouchableOpacity>
-
-      <TouchableOpacity style={styles.ButtonContainer} onPress={() => navigation.navigate('Add')}>
-        <Image source={addImage} style={styles.icon} />
       </TouchableOpacity>
     </View>
   );

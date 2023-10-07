@@ -93,7 +93,7 @@ const TodoScreen = ({ navigation }) => {
                           saveCheckedItemsToStorage(newCheckedItems);
                       }}
                   />
-                  <Text style={{ color: 'black', fontSize: 20, fontWeight: '800', flex: 1, marginHorizontal: 10 }} numberOfLines={2} ellipsizeMode="tail">{item.title}</Text>
+                  <Text style={{ color: 'black', fontSize: 12, fontWeight: '800', flex: 1, marginHorizontal: 10 }} numberOfLines={2} ellipsizeMode="tail">{item.title}</Text>
                   <IconButton icon="pencil" iconColor='darkblue' onPress={() => handleEditPress(item)} />
                   <IconButton icon="trash-can" iconColor='red' onPress={() => handleDeleteConfirmTodo(item)} />
               </View>
@@ -106,16 +106,16 @@ const TodoScreen = ({ navigation }) => {
     return (
         <>
         <View style={{ marginHorizontal: 16, marginTop: 200, fontSize: 20}}>
-            <View style={{flexDirection: 'row', borderColor: '#FC5858', backgroundColor: '#dbdbdb', borderWidth: 8, marginStart: -30, paddingStart: 40, alignItems: 'center', borderTopRightRadius: 50, borderBottomRightRadius: 50, justifyContent: 'center', width: 340, marginTop: -150}}>
-                <Text style={{fontSize: 30, fontWeight: 'bold'}}>Assigment App</Text>
+            <View style={{flexDirection: 'row', borderColor: '#FC5858', backgroundColor: '#dbdbdb', borderWidth: 5, marginStart: -30, paddingStart: 40, alignItems: 'center', borderTopRightRadius: 50, borderBottomRightRadius: 50, justifyContent: 'flex-end', width: 250, marginTop: -150}}>
+                <Text style={{fontSize: 15, fontWeight: 'bold'}}>Assigment Application</Text>
                 <Image
                     source={require("../../assets/splash.png")}
-                    style={{ height: 80, width: 80, marginBottom: 10, marginEnd: 20}}
+                    style={{ height: 60, width: 60, marginBottom: 5, marginEnd: 10}}
                 />
             </View>
             <View>
-                <Text style={{ fontSize: 50, textAlign: 'center', fontWeight: 'bold', marginBottom: 10, marginTop: 15 }}>
-                    Tasks
+                <Text style={{ fontSize: 35, textAlign: 'center', fontWeight: 'bold', marginBottom: 10, marginTop: 15 }}>
+                    TASKS
                 </Text>
             </View>
             <View style={{ backgroundColor: '#FC5858', borderTopRightRadius: 40, borderBottomLeftRadius: 40, height: 500, marginTop: 5, padding: 20, fontSize: 20}}>
