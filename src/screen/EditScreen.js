@@ -51,7 +51,7 @@ const EditScreen = ({ navigation }) => {
   const onChange = ({ type }, selectedDate) => {
     if (type === "set") {
       const currentDate = selectedDate || due;
-      setDue(currentDate);
+      setDue(formatDate(currentDate));
   
       if (Platform.OS === "android") {
         toggleDatePicker();

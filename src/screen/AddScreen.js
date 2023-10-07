@@ -41,17 +41,26 @@ const AddScreen = ({ navigation }) => {
   const onChange = ({ type }, selectedDate) => {
     if (type === "set") {
       const currentDate = selectedDate || due;
-      setDue(currentDate);
+      setDue(formatDate(currentDate));
   
       if (Platform.OS === "android") {
         toggleDatePicker();
-        setDue(currentDate.toDateString());
+        setDue(formatDate(currentDate));
       }
     } else {
       toggleDatePicker();
     }
   };
   
+  const formatDate = (rawDate) =>{
+    let date = new Date(rawDate)
+
+    let year = date.getFullYear();
+    let month = date.getMonth() + 1;
+    let day = date.getDate()
+
+    return `${day}/${month}/${year}`;
+  }
 
   const handleAddTodo = async () => {
   if (todo === "") {
