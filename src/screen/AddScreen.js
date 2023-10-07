@@ -3,6 +3,7 @@ import { View, Text, TextInput, TouchableOpacity, StyleSheet, DatePickerIOS, Pre
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import BottomNavigation from '../navigation/BottomNav';
 import DateTimePicker from "@react-native-community/datetimepicker";
+import { LinearGradient } from 'expo-linear-gradient';
 
 const AddScreen = ({ navigation }) => {
   const [todo, setTodo] = useState("");
@@ -99,7 +100,7 @@ const AddScreen = ({ navigation }) => {
       </View>
 
       {/* New Container */}
-      <View style={styles.newContainer}>
+      <LinearGradient colors={['#FC5858', 'pink']} style={styles.newContainer}>
         {/* Title */}
         <Text style={styles.subtitle}>Title</Text>
         <TextInput style={styles.input} value={todo} onChangeText={(userText) => setTodo(userText)} />
@@ -147,7 +148,7 @@ const AddScreen = ({ navigation }) => {
             <Text style={styles.cancelbuttonText}>Cancel</Text>
           </TouchableOpacity>
         </View>
-      </View>
+      </LinearGradient>
 
       {/* Bottom Navigation Container */}
       {/* Assuming BottomNavigation is correctly implemented */}
@@ -166,8 +167,8 @@ const styles = StyleSheet.create({
     alignItems: 'center', // Center content horizontally
   },
   noteContainer: {
-    backgroundColor: 'pink',
     borderRadius: 15,
+    backgroundColor: 'pink',
     padding: 10,
     alignItems: 'center',
     marginBottom: 10,

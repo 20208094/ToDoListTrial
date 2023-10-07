@@ -5,6 +5,7 @@ import Fallback from "../components/Fallback";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import BottomNavigation from '../navigation/BottomNav';
 import { useIsFocused } from '@react-navigation/native';
+import { LinearGradient } from 'expo-linear-gradient';
 
 const TodoScreen = ({ navigation }) => {
     const [todo, setTodo] = useState("");
@@ -126,7 +127,7 @@ const TodoScreen = ({ navigation }) => {
                     TASKS
                 </Text>
             </View>
-            <View style={{ backgroundColor: '#FC5858', borderTopRightRadius: 40, borderBottomLeftRadius: 40, height: 500, marginTop: 5, padding: 20, fontSize: 20}}>
+            <LinearGradient colors={['#FC5858', 'pink']} style={{borderTopRightRadius: 40, borderBottomLeftRadius: 40, height: 500, marginTop: 5, padding: 20, fontSize: 20}}>
 
                 <View style={{ backgroundColor: '#dbdbdb', padding: 10, height: 450, borderRadius: 6, borderColor: '#fff', borderWidth: 5 }}>
                     {todoList.length <= 0 && <Fallback />}
@@ -134,7 +135,7 @@ const TodoScreen = ({ navigation }) => {
                     {/* RENDER TO DO LIST */}
                     <FlatList data={todoList} renderItem={renderTodos} />
                 </View>
-            </View>
+            </LinearGradient>
 
       {/* DELETE MODAL */}
       <Modal
