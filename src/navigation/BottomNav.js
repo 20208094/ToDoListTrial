@@ -4,10 +4,11 @@ import houseImage from '../../assets/house.png';
 import addImage from '../../assets/add.png';
 import graphImage from '../../assets/graph.png';
 import doubleCheck from '../../assets/doubleCheck.png';
+import { LinearGradient } from 'expo-linear-gradient';
 
 const BottomNavigation = ({ navigation }) => {
   return (
-    <View style={styles.bottomContainer}>
+    <LinearGradient colors={['#FC5858', 'pink']} style={styles.bottomContainer}>
       <TouchableOpacity style={styles.ButtonContainer} onPress={() => navigation.navigate('Todo')}>
         <Image source={houseImage} style={styles.icon} />
       </TouchableOpacity>
@@ -23,7 +24,7 @@ const BottomNavigation = ({ navigation }) => {
       <TouchableOpacity style={styles.ButtonContainer} onPress={() => navigation.navigate('Archive')}>
         <Image source={doubleCheck} style={styles.icon} />
       </TouchableOpacity>
-    </View>
+    </LinearGradient>
   );
 };
 
@@ -32,7 +33,6 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     marginTop: 20,
-    backgroundColor: 'pink',
     borderRadius: 15,
     padding: 10,
     alignItems: 'center',
@@ -52,7 +52,7 @@ const styles = StyleSheet.create({
     borderRadius: 15,
   },
   ButtonContainer: {
-    backgroundColor: '#B94D4D',
+    backgroundColor: '#FC5858',
     borderRadius: 50,
     padding: 10,
     width: 50,

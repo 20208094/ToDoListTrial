@@ -10,6 +10,7 @@ import {
   Dimensions,
   ScrollView,
 } from "react-native";
+import { LinearGradient } from 'expo-linear-gradient';
 
 import {
   LineChart
@@ -73,7 +74,7 @@ const AnalyticsScreen = ({ navigation }) => {
         </View>
 
         {/* New Container */}
-        <View style={styles.newContainer}>
+        <LinearGradient colors={['#FC5858', 'pink']} style={styles.newContainer}>
           {/* Title */}
           <Text style={styles.subtitle}>October</Text>
 
@@ -81,7 +82,7 @@ const AnalyticsScreen = ({ navigation }) => {
           <View>
             <MyLineChart />
           </View>
-        </View>
+        </LinearGradient>
       </ScrollView>
 
       {/* Bottom Navigation Container */}
@@ -120,7 +121,6 @@ const styles = StyleSheet.create({
     fontSize: 18
   },
   newContainer: {
-    backgroundColor: "pink",
     borderRadius: 15,
     padding: 20
   },

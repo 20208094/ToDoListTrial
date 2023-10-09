@@ -4,6 +4,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import BottomNavigation from '../navigation/BottomNav';
 import DateTimePicker from "@react-native-community/datetimepicker";
 import { LinearGradient } from 'expo-linear-gradient';
+import {Dimensions} from 'react-native';
 
 const AddScreen = ({ navigation }) => {
   const [todo, setTodo] = useState("");
@@ -11,6 +12,7 @@ const AddScreen = ({ navigation }) => {
   const [desc, setDesc] = useState("");
   const [showPicker, setShowPicker] = useState(false);
   const [todoList, setTodoList] = useState([]);
+  const {height, width} = Dimensions.get('window');
 
   useEffect(() => {
     const fetchTodoList = async () => {
@@ -95,9 +97,9 @@ const AddScreen = ({ navigation }) => {
   return (
     <View style={styles.container}>
       {/* Add Task Note Container */}
-      <View style={styles.noteContainer}>
+      <LinearGradient colors={['#FC5858', 'pink']} style={styles.noteContainer}>
         <Text style={styles.noteText}>Add Task</Text>
-      </View>
+      </LinearGradient>
 
       {/* New Container */}
       <LinearGradient colors={['#FC5858', 'pink']} style={styles.newContainer}>
@@ -142,17 +144,13 @@ const AddScreen = ({ navigation }) => {
           <TouchableOpacity style={styles.addButton} onPress={handleAddTodo}>
             <Text style={styles.buttonText}>Add</Text>
           </TouchableOpacity>
-
-          {/* Cancel Button */}
-          <TouchableOpacity style={styles.cancelButton} onPress={() => navigation.navigate('Todo')}>
-            <Text style={styles.cancelbuttonText}>Cancel</Text>
-          </TouchableOpacity>
         </View>
       </LinearGradient>
 
       {/* Bottom Navigation Container */}
-      {/* Assuming BottomNavigation is correctly implemented */}
-      <BottomNavigation navigation={navigation} />
+      <View style={{ width: width, position: 'absolute', right: 0, left: 0, bottom: 0, flex: 1}}>
+        <BottomNavigation navigation={navigation} />
+      </View>
     </View>
   );
 };
@@ -201,7 +199,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
   },
   addButton: {
-    backgroundColor: '#B94D4D',
+    backgroundColor: '#FC5858',
     borderRadius: 15,
     padding: 10,
     flex: 1,

@@ -15,7 +15,10 @@ const Stack = createNativeStackNavigator();
 export default function App() {
   return (
     <NavigationContainer>
-      <Stack.Navigator>
+      <Stack.Navigator screenOptions={{
+        animation: 'none',
+        headerShown: false
+      }}>
         <Stack.Screen name="Todo" component={TodoScreen} options={{ headerShown: false }} />
         <Stack.Screen name="Add" component={AddScreen} options={{ headerShown: false }} />
         <Stack.Screen name="Edit" component={EditScreen} options={{ headerShown: false }} />

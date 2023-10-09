@@ -6,6 +6,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import BottomNavigation from '../navigation/BottomNav';
 import { useIsFocused } from '@react-navigation/native';
 import { LinearGradient } from 'expo-linear-gradient';
+import {Dimensions} from 'react-native';
 
 const TodoScreen = ({ navigation }) => {
     const [todo, setTodo] = useState("");
@@ -13,6 +14,7 @@ const TodoScreen = ({ navigation }) => {
     const [deleteConfirmTodo, setDeleteConfirmTodo] = useState(null);
     const [checkedItems, setCheckedItems] = useState({});
     const [modalDeleteVisible, setModalDeleteVisible] = useState(false);
+    const {height, width} = Dimensions.get('window');
 
     const isFocused = useIsFocused();
 
@@ -112,10 +114,11 @@ const TodoScreen = ({ navigation }) => {
       }
   };
 
+  const taskCon = height / 1.5;
     return (
         <>
         <View style={{ marginHorizontal: 16, marginTop: 200, fontSize: 20}}>
-            <View style={{flexDirection: 'row', borderColor: '#FC5858', backgroundColor: '#dbdbdb', borderWidth: 5, marginStart: -30, paddingStart: 40, alignItems: 'center', borderTopRightRadius: 50, borderBottomRightRadius: 50, justifyContent: 'flex-end', width: 250, marginTop: -150}}>
+            <View style={{flexDirection: 'row', borderColor: '#FC5858', backgroundColor: '#dbdbdb', borderWidth: 5, marginStart: -30, paddingStart: 40, alignItems: 'center', borderTopRightRadius: 50, borderBottomRightRadius: 50, justifyContent: 'flex-end', width: width - 170, marginTop: -150}}>
                 <Text style={{fontSize: 15, fontWeight: 'bold'}}>Assigment Application</Text>
                 <Image
                     source={require("../../assets/splash.png")}
@@ -127,9 +130,8 @@ const TodoScreen = ({ navigation }) => {
                     TASKS
                 </Text>
             </View>
-            <LinearGradient colors={['#FC5858', 'pink']} style={{borderTopRightRadius: 40, borderBottomLeftRadius: 40, height: 500, marginTop: 5, padding: 20, fontSize: 20}}>
-
-                <View style={{ backgroundColor: '#dbdbdb', padding: 10, height: 450, borderRadius: 6, borderColor: '#fff', borderWidth: 5 }}>
+            <LinearGradient colors={['#FC5858', 'pink']} style={{borderTopRightRadius: 40, borderBottomLeftRadius: 40, height: height / 1.5, marginTop: 5, padding: 20, fontSize: 20}}>
+                <View style={{ backgroundColor: '#dbdbdb', padding: 10, height: taskCon - 50, borderRadius: 6, borderColor: '#fff', borderWidth: 5 }}>
                     {todoList.length <= 0 && <Fallback />}
 
                     {/* RENDER TO DO LIST */}
