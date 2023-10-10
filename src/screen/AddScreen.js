@@ -41,19 +41,21 @@ const AddScreen = ({ navigation }) => {
     setShowPicker(!showPicker)
   };
 
-  const onChange = ({ type }, selectedDate) => {
-    if (type === "set") {
+  const onChange = (event, selectedDate) => {
+    if (event.type === "set") {
       const currentDate = selectedDate || due;
-      setDue(formatDate(currentDate));
-  
+      const formattedDate = formatDate(currentDate);
+      
+      setDue(currentDate); // Set the Date object directly
       if (Platform.OS === "android") {
         toggleDatePicker();
-        setDue(formatDate(currentDate));
       }
     } else {
       toggleDatePicker();
     }
   };
+  
+  
   
   const formatDate = (rawDate) =>{
     let date = new Date(rawDate)
@@ -62,7 +64,7 @@ const AddScreen = ({ navigation }) => {
     let month = date.getMonth() + 1;
     let day = date.getDate()
 
-    return `${day}/${month}/${year}`;
+    return `${year}-${month < 10 ? '0' : ''}${month}-${day < 10 ? '0' : ''}${day}`;
   }
 
   const handleAddTodo = async () => {
@@ -122,11 +124,14 @@ const AddScreen = ({ navigation }) => {
 
        {!showPicker && (
         <Pressable onPress={toggleDatePicker}>
-          <TextInput style={styles.input} 
-          value={due} 
-          onChangeText={setDue}
-          editable={false}
-          onPressIn={toggleDatePicker} />
+          <TextInput 
+            style={styles.input} 
+            value={formatDate(due)}  // Convert the date to string using your formatDate function
+            onChangeText={setDue}
+            editable={false}
+            onPressIn={toggleDatePicker} 
+          />
+
        </Pressable>
        )}
 

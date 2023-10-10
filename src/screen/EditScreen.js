@@ -48,19 +48,20 @@ const EditScreen = ({ navigation }) => {
     setShowPicker(!showPicker)
   };
 
-  const onChange = ({ type }, selectedDate) => {
-    if (type === "set") {
+  const onChange = (event, selectedDate) => {
+    if (event.type === "set") {
       const currentDate = selectedDate || due;
-      setDue(formatDate(currentDate));
-  
+      const formattedDate = formatDate(currentDate);
+      
+      setDue(currentDate); // Set the Date object directly
       if (Platform.OS === "android") {
         toggleDatePicker();
-        setDue(formatDate(currentDate));
       }
     } else {
       toggleDatePicker();
     }
   };
+  
 
   const formatDate = (rawDate) =>{
     let date = new Date(rawDate)
@@ -128,7 +129,7 @@ const EditScreen = ({ navigation }) => {
           {!showPicker && (
             <Pressable onPress={toggleDatePicker}>
               <TextInput style={styles.input} 
-              value={due} 
+              value={formatDate(due)} 
               onChangeText={setDue}
               editable={false}
               onPressIn={toggleDatePicker} />

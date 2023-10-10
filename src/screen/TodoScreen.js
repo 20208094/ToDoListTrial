@@ -81,6 +81,16 @@ const TodoScreen = ({ navigation }) => {
     const handleEditPress = (item) => {
         navigation.navigate('Edit', { nestedObject: { id: item.id, title: item.title, due: item.due, desc: item.desc } });
     };
+    const formatDate = (rawDate) =>{
+        let date = new Date(rawDate)
+    
+        let year = date.getFullYear();
+        let month = date.getMonth() + 1;
+        let day = date.getDate()
+    
+        return `${year}-${month < 10 ? '0' : ''}${month}-${day < 10 ? '0' : ''}${day}`;
+      }
+    
 
     const renderTodos = ({ item, index }) => {
       // Check if the item is unchecked
@@ -105,8 +115,11 @@ const TodoScreen = ({ navigation }) => {
                     <IconButton style={{marginLeft: -15}} icon="trash-can" iconColor='red' onPress={() => handleDeleteConfirmTodo(item)} />
                 </View>
                 <View>
-                    <Text style={{ color: 'gray', fontSize: 8, flex: 1, marginLeft: 37, marginTop: -10, marginBottom: 2}}>{item.due}</Text>
+                    <Text style={{ color: 'gray', fontSize: 10, flex: 1, marginLeft: 37, marginTop: -10, marginBottom: 2}}>
+                        {formatDate(new Date(item.due))}
+                    </Text>
                 </View>
+
             </View>
           );
       } else {
