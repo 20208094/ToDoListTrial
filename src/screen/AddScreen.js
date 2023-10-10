@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet, Pressable, Platform} from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, StyleSheet, DatePickerIOS, Pressable, Platform} from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import BottomNavigation from '../navigation/BottomNav';
 import DateTimePicker from "@react-native-community/datetimepicker";
@@ -9,10 +9,8 @@ import {Dimensions} from 'react-native';
 const AddScreen = ({ navigation }) => {
   const [todo, setTodo] = useState("");
   const [due, setDue] = useState(new Date());
-  const [time, setTime] = useState(new Date());
   const [desc, setDesc] = useState("");
-  const [showDatePicker, setshowDatePicker] = useState(false);
-  const [showTimePicker, setshowTimePicker] = useState(false);
+  const [showPicker, setShowPicker] = useState(false);
   const [todoList, setTodoList] = useState([]);
   const {height, width} = Dimensions.get('window');
 
@@ -43,8 +41,8 @@ const AddScreen = ({ navigation }) => {
     setShowPicker(!showPicker)
   };
 
-  const onChange = ({ type }, selectedDate) => {
-    if (type === "set") {
+  const onChange = (event, selectedDate) => {
+    if (event.type === "set") {
       const currentDate = selectedDate || due;
       const formattedDate = formatDate(currentDate);
       
@@ -56,6 +54,8 @@ const AddScreen = ({ navigation }) => {
       toggleDatePicker();
     }
   };
+  
+  
   
   const formatDate = (rawDate) =>{
     let date = new Date(rawDate)
@@ -72,7 +72,7 @@ const AddScreen = ({ navigation }) => {
     return;
   }
 
-  const newTodo = { id: Date.now().toString(), title: todo, due: due, time: time, desc: desc };
+  const newTodo = { id: Date.now().toString(), title: todo, due: due, desc: desc };
 
   try {
     // Fetch the current todoList from AsyncStorage
@@ -112,23 +112,26 @@ const AddScreen = ({ navigation }) => {
         {/* Due */}
         <Text style={[styles.subtitle, { marginTop: 10 }]}>Due:</Text>
         
-        {showDatePicker && (
+        {showPicker && (
           <DateTimePicker 
           mode='date'
-          display='calendar'
+          display='spinner'
           value={new Date()}
           onChange={onChange}
           style={styles.datePicker}
         />
         )}
 
-       {!showDatePicker && (
+       {!showPicker && (
         <Pressable onPress={toggleDatePicker}>
-          <TextInput style={styles.input} 
-          value={due} 
-          onChangeText={setDue}
-          editable={false}
-          onPressIn={toggleDatePicker} />
+          <TextInput 
+            style={styles.input} 
+            value={formatDate(due)}  // Convert the date to string using your formatDate function
+            onChangeText={setDue}
+            editable={false}
+            onPressIn={toggleDatePicker} 
+          />
+
        </Pressable>
        )}
 
