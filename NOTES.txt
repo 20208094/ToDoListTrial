@@ -8,6 +8,7 @@ npm install @react-navigation/native @react-navigation/native-stack
 npm install react-native-chart-kit
 npx expo install @react-native-community/datetimepicker
 npx expo install expo-linear-gradient
+npm install react-time-range
 
 https://www.youtube.com/watch?v=cmXZNGXjXPM
 
