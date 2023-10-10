@@ -40,50 +40,23 @@ const AddScreen = ({ navigation }) => {
   };
 
   const toggleDatePicker = () =>{
-    setshowDatePicker(!showDatePicker)
-  };
-
-  const toggleTimePicker = () =>{
-    setshowTimePicker(!showTimePicker)
+    setShowPicker(!showPicker)
   };
 
   const onChange = ({ type }, selectedDate) => {
     if (type === "set") {
       const currentDate = selectedDate || due;
-      setDue(formatDate(currentDate));
-  
+      const formattedDate = formatDate(currentDate);
+      
+      setDue(currentDate); // Set the Date object directly
       if (Platform.OS === "android") {
         toggleDatePicker();
-        setDue(formatDate(currentDate));
       }
     } else {
       toggleDatePicker();
     }
   };
   
-  const onChangeTime = ({ type }, selectedTime) => {
-    if (type === "set") {
-      const time = selectedTime || time;
-      setTime(formatTime(time));
-  
-      if (Platform.OS === "android") {
-        toggleTimePicker();
-        setTime(formatTime(time));
-      }
-    } else {
-      toggleTimePicker();
-    }
-  };
-
-  const formatTime = (rawTime) =>{
-    let time = new Date(rawTime)
-
-    let hour = time.getHours();
-    let min = time.getMinutes();
-
-    return `${hour}:${min}`;
-  }
-
   const formatDate = (rawDate) =>{
     let date = new Date(rawDate)
 
@@ -91,7 +64,7 @@ const AddScreen = ({ navigation }) => {
     let month = date.getMonth() + 1;
     let day = date.getDate()
 
-    return `${day}/${month}/${year}`;
+    return `${year}-${month < 10 ? '0' : ''}${month}-${day < 10 ? '0' : ''}${day}`;
   }
 
   const handleAddTodo = async () => {
@@ -154,30 +127,8 @@ const AddScreen = ({ navigation }) => {
           <TextInput style={styles.input} 
           value={due} 
           onChangeText={setDue}
-          onPressIn={toggleDatePicker}
-           />
-       </Pressable>
-       )}
-
-        {/* Time */}
-        <Text style={[styles.subtitle, { marginTop: 10 }]}>Time:</Text>
-        
-        {showTimePicker && (
-          <DateTimePicker 
-          mode='time'
-          display='clock'
-          value={new Date()}
-          onChange={onChangeTime}
-        />
-        )}
-
-       {!showTimePicker && (
-        <Pressable onPress={toggleTimePicker}>
-          <TextInput style={styles.input} 
-          value={time} 
-          onChangeText={setTime}
-          onPressIn={toggleTimePicker}
-           />
+          editable={false}
+          onPressIn={toggleDatePicker} />
        </Pressable>
        )}
 

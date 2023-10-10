@@ -81,26 +81,17 @@ const TodoScreen = ({ navigation }) => {
     const handleEditPress = (item) => {
         navigation.navigate('Edit', { nestedObject: { id: item.id, title: item.title, due: item.due, desc: item.desc } });
     };
-    const formatDate = (rawDate) =>{
-        let date = new Date(rawDate)
-    
-        let year = date.getFullYear();
-        let month = date.getMonth() + 1;
-        let day = date.getDate()
-    
-        return `${year}-${month < 10 ? '0' : ''}${month}-${day < 10 ? '0' : ''}${day}`;
-      }
-    
 
     const renderTodos = ({ item, index }) => {
       // Check if the item is unchecked
       if (!checkedItems[item.id]) {
           return (
-            <View style={{ backgroundColor: "white", borderRadius: 6, paddingTop: 15, marginBottom: 12}} numberOfLines={1} ellipsizeMode="tail">
-                <View>
-                    <Text style={{ color: 'black', fontSize: 15, fontWeight: '800', flex: 1, marginLeft: 10, marginTop: -10, marginBottom: -20}}>{item.title}</Text>
+            <View style={{backgroundColor: 'white', borderRadius: 10, borderWidth: 3, borderColor: 'pink', height: 100, marginBottom: 5}} numberOfLines={1} ellipsizeMode="tail">
+                <View style={{ flexDirection: 'row', paddingHorizontal: 15, height: "35%", alignItems: 'center', justifyContent: 'space-between'}}>
+                    <Text style={{fontSize: 20, fontWeight: '800'}}>{item.title}</Text>
+                    <Text style={{fontWeight: 'bold'}}>{item.due}</Text>
                 </View>
-                <View style={{flexDirection: 'row', alignItems: "center"}}>
+                <View style={{flexDirection: 'row', alignItems: "center",  alignItems: 'flex-start', alignItems: 'center'}}>
                     <Checkbox
                         status={checkedItems[item.id] ? 'checked' : 'unchecked'}
                         onPress={() => {
@@ -109,21 +100,12 @@ const TodoScreen = ({ navigation }) => {
                             setCheckedItems(newCheckedItems);
                             saveCheckedItemsToStorage(newCheckedItems);
                         }}
+                        style={{alignItems: 'flex-start'}}
                     />
-                    <Text style={{ color: 'black', fontSize: 12, fontWeight: '800', flex: 1}} numberOfLines={2} ellipsizeMode="tail">{item.desc}</Text>
+                    <Text style={{width: '60%', fontSize: 15}} numberOfLines={2} ellipsizeMode="tail">{item.desc}</Text>
                     <IconButton style={{marginHorizontal: 5}} icon="pencil" iconColor='darkblue' onPress={() => handleEditPress(item)} />
                     <IconButton style={{marginLeft: -15}} icon="trash-can" iconColor='red' onPress={() => handleDeleteConfirmTodo(item)} />
                 </View>
-                <View>
-<<<<<<< HEAD
-                    <Text style={{ color: 'gray', fontSize: 8, flex: 1, marginLeft: 37, marginTop: -10, marginBottom: 2}}>{item.due}: {item.time}</Text>
-=======
-                    <Text style={{ color: 'gray', fontSize: 10, flex: 1, marginLeft: 37, marginTop: -10, marginBottom: 2}}>
-                        {formatDate(new Date(item.due))}
-                    </Text>
->>>>>>> 7238d37e2df2bc1056ea2d22b5760e69bece5600
-                </View>
-
             </View>
           );
       } else {
@@ -134,8 +116,8 @@ const TodoScreen = ({ navigation }) => {
   const taskCon = height / 1.5;
     return (
         <>
-        <View style={{ marginHorizontal: 16, marginTop: 200, fontSize: 20}}>
-            <View style={{flexDirection: 'row', borderColor: '#FC5858', backgroundColor: '#dbdbdb', borderWidth: 5, marginStart: -30, paddingStart: 40, alignItems: 'center', borderTopRightRadius: 50, borderBottomRightRadius: 50, justifyContent: 'flex-end', width: width - 170, marginTop: -150}}>
+        <View style={{ marginHorizontal: 16, marginTop: 200, fontSize: 20, flex: 1}}>
+            <View style={{flexDirection: 'row', borderColor: '#FC5858', backgroundColor: '#dbdbdb', borderWidth: 5, marginStart: -30, paddingStart: 40, alignItems: 'center', borderTopRightRadius: 50, borderBottomRightRadius: 50, justifyContent: 'flex-end', width: '80%', marginTop: -150}}>
                 <Text style={{fontSize: 15, fontWeight: 'bold'}}>Assigment Application</Text>
                 <Image
                     source={require("../../assets/splash.png")}
