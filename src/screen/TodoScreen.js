@@ -115,13 +115,10 @@ const TodoScreen = ({ navigation }) => {
                     <IconButton style={{marginLeft: -15}} icon="trash-can" iconColor='red' onPress={() => handleDeleteConfirmTodo(item)} />
                 </View>
                 <View>
-<<<<<<< HEAD
                     <Text style={{ color: 'gray', fontSize: 8, flex: 1, marginLeft: 37, marginTop: -10, marginBottom: 2}}>{item.due}: {item.time}</Text>
-=======
                     <Text style={{ color: 'gray', fontSize: 10, flex: 1, marginLeft: 37, marginTop: -10, marginBottom: 2}}>
                         {formatDate(new Date(item.due))}
                     </Text>
->>>>>>> 7238d37e2df2bc1056ea2d22b5760e69bece5600
                 </View>
 
             </View>
