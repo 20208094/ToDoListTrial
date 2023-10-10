@@ -142,7 +142,7 @@ const AddScreen = ({ navigation }) => {
         {showDatePicker && (
           <DateTimePicker 
           mode='date'
-          display='spinner'
+          display='calendar'
           value={new Date()}
           onChange={onChange}
           style={styles.datePicker}
