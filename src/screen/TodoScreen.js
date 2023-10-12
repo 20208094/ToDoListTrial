@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { FlatList, StyleSheet, Text, View, Modal, Pressable, Image } from 'react-native';
+import { FlatList, StyleSheet, Text, View, Modal, Pressable, Image, TouchableOpacity } from 'react-native';
 import { IconButton, Checkbox } from 'react-native-paper';
 import Fallback from "../components/Fallback";
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -7,6 +7,8 @@ import BottomNavigation from '../navigation/BottomNav';
 import { useIsFocused } from '@react-navigation/native';
 import { LinearGradient } from 'expo-linear-gradient';
 import {Dimensions} from 'react-native';
+import { Button } from "react-native";
+import Dialog from "react-native-dialog";
 
 const TodoScreen = ({ navigation }) => {
     const [todo, setTodo] = useState("");
@@ -91,6 +93,7 @@ const TodoScreen = ({ navigation }) => {
         return `${year}-${month < 10 ? '0' : ''}${month}-${day < 10 ? '0' : ''}${day}`;
       }
     
+    const [selectedTodo, setSelectedTodo] = useState(null);
 
     const renderTodos = ({ item, index }) => {
       // Check if the item is unchecked
@@ -120,6 +123,20 @@ const TodoScreen = ({ navigation }) => {
                     </Text>
                 </View>
 
+                <Button title="Show More Details" onPress={() => showDialog(item)} />
+                <TouchableOpacity 
+                    style={styles.button} 
+                    onPress={() => showDialog(item)} >
+                    <Text style={styles.buttonText}>Show More Details</Text>
+                </TouchableOpacity>
+                <Dialog.Container visible={visible}>
+                    <Dialog.Title>{selectedTodo?.title}</Dialog.Title>
+                    <Dialog.Description>
+                    {selectedTodo?.desc}
+                    </Dialog.Description>
+                    <Text>{formatDate(new Date(selectedTodo?.due))}</Text>
+                    <Dialog.Button label="Done" onPress={handleCancel}/>
+                </Dialog.Container>
             </View>
           );
       } else {
@@ -128,8 +145,20 @@ const TodoScreen = ({ navigation }) => {
   };
 
   const taskCon = height / 1.5;
+  const [visible, setVisible] = useState(false);
+
+  const showDialog = (item) => {
+    setSelectedTodo(item);
+    setVisible(true);
+  };
+  
+  const handleCancel = () => {
+    setSelectedTodo(null);
+    setVisible(false);
+  };
+  
     return (
-        <>
+    <>
         <View style={{ marginHorizontal: 16, marginTop: 200, fontSize: 20}}>
             <View style={{flexDirection: 'row', borderColor: '#FC5858', backgroundColor: '#dbdbdb', borderWidth: 5, marginStart: -30, paddingStart: 40, alignItems: 'center', borderTopRightRadius: 50, borderBottomRightRadius: 50, justifyContent: 'flex-end', width: width - 170, marginTop: -150}}>
                 <Text style={{fontSize: 15, fontWeight: 'bold'}}>Assigment Application</Text>
@@ -152,8 +181,8 @@ const TodoScreen = ({ navigation }) => {
                 </View>
             </LinearGradient>
 
-      {/* DELETE MODAL */}
-      <Modal
+        {/* DELETE MODAL */}
+        <Modal
           transparent={true}
           visible={modalDeleteVisible}
           onRequestClose={() => {
@@ -193,7 +222,9 @@ const TodoScreen = ({ navigation }) => {
         </View>
 
         {/* Bottom Navigation Container */}
-        <BottomNavigation navigation={navigation} />
+        <View style={{ width: width, position: 'absolute', right: 0, left: 0, bottom: 0, flex: 1}}>
+            <BottomNavigation navigation={navigation} />
+        </View>
     </>
     )
 }
