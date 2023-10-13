@@ -99,10 +99,7 @@ const TodoScreen = ({ navigation }) => {
       // Check if the item is unchecked
       if (!checkedItems[item.id]) {
           return (
-            <View style={{ backgroundColor: "white", borderRadius: 6, paddingTop: 15, marginBottom: 12}} numberOfLines={1} ellipsizeMode="tail">
-                <View>
-                    <Text style={{ color: 'black', fontSize: 15, fontWeight: '800', flex: 1, marginLeft: 10, marginTop: -10, marginBottom: -20}}>{item.title}</Text>
-                </View>
+            <View style={{ backgroundColor: "white", borderRadius: 6, paddingTop: 5, marginBottom: 12}} numberOfLines={1} ellipsizeMode="tail">
                 <View style={{flexDirection: 'row', alignItems: "center"}}>
                     <Checkbox
                         status={checkedItems[item.id] ? 'checked' : 'unchecked'}
@@ -113,30 +110,24 @@ const TodoScreen = ({ navigation }) => {
                             saveCheckedItemsToStorage(newCheckedItems);
                         }}
                     />
-                    <Text style={{ color: 'black', fontSize: 12, fontWeight: '800', flex: 1}} numberOfLines={2} ellipsizeMode="tail">{item.desc}</Text>
-                    <IconButton style={{marginHorizontal: 5}} icon="pencil" iconColor='darkblue' onPress={() => handleEditPress(item)} />
-                    <IconButton style={{marginLeft: -15}} icon="trash-can" iconColor='red' onPress={() => handleDeleteConfirmTodo(item)} />
+                    
+                    <Pressable style={{width: '70%', justifyContent: 'center', backgroundColor:'gray'}} onPress={() => showDialog(item)}>
+                        <Text style={{ color: 'black', fontSize: 20, fontWeight: '800'}} numberOfLines={1} ellipsizeMode="tail">{item.title}</Text>
+                        <Text style={{ color: 'lightgray', fontSize: 14}}>
+                            {formatDate(new Date(item.due))}
+                        </Text>
+                    </Pressable>
+                    <Dialog.Container visible={visible} style={styles.dialog}>
+                        <Dialog.Title>{selectedTodo?.title}</Dialog.Title>
+                        <Dialog.Description>
+                        {selectedTodo?.desc}
+                        </Dialog.Description>
+                        <Text>{selectedTodo?.due}</Text>
+                        <Dialog.Button label="Done" onPress={handleCancel}/>
+                    </Dialog.Container>
+                    <IconButton style={{ backgroundColor: 'gray'}} icon="pencil" iconColor='darkblue' onPress={() => handleEditPress(item)} />
+                    <IconButton style={{ backgroundColor: 'lightgray'}} icon="trash-can" iconColor='red' onPress={() => handleDeleteConfirmTodo(item)} />
                 </View>
-                <View>
-                    <Text style={{ color: 'gray', fontSize: 10, flex: 1, marginLeft: 37, marginTop: -10, marginBottom: 2}}>
-                        {formatDate(new Date(item.due))}
-                    </Text>
-                </View>
-
-                <Button title="Show More Details" onPress={() => showDialog(item)} />
-                <TouchableOpacity 
-                    style={styles.button} 
-                    onPress={() => showDialog(item)} >
-                    <Text style={styles.buttonText}>Show More Details</Text>
-                </TouchableOpacity>
-                <Dialog.Container visible={visible}>
-                    <Dialog.Title>{selectedTodo?.title}</Dialog.Title>
-                    <Dialog.Description>
-                    {selectedTodo?.desc}
-                    </Dialog.Description>
-                    <Text>{formatDate(new Date(selectedTodo?.due))}</Text>
-                    <Dialog.Button label="Done" onPress={handleCancel}/>
-                </Dialog.Container>
             </View>
           );
       } else {
