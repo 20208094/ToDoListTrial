@@ -12,6 +12,9 @@ const EditScreen = ({ navigation }) => {
   const [showPicker, setShowPicker] = useState(false);
   const [todoList, setTodoList] = useState([]);
   const [editedTodo, setEditedTodo] = useState(null);
+  // time
+  const [time, setTime] = useState(new Date());
+  const [showTimePicker, setshowTimePicker] = useState(false);
 
   const route = useRoute();
   const taskId = route.params?.nestedObject?.id;
@@ -24,10 +27,11 @@ const EditScreen = ({ navigation }) => {
       setTodo(taskTitle);
       setDue(taskDue)
       setDesc(taskDesc);
+      setTime(new Date(taskDue));
       setEditedTodo({ id: taskId, title: taskTitle, due: taskDue, desc: taskDesc });
     }
   }, [taskId, taskTitle, taskDue, taskDesc]);
-  
+
 
   useEffect(() => {
     const fetchTodoList = async () => {
@@ -44,15 +48,19 @@ const EditScreen = ({ navigation }) => {
     fetchTodoList();
   }, []);
 
-  const toggleDatePicker = () =>{
+  const toggleDatePicker = () => {
     setShowPicker(!showPicker)
+  };
+
+  const toggleTimePicker = () => {
+    setshowTimePicker(!showTimePicker)
   };
 
   const onChange = (event, selectedDate) => {
     if (event.type === "set") {
       const currentDate = selectedDate || due;
       const formattedDate = formatDate(currentDate);
-      
+
       setDue(currentDate); // Set the Date object directly
       if (Platform.OS === "android") {
         toggleDatePicker();
@@ -61,9 +69,22 @@ const EditScreen = ({ navigation }) => {
       toggleDatePicker();
     }
   };
-  
 
-  const formatDate = (rawDate) =>{
+  const onChangeTime = ({ type, nativeEvent }, selectedTime) => {
+    if (type === "set") {
+      const formattedTime = selectedTime || time;
+      const newFormattedTime = formatTime(formattedTime);
+      setTime(new Date(formattedTime));
+
+      if (Platform.OS === "android") {
+        toggleTimePicker();
+      }
+    } else {
+      toggleTimePicker();
+    }
+  };
+
+  const formatDate = (rawDate) => {
     let date = new Date(rawDate)
 
     let year = date.getFullYear();
@@ -72,7 +93,14 @@ const EditScreen = ({ navigation }) => {
 
     return `${day}/${month}/${year}`;
   }
-  
+
+  const formatTime = (rawTime) => {
+    let time = new Date(rawTime);
+    let hour = time.getHours();
+    let min = time.getMinutes();
+
+    return `${('0' + hour).slice(-2)}:${('0' + min).slice(-2)}`;
+  }
 
   const saveTodoListToStorage = async (list) => {
     try {
@@ -86,18 +114,23 @@ const EditScreen = ({ navigation }) => {
     if (editedTodo === null || todo === "") {
       return;
     }
-
+  
+    // Combine date and time for the due value
+    const updatedDue = new Date(due);
+    updatedDue.setHours(time.getHours(), time.getMinutes());
+  
     const updatedTodos = todoList.map((item) => {
       if (item.id === editedTodo.id) {
-        return { ...item, title: todo, due: due, desc: desc };
+        return { ...item, title: todo, due: updatedDue, desc: desc };
       }
       return item;
     });
-
+  
     setTodoList(updatedTodos);
     saveTodoListToStorage(updatedTodos);
     navigation.goBack();
   };
+  
 
   const handleCancel = () => {
     // Navigate back to the previous screen
@@ -115,26 +148,49 @@ const EditScreen = ({ navigation }) => {
         <TextInput style={styles.input} value={todo} onChangeText={(userText) => setTodo(userText)} />
 
         <Text style={[styles.subtitle, { marginTop: 10 }]}>Due:</Text>
-            
-            {showPicker && (
-              <DateTimePicker 
-              mode='date'
-              display='spinner'
-              value={new Date()}
-              onChange={onChange}
-              style={styles.datePicker}
-            />
-            )}
 
-          {!showPicker && (
-            <Pressable onPress={toggleDatePicker}>
-              <TextInput style={styles.input} 
-              value={formatDate(due)} 
+        {showPicker && (
+          <DateTimePicker
+            mode='date'
+            display='spinner'
+            value={new Date()}
+            onChange={onChange}
+            style={styles.datePicker}
+          />
+        )}
+
+        {!showPicker && (
+          <Pressable onPress={toggleDatePicker}>
+            <TextInput style={styles.input}
+              value={formatDate(due)}
               onChangeText={setDue}
               editable={false}
               onPressIn={toggleDatePicker} />
           </Pressable>
-          )}
+        )}
+
+        {/* Time */}
+        <Text style={[styles.subtitle, { marginTop: 10 }]}>Time:</Text>
+
+        {showTimePicker && (
+          <DateTimePicker
+            mode='time'
+            display='clock'
+            value={time}
+            onChange={onChangeTime}
+          />
+        )}
+
+        {!showTimePicker && (
+          <Pressable onPress={toggleTimePicker}>
+            <TextInput
+              style={styles.input}
+              value={formatTime(time)}
+              onChangeText={setTime}
+              onPressIn={toggleTimePicker}
+            />
+          </Pressable>
+        )}
 
         <Text style={[styles.subtitle, { marginTop: 10 }]}>Task Description</Text>
         <TextInput

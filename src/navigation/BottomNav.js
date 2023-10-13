@@ -1,28 +1,36 @@
 import React from 'react';
 import { View, TouchableOpacity, Image, StyleSheet } from 'react-native';
 import houseImage from '../../assets/house.png';
-import addImage from '../../assets/add.png';
 import graphImage from '../../assets/graph.png';
 import doubleCheck from '../../assets/doubleCheck.png';
 import { LinearGradient } from 'expo-linear-gradient';
+import { useRoute } from '@react-navigation/native';
 
 const BottomNavigation = ({ navigation }) => {
+  const route = useRoute();
+
+  const getButtonStyle = (screenName) => ({
+    ...styles.ButtonContainer,
+    backgroundColor: route.name === screenName ? 'blue' : '#FC5858',
+    borderWidth: route.name === screenName ? 2 : 0,
+    borderColor: 'white',
+  });
+
   return (
     <LinearGradient colors={['#FC5858', 'pink']} style={styles.bottomContainer}>
-      <TouchableOpacity style={styles.ButtonContainer} onPress={() => navigation.navigate('Todo')}>
+      {/* ARCHIVE BUTTON */}
+      <TouchableOpacity style={getButtonStyle('Archive')} onPress={() => navigation.navigate('Archive')}>
+        <Image source={doubleCheck} style={styles.icon} />
+      </TouchableOpacity>
+
+      {/* TODO SCREEN BUTTON */}
+      <TouchableOpacity style={getButtonStyle('Todo')} onPress={() => navigation.navigate('Todo')}>
         <Image source={houseImage} style={styles.icon} />
       </TouchableOpacity>
-      
-      <TouchableOpacity style={styles.ButtonContainer} onPress={() => navigation.navigate('Add')}>
-        <Image source={addImage} style={styles.icon} />
-      </TouchableOpacity>
 
-      <TouchableOpacity style={styles.ButtonContainer} onPress={() => navigation.navigate('Analytics')}>
+      {/* ANALYTICS BUTTON */}
+      <TouchableOpacity style={getButtonStyle('Analytics')} onPress={() => navigation.navigate('Analytics')}>
         <Image source={graphImage} style={styles.icon} />
-      </TouchableOpacity>
-
-      <TouchableOpacity style={styles.ButtonContainer} onPress={() => navigation.navigate('Archive')}>
-        <Image source={doubleCheck} style={styles.icon} />
       </TouchableOpacity>
     </LinearGradient>
   );
@@ -40,6 +48,8 @@ const styles = StyleSheet.create({
     bottom: 0,
     left: 0,
     right: 0,
+    paddingStart: 40,
+    paddingEnd: 40,
   },
   iconContainer: {
     alignItems: 'center',
@@ -52,18 +62,13 @@ const styles = StyleSheet.create({
     borderRadius: 15,
   },
   ButtonContainer: {
-    backgroundColor: '#FC5858',
     borderRadius: 50,
     padding: 10,
     width: 50,
     height: 50,
     alignItems: 'center',
     justifyContent: 'center',
-    borderWidth: 2,
-    borderColor: 'white',
   },
 });
 
 export default BottomNavigation;
-
-

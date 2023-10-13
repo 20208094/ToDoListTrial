@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { FlatList, StyleSheet, Text, TextInput, Touchable, TouchableOpacity, View, Modal, Pressable, Image } from 'react-native';
 import { IconButton, Checkbox } from 'react-native-paper';
-import Fallback from "../components/Fallback";
+import Fallback from "../../components/Fallback";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const TodoScreen = () => {

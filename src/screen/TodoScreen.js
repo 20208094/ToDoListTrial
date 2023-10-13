@@ -83,6 +83,15 @@ const TodoScreen = ({ navigation }) => {
     const handleEditPress = (item) => {
         navigation.navigate('Edit', { nestedObject: { id: item.id, title: item.title, due: item.due, desc: item.desc } });
     };
+
+    const formatTime = (rawTime) => {
+        let time = new Date(rawTime);
+        let hour = time.getHours();
+        let min = time.getMinutes();
+    
+        return `${('0' + hour).slice(-2)}:${('0' + min).slice(-2)}`;
+      }
+
     const formatDate = (rawDate) =>{
         let date = new Date(rawDate)
     
@@ -96,53 +105,57 @@ const TodoScreen = ({ navigation }) => {
     const [selectedTodo, setSelectedTodo] = useState(null);
 
     const renderTodos = ({ item, index }) => {
-      // Check if the item is unchecked
-      if (!checkedItems[item.id]) {
-          return (
-            <View style={{ backgroundColor: "white", borderRadius: 6, paddingTop: 15, marginBottom: 12}} numberOfLines={1} ellipsizeMode="tail">
-                <View>
-                    <Text style={{ color: 'black', fontSize: 15, fontWeight: '800', flex: 1, marginLeft: 10, marginTop: -10, marginBottom: -20}}>{item.title}</Text>
-                </View>
-                <View style={{flexDirection: 'row', alignItems: "center"}}>
-                    <Checkbox
-                        status={checkedItems[item.id] ? 'checked' : 'unchecked'}
-                        onPress={() => {
-                            const newCheckedItems = { ...checkedItems };
-                            newCheckedItems[item.id] = !checkedItems[item.id];
-                            setCheckedItems(newCheckedItems);
-                            saveCheckedItemsToStorage(newCheckedItems);
-                        }}
-                    />
-                    <Text style={{ color: 'black', fontSize: 12, fontWeight: '800', flex: 1}} numberOfLines={2} ellipsizeMode="tail">{item.desc}</Text>
-                    <IconButton style={{marginHorizontal: 5}} icon="pencil" iconColor='darkblue' onPress={() => handleEditPress(item)} />
-                    <IconButton style={{marginLeft: -15}} icon="trash-can" iconColor='red' onPress={() => handleDeleteConfirmTodo(item)} />
-                </View>
-                <View>
-                    <Text style={{ color: 'gray', fontSize: 10, flex: 1, marginLeft: 37, marginTop: -10, marginBottom: 2}}>
-                        {formatDate(new Date(item.due))}
-                    </Text>
-                </View>
+  // Check if the item is unchecked
+  if (!checkedItems[item.id]) {
+    return (
+      <View style={{ backgroundColor: "white", borderRadius: 6, paddingTop: 15, marginBottom: 12 }} numberOfLines={1} ellipsizeMode="tail">
+        <View>
+          <Text style={{ color: 'black', fontSize: 15, fontWeight: '800', flex: 1, marginLeft: 10, marginTop: -10, marginBottom: -20 }}>{item.title}</Text>
+        </View>
+        <View style={{ flexDirection: 'row', alignItems: "center" }}>
+          <Checkbox
+            status={checkedItems[item.id] ? 'checked' : 'unchecked'}
+            onPress={() => {
+              const newCheckedItems = { ...checkedItems };
+              newCheckedItems[item.id] = !checkedItems[item.id];
+              setCheckedItems(newCheckedItems);
+              saveCheckedItemsToStorage(newCheckedItems);
+            }}
+          />
+          <Text style={{ color: 'black', fontSize: 12, fontWeight: '800', flex: 1 }} numberOfLines={2} ellipsizeMode="tail">{item.desc}</Text>
+          <IconButton style={{ marginHorizontal: 5 }} icon="pencil" iconColor='darkblue' onPress={() => handleEditPress(item)} />
+          <IconButton style={{ marginLeft: -15 }} icon="trash-can" iconColor='red' onPress={() => handleDeleteConfirmTodo(item)} />
+        </View>
+        <View>
+          <Text style={{ color: 'gray', fontSize: 10, flex: 1, marginLeft: 37, marginTop: -10, marginBottom: 2 }}>
+            {formatDate(new Date(item.due))}
+            {'      '}
+            {formatTime(new Date(item.due))}
+          </Text>
+        </View>
 
-                <Button title="Show More Details" onPress={() => showDialog(item)} />
-                <TouchableOpacity 
-                    style={styles.button} 
-                    onPress={() => showDialog(item)} >
-                    <Text style={styles.buttonText}>Show More Details</Text>
-                </TouchableOpacity>
-                <Dialog.Container visible={visible}>
-                    <Dialog.Title>{selectedTodo?.title}</Dialog.Title>
-                    <Dialog.Description>
-                    {selectedTodo?.desc}
-                    </Dialog.Description>
-                    <Text>{formatDate(new Date(selectedTodo?.due))}</Text>
-                    <Dialog.Button label="Done" onPress={handleCancel}/>
-                </Dialog.Container>
-            </View>
-          );
-      } else {
-          return null; // Don't render checked tasks
-      }
-  };
+        <Button title="Show More Details" onPress={() => showDialog(item)} />
+        <TouchableOpacity
+          style={styles.button}
+          onPress={() => showDialog(item)} >
+          <Text style={styles.buttonText}>Show More Details</Text>
+        </TouchableOpacity>
+        <Dialog.Container visible={visible}>
+          <Dialog.Title>{selectedTodo?.title}</Dialog.Title>
+          <Dialog.Description>
+            {selectedTodo?.desc}
+          </Dialog.Description>
+          <Text>{formatDate(new Date(selectedTodo?.due))}</Text>
+          <Text>{formatTime(new Date(selectedTodo?.due))}</Text>
+          <Dialog.Button label="Done" onPress={handleCancel} />
+        </Dialog.Container>
+      </View>
+    );
+  } else {
+    return null; // Don't render checked tasks
+  }
+};
+
 
   const taskCon = height / 1.5;
   const [visible, setVisible] = useState(false);
@@ -180,6 +193,22 @@ const TodoScreen = ({ navigation }) => {
                     <FlatList data={todoList} renderItem={renderTodos} />
                 </View>
             </LinearGradient>
+
+            {/* Add Button */}
+        <Pressable style={{position: 'absolute', bottom: 1, right: 1,}} onPress={() => navigation.navigate('Add')}>
+                    <View style={{backgroundColor: '#FC5858',
+                        width: 80,
+                        height: 80,
+                        borderRadius: 80,
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        borderWidth: 7,
+                        borderColor: 'white',
+                        bottom: 8,
+                        right: 8,}}>
+                    <Text style={{fontSize: 50, color: 'white',}}>+</Text>
+                    </View>
+                </Pressable>
 
         {/* DELETE MODAL */}
         <Modal
@@ -219,7 +248,11 @@ const TodoScreen = ({ navigation }) => {
             </View>
           </View>
         </Modal>
+
+        
         </View>
+
+        
 
         {/* Bottom Navigation Container */}
         <View style={{ width: width, position: 'absolute', right: 0, left: 0, bottom: 0, flex: 1}}>

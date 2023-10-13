@@ -1,18 +1,22 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet, DatePickerIOS, Pressable, Platform} from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, StyleSheet, DatePickerIOS, Pressable, Platform } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import BottomNavigation from '../navigation/BottomNav';
 import DateTimePicker from "@react-native-community/datetimepicker";
 import { LinearGradient } from 'expo-linear-gradient';
-import {Dimensions} from 'react-native';
+import { Dimensions } from 'react-native';
 
 const AddScreen = ({ navigation }) => {
   const [todo, setTodo] = useState("");
-  const [due, setDue] = useState(new Date());
   const [desc, setDesc] = useState("");
-  const [showPicker, setShowPicker] = useState(false);
   const [todoList, setTodoList] = useState([]);
-  const {height, width} = Dimensions.get('window');
+  const { height, width } = Dimensions.get('window');
+  // date
+  const [due, setDue] = useState(new Date());
+  const [showDatePicker, setShowDatePicker] = useState(false);
+  // time
+  const [time, setTime] = useState(new Date());
+  const [showTimePicker, setshowTimePicker] = useState(false);
 
   useEffect(() => {
     const fetchTodoList = async () => {
@@ -37,15 +41,19 @@ const AddScreen = ({ navigation }) => {
     }
   };
 
-  const toggleDatePicker = () =>{
-    setShowPicker(!showPicker)
+  const toggleDatePicker = () => {
+    setShowDatePicker(!showDatePicker)
+  };
+
+  const toggleTimePicker = () => {
+    setshowTimePicker(!showTimePicker)
   };
 
   const onChange = (event, selectedDate) => {
     if (event.type === "set") {
       const currentDate = selectedDate || due;
       const formattedDate = formatDate(currentDate);
-      
+
       setDue(currentDate); // Set the Date object directly
       if (Platform.OS === "android") {
         toggleDatePicker();
@@ -54,10 +62,22 @@ const AddScreen = ({ navigation }) => {
       toggleDatePicker();
     }
   };
+
+  const onChangeTime = ({ type, nativeEvent }, selectedTime) => {
+    if (type === "set") {
+      const formattedTime = selectedTime || time;
+      const newFormattedTime = formatTime(formattedTime);
+      setTime(new Date(formattedTime));
   
+      if (Platform.OS === "android") {
+        toggleTimePicker();
+      }
+    } else {
+      toggleTimePicker();
+    }
+  };
   
-  
-  const formatDate = (rawDate) =>{
+  const formatDate = (rawDate) => {
     let date = new Date(rawDate)
 
     let year = date.getFullYear();
@@ -67,33 +87,41 @@ const AddScreen = ({ navigation }) => {
     return `${year}-${month < 10 ? '0' : ''}${month}-${day < 10 ? '0' : ''}${day}`;
   }
 
+  const formatTime = (rawTime) => {
+    let time = new Date(rawTime);
+    let hour = time.getHours();
+    let min = time.getMinutes();
+
+    return `${('0' + hour).slice(-2)}:${('0' + min).slice(-2)}`;
+  }
+
   const handleAddTodo = async () => {
-  if (todo === "") {
-    return;
-  }
+    if (todo === "") {
+      return;
+    }
 
-  const newTodo = { id: Date.now().toString(), title: todo, due: due, desc: desc };
+    const newTodo = { id: Date.now().toString(), title: todo, due: due, desc: desc };
 
-  try {
-    // Fetch the current todoList from AsyncStorage
-    const storedTodoList = await AsyncStorage.getItem('todoList');
-    const currentTodoList = storedTodoList ? JSON.parse(storedTodoList) : [];
+    try {
+      // Fetch the current todoList from AsyncStorage
+      const storedTodoList = await AsyncStorage.getItem('todoList');
+      const currentTodoList = storedTodoList ? JSON.parse(storedTodoList) : [];
 
-    // Add the newTodo to the list
-    const updatedTodoList = [...currentTodoList, newTodo];
+      // Add the newTodo to the list
+      const updatedTodoList = [...currentTodoList, newTodo];
 
-    // Save the updated todoList to AsyncStorage
-    await AsyncStorage.setItem('todoList', JSON.stringify(updatedTodoList));
+      // Save the updated todoList to AsyncStorage
+      await AsyncStorage.setItem('todoList', JSON.stringify(updatedTodoList));
 
-    // Update the state in the TodoScreen component
-    setTodoList(updatedTodoList);
+      // Update the state in the TodoScreen component
+      setTodoList(updatedTodoList);
 
-    // Navigate back to TodoScreen
-    navigation.navigate('Todo');
-  } catch (error) {
-    console.error('Error adding todo: ', error);
-  }
-};
+      // Navigate back to TodoScreen
+      navigation.navigate('Todo');
+    } catch (error) {
+      console.error('Error adding todo: ', error);
+    }
+  };
 
 
   return (
@@ -111,36 +139,59 @@ const AddScreen = ({ navigation }) => {
 
         {/* Due */}
         <Text style={[styles.subtitle, { marginTop: 10 }]}>Due:</Text>
-        
-        {showPicker && (
-          <DateTimePicker 
-          mode='date'
-          display='spinner'
-          value={new Date()}
-          onChange={onChange}
-          style={styles.datePicker}
-        />
+
+        {showDatePicker && (
+          <DateTimePicker
+            mode='date'
+            display='spinner'
+            value={new Date()}
+            onChange={onChange}
+            style={styles.datePicker}
+          />
         )}
 
-       {!showPicker && (
-        <Pressable onPress={toggleDatePicker}>
-          <TextInput 
-            style={styles.input} 
-            value={formatDate(due)}  // Convert the date to string using your formatDate function
-            onChangeText={setDue}
-            editable={false}
-            onPressIn={toggleDatePicker} 
-          />
+        {!showDatePicker && (
+          <Pressable onPress={toggleDatePicker}>
+            <TextInput
+              style={styles.input}
+              value={formatDate(due)}  // Convert the date to string using your formatDate function
+              onChangeText={setDue}
+              editable={false}
+              onPressIn={toggleDatePicker}
+            />
 
-       </Pressable>
-       )}
+          </Pressable>
+        )}
+
+        {/* Time */}
+        <Text style={[styles.subtitle, { marginTop: 10 }]}>Time:</Text>
+
+        {showTimePicker && (
+          <DateTimePicker
+            mode='time'
+            display='clock'
+            value={new Date()}
+            onChange={onChangeTime}
+          />
+        )}
+
+        {!showTimePicker && (
+          <Pressable onPress={toggleTimePicker}>
+            <TextInput
+              style={styles.input}
+              value={formatTime(time)}  // Convert the time to string using your formatTime function
+              onChangeText={setTime}
+              onPressIn={toggleTimePicker}
+            />
+          </Pressable>
+        )}
 
         {/* Task Description */}
         <Text style={[styles.subtitle, { marginTop: 10 }]}>Task Description</Text>
         <TextInput
           style={[styles.input, { height: 100, textAlignVertical: 'top' }]}
           multiline={true}
-          value={desc} onChangeText={(userText) => setDesc(userText)} 
+          value={desc} onChangeText={(userText) => setDesc(userText)}
         />
 
         {/* Buttons Container */}
@@ -153,7 +204,7 @@ const AddScreen = ({ navigation }) => {
       </LinearGradient>
 
       {/* Bottom Navigation Container */}
-      <View style={{ width: width, position: 'absolute', right: 0, left: 0, bottom: 0, flex: 1}}>
+      <View style={{ width: width, position: 'absolute', right: 0, left: 0, bottom: 0, flex: 1 }}>
         <BottomNavigation navigation={navigation} />
       </View>
     </View>
