@@ -108,64 +108,64 @@ const TodoScreen = ({ navigation }) => {
   if (!checkedItems[item.id]) {
     return (
         <View style={{marginBottom: 10}}>
-        <SwipeListView
-        data={[item]} 
-        renderItem={(data, rowMap) => (
-            <View style={{ backgroundColor: 'white', borderRadius: 4, width: '100%', height: 75, justifyContent: 'center' }}>
-                <View style={{ flexDirection: 'row' }}>
-                    <Checkbox 
-                        status={checkedItems[data.item.id] ? 'checked' : 'unchecked'} 
-                        onPress={() => { 
-                            const newCheckedItems = { ...checkedItems }; 
-                            newCheckedItems[data.item.id] = !checkedItems[data.item.id]; 
-                            setCheckedItems(newCheckedItems); 
-                            saveCheckedItemsToStorage(newCheckedItems); 
-                        }}
-                        style={{ paddingHorizontal: 5}}
-                    />
-                    <View style={{flex: 1}} >
-                        <Text style={{color: 'black', fontSize: 25, fontWeight: '800'}} numberOfLines={1} ellipsizeMode="tail">{data.item.title}</Text>
-                        <Text style={{ color: 'gray', fontSize: 15 }}>
-                            {formatDate(new Date(data.item.due))}
-                            {'      '}
-                            {formatTime(new Date(data.item.due))}
-                        </Text>
-                    </View>
-                    
-                    <View style={{ flexDirection: 'row', alignItems: 'center'}}>
-                        <IconButton style={{ margin: 0 }} icon="eye" iconColor='#3498db' onPress={() => showDialog(data.item)} />
-                            {/* Popup dialog */}
-                            <Dialog.Container visible={visible}>
-                                <Dialog.Title>{selectedTodo?.title}</Dialog.Title>
-                                <Dialog.Description>
-                                    {selectedTodo?.desc}
-                                </Dialog.Description>
-                                <Text>{formatDate(new Date(selectedTodo?.due))}</Text>
-                                <Text>{formatTime(new Date(selectedTodo?.due))}</Text>
-                                <Dialog.Button label="Done" onPress={handleCancel} />
-                            </Dialog.Container>
+            <SwipeListView
+            data={[item]} 
+            renderItem={(data, rowMap) => (
+                <View style={{ backgroundColor: 'white', borderRadius: 4, width: '100%', height: 75, justifyContent: 'center' }}>
+                    <View style={{ flexDirection: 'row' }}>
+                        <Checkbox 
+                            status={checkedItems[data.item.id] ? 'checked' : 'unchecked'} 
+                            onPress={() => { 
+                                const newCheckedItems = { ...checkedItems }; 
+                                newCheckedItems[data.item.id] = !checkedItems[data.item.id]; 
+                                setCheckedItems(newCheckedItems); 
+                                saveCheckedItemsToStorage(newCheckedItems); 
+                            }}
+                            style={{ paddingHorizontal: 5}}
+                        />
+                        <View style={{flex: 1}} >
+                            <Text style={{color: 'black', fontSize: 25, fontWeight: '800'}} numberOfLines={1} ellipsizeMode="tail">{data.item.title}</Text>
+                            <Text style={{ color: 'gray', fontSize: 15 }}>
+                                {formatDate(new Date(data.item.due))}
+                                {'      '}
+                                {formatTime(new Date(data.item.due))}
+                            </Text>
+                        </View>
+                        
+                        <View style={{ flexDirection: 'row', alignItems: 'center'}}>
+                            <IconButton style={{ margin: 0 }} icon="eye" iconColor='#3498db' onPress={() => showDialog(data.item)} />
+                                {/* Popup dialog */}
+                                <Dialog.Container visible={visible}>
+                                    <Dialog.Title>{selectedTodo?.title}</Dialog.Title>
+                                    <Dialog.Description>
+                                        {selectedTodo?.desc}
+                                    </Dialog.Description>
+                                    <Text>{formatDate(new Date(selectedTodo?.due))}</Text>
+                                    <Text>{formatTime(new Date(selectedTodo?.due))}</Text>
+                                    <Dialog.Button label="Done" onPress={handleCancel} />
+                                </Dialog.Container>
+                        </View>
                     </View>
                 </View>
-            </View>
-        )}
-        renderHiddenItem={(data, rowMap) => (
-            <View style={{ flex: 1, flexDirection: 'row', alignItems: 'center', justifyContent: 'flex-end', padding: 10, backgroundColor: 'gray', height: 75, width: '50%', position: 'absolute', right: 0, borderRadius: 4}}>
-                <IconButton 
-                    style={{ margin: 0, backgroundColor: '#f39c12', marginEnd: 5 }} 
-                    icon="pencil" 
-                    iconColor='black' 
-                    onPress={() => handleEditPress(data.item)} 
-                />
-                <IconButton 
-                    style={{ margin: 0, backgroundColor: '#e74c3c' }} 
-                    icon="trash-can" 
-                    iconColor='black' 
-                    onPress={() => handleDeleteConfirmTodo(data.item)} 
-                />
-            </View>
-        )}
-        rightOpenValue={-100}
-        />
+            )}
+            renderHiddenItem={(data, rowMap) => (
+                <View style={{ flex: 1, flexDirection: 'row', alignItems: 'center', justifyContent: 'flex-end', padding: 10, backgroundColor: 'gray', height: 75, width: '50%', position: 'absolute', right: 0, borderRadius: 4}}>
+                    <IconButton 
+                        style={{ margin: 0, backgroundColor: '#f39c12', marginEnd: 5 }} 
+                        icon="pencil" 
+                        iconColor='black' 
+                        onPress={() => handleEditPress(data.item)} 
+                    />
+                    <IconButton 
+                        style={{ margin: 0, backgroundColor: '#e74c3c' }} 
+                        icon="trash-can" 
+                        iconColor='black' 
+                        onPress={() => handleDeleteConfirmTodo(data.item)} 
+                    />
+                </View>
+            )}
+            rightOpenValue={-100}
+            />
         </View>
     );
   } else {
