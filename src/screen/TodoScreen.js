@@ -181,7 +181,7 @@ const TodoScreen = ({ navigation }) => {
   };
 
   const handleEditPress = (item) => {
-    navigation.navigate('Edit', { nestedObject: { id: item.id, title: item.title, due: item.due, desc: item.desc } });
+    navigation.navigate('Edit', { nestedObject: { id: item.id, title: item.title, due: item.due, mins: item.mins, desc: item.desc } });
   };
 
   const formatTime = (rawTime) => {
