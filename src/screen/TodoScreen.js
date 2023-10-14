@@ -116,7 +116,7 @@ const TodoScreen = ({ navigation }) => {
       await Notifications.scheduleNotificationAsync({
         content: {
           title: 'Task Reminder',
-          body: `Your task "${item.title}" is due in 5 minutes!`,
+          body: `Your task "${item.title}" is due in 2 minutes!`,
         },
         trigger: {
           seconds: 1, // You can customize the delay as needed
