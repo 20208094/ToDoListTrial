@@ -294,9 +294,9 @@ const TodoScreen = ({ navigation }) => {
           </Text>
 
           {/* Display the total of unfinished task */}
-          <View style={{ backgroundColor: 'pink', width: 200, height: 20, borderRadius: 5, borderColor: '#FC5858', borderWidth: 1 }}>
+          {/* <View style={{ backgroundColor: 'pink', width: 200, height: 20, borderRadius: 5, borderColor: '#FC5858', borderWidth: 1 }}>
             <Text style={{ fontWeight: 'bold', fontSize: 16, marginHorizontal: 5 }}>Unfinished Tasks: {uncheckedItemsCount}</Text>
-          </View>
+          </View> */}
         </View>
         <LinearGradient colors={['#FC5858', 'pink']} style={{ borderTopRightRadius: 40, borderBottomLeftRadius: 40, height: height / 1.5, marginTop: 5, padding: 20, fontSize: 20 }}>
           <View style={{ backgroundColor: '#dbdbdb', padding: 10, height: taskCon - 50, borderRadius: 6, borderColor: '#fff', borderWidth: 5 }}>
