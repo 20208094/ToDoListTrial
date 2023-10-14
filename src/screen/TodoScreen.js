@@ -65,31 +65,19 @@ const TodoScreen = ({ navigation }) => {
             return;
           }
     
+          const dueDate = new Date(item.due).getDate();
+          const currentDate = new Date().getDate();
+          const currentTime = new Date().getTime();
           const dueTime = new Date(item.due).getTime();
-          const currentTime = Date.now();
+          const notificationMinutes = item.mins; // Get the notification minutes from the item
+
+          
+          const hour = new Date(dueTime).getHours();
+          const minute = new Date(dueTime).getMinutes() - notificationMinutes
     
-          // Log for debugging
-          console.log('Due Time:', new Date(dueTime));
-          console.log('Current Time:', new Date(currentTime));
-    
-          // Convert notifTime to a number (assuming it's a string)
-          const notifTimeAsNumber = parseFloat(item.notifTime);
-    
-          // Check if notifTime is a valid number
-          if (!isNaN(notifTimeAsNumber)) {
-            // Check if there is notifTime left before the due time
-            const timeDifference = dueTime - currentTime;
-            if (timeDifference > 0 && timeDifference <= notifTimeAsNumber * 60 * 1000) {
-              // Schedule a notification for this item within the next notifTime minutes
-              console.log('Scheduling notification for:', item);
-              notificationsToSchedule.push(scheduleNotification(item));
-            } else if (dueTime <= currentTime) {
-              // Schedule a notification for this item with a past due time
-              console.log('Scheduling past due notification for:', item);
-              notificationsToSchedule.push(schedulePastDueNotification(item));
-            }
-          } else {
-            console.warn(`Invalid notifTime for item with id ${item.id}: ${item.notifTime}`);
+          if (currentDate == dueDate) {
+            notificationsToSchedule.push(scheduleDateNotification(item));
+            notificationsToSchedule.push(scheduleTimeNotification(item));
           }
         });
     
