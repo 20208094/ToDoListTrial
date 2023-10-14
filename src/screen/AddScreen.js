@@ -68,7 +68,7 @@ const AddScreen = ({ navigation }) => {
       const formattedTime = selectedTime || time;
       const newFormattedTime = formatTime(formattedTime);
       setTime(new Date(formattedTime));
-  
+
       if (Platform.OS === "android") {
         toggleTimePicker();
       }
@@ -76,7 +76,7 @@ const AddScreen = ({ navigation }) => {
       toggleTimePicker();
     }
   };
-  
+
   const formatDate = (rawDate) => {
     let date = new Date(rawDate)
 
@@ -100,7 +100,11 @@ const AddScreen = ({ navigation }) => {
       return;
     }
 
-    const newTodo = { id: Date.now().toString(), title: todo, due: due, desc: desc };
+    // Combine date and time for the due value
+    const combinedDue = new Date(due);
+    combinedDue.setHours(time.getHours(), time.getMinutes());
+
+    const newTodo = { id: Date.now().toString(), title: todo, due: combinedDue, desc: desc };
 
     try {
       // Fetch the current todoList from AsyncStorage
@@ -122,7 +126,6 @@ const AddScreen = ({ navigation }) => {
       console.error('Error adding todo: ', error);
     }
   };
-
 
   return (
     <View style={styles.container}>
