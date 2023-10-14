@@ -1,9 +1,9 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { FlatList, StyleSheet, Text, View, Modal, Pressable, Image, TouchableOpacity, Button, Dimensions } from 'react-native';
 import { IconButton, Checkbox } from 'react-native-paper';
-import Fallback from "../components/Fallback";
+import Fallback from "../../components/Fallback";
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import BottomNavigation from '../navigation/BottomNav';
+import BottomNavigation from '../../navigation/BottomNav';
 import { useIsFocused } from '@react-navigation/native';
 import { LinearGradient } from 'expo-linear-gradient';
 import Dialog from "react-native-dialog";
@@ -55,31 +55,28 @@ const TodoScreen = ({ navigation }) => {
     const checkDueNotifications = async () => {
       try {
         const notificationsToSchedule = [];
-    
+
+        // Check for each item in the todoList
         todoList.forEach((item) => {
-          console.log('Checking item:', item);
-    
-          // Skip checked tasks
-          if (checkedItems[item.id]) {
-            return;
-          }
-    
+
+          const dueDate = new Date(item.due).getDate();
+          const currentDate = new Date().getDate();
+          const currentTime = new Date().getTime();
           const dueTime = new Date(item.due).getTime();
-          const currentTime = Date.now();
-    
-          // Log for debugging
-          console.log('Due Time:', new Date(dueTime));
-          console.log('Current Time:', new Date(currentTime));
-    
-          // Convert notifTime to a number (assuming it's a string)
-          const notifTimeAsNumber = parseFloat(item.notifTime);
-    
-          // Check if notifTime is a valid number
-          if (!isNaN(notifTimeAsNumber)) {
-            // Check if there is notifTime left before the due time
-            const timeDifference = dueTime - currentTime;
-            if (timeDifference > 0 && timeDifference <= notifTimeAsNumber * 60 * 1000) {
-              // Schedule a notification for this item within the next notifTime minutes
+          const notificationMinutes = item.mins; // Get the notification minutes from the item
+
+          // const notifTime = new Date(dueTime - notificationMinutes * 60 * 1000).getTime();
+
+            // if (currentDate == dueDate) {
+            //     notificationsToSchedule.push(scheduleDateNotification(item, currentDate));
+            // }
+
+            // if (notifTime <= currentTime) {
+            //     notificationsToSchedule.push(scheduleTimeNotification(item, notifTime));
+            // }
+
+            if (dueTime - currentTime > 0 && dueTime - currentTime <= item.notifTime * 60 * 1000) {
+              // Schedule a notification for this item within the next 5 minutes
               console.log('Scheduling notification for:', item);
               notificationsToSchedule.push(scheduleNotification(item));
             } else if (dueTime <= currentTime) {
@@ -87,19 +84,20 @@ const TodoScreen = ({ navigation }) => {
               console.log('Scheduling past due notification for:', item);
               notificationsToSchedule.push(schedulePastDueNotification(item));
             }
-          } else {
-            console.warn(`Invalid notifTime for item with id ${item.id}: ${item.notifTime}`);
-          }
+            
         });
-    
+
+        // Wait for all notifications to be scheduled before continuing
         await Promise.all(notificationsToSchedule);
       } catch (error) {
         console.error('Error scheduling notifications: ', error);
       }
     };
-    
+
+    // Call the checkDueNotifications function
     checkDueNotifications();
   }, [todoList]);
+
 
   useEffect(() => {
     const requestNotificationPermissions = async () => {
@@ -124,35 +122,36 @@ const TodoScreen = ({ navigation }) => {
     }
   };
 
+  const schedulePastDueNotification = async (item) => {
+    try {   
+      await Notifications.scheduleNotificationAsync({
+        content: {
+            title: 'Task Reminder',
+            body: `Your task "${item.title}" is past its due!`,
+          },
+          trigger: null
+        });
+
+    } catch (error) {
+      console.error('Error scheduling notification:', error);
+    }
+  };
+  
   const scheduleNotification = async (item) => {
     try {
-      await Notifications.scheduleNotificationAsync({
-        content: {
-          title: 'Task Reminder',
-          body: `Your task "${item.title}" is in "${item.notifTime}" minutes.!`,
-        },
-        trigger: null
-      });
+        await Notifications.scheduleNotificationAsync({
+            content: {
+                title: 'Task Reminder',
+                body: `Your task "${item.title}" is in "${item.notifTime}" minutes.!`,
+                },
+                trigger: null
+            });
 
     } catch (error) {
-      console.error('Error scheduling notification:', error);
+        console.error('Error scheduling notification:', error);
     }
   };
-
-  const schedulePastDueNotification = async (item) => {
-    try {
-      await Notifications.scheduleNotificationAsync({
-        content: {
-          title: 'Task Reminder',
-          body: `Your task "${item.title}" is past its due!`,
-        },
-        trigger: null
-      });
-
-    } catch (error) {
-      console.error('Error scheduling notification:', error);
-    }
-  };
+  
 
   const saveCheckedItemsToStorage = async (items) => {
     try {
@@ -183,7 +182,7 @@ const TodoScreen = ({ navigation }) => {
   };
 
   const handleEditPress = (item) => {
-    navigation.navigate('Edit', { nestedObject: { id: item.id, title: item.title, due: item.due, desc: item.desc, notifTime: item.notifTime } });
+    navigation.navigate('Edit', { nestedObject: { id: item.id, title: item.title, due: item.due, desc: item.desc } });
   };
 
   const formatTime = (rawTime) => {
@@ -247,6 +246,15 @@ const TodoScreen = ({ navigation }) => {
               <IconButton style={{ margin: 0 }} icon="trash-can" iconColor='#e74c3c' onPress={() => handleDeleteConfirmTodo(item)} />
             </View>
           </View>
+
+          {/* <View>
+          <Text style={{ color: 'gray', fontSize: 12,  marginLeft: 37,  }}>
+            {formatDate(new Date(item.due))}
+            {'      '}
+            {formatTime(new Date(item.due))}
+          </Text>
+        </View>  */}
+
         </View>
       );
     } else {
@@ -288,7 +296,7 @@ const TodoScreen = ({ navigation }) => {
           </Text>
 
           {/* Display the total of unfinished task */}
-          <View style={{ backgroundColor: 'pink', width: 180, height: 20, borderRadius: 5, borderColor: '#FC5858', borderWidth: 1 }}>
+          <View style={{ backgroundColor: 'pink', width: 145, height: 20, borderRadius: 5, borderColor: '#FC5858', borderWidth: 1 }}>
             <Text style={{ fontWeight: 'bold', fontSize: 16, marginHorizontal: 5 }}>Unfinished Tasks: {uncheckedItemsCount}</Text>
           </View>
         </View>
@@ -357,7 +365,12 @@ const TodoScreen = ({ navigation }) => {
             </View>
           </View>
         </Modal>
+
+
       </View>
+
+
+
       {/* Bottom Navigation Container */}
       <View style={{ width: width, position: 'absolute', right: 0, left: 0, bottom: 0, flex: 1 }}>
         <BottomNavigation navigation={navigation} />
