@@ -8,6 +8,7 @@ DEPENDENCY INSTALLATION:
     npx expo install expo-linear-gradient
     npm install react-time-range
     npm install react-native-dialog
+    npm install react-native-swipe-list-view
 
 ----------------------------------------------------------------------------------
 EXPORT GUIDE:
