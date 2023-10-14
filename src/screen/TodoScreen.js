@@ -24,6 +24,7 @@ const TodoScreen = ({ navigation }) => {
   const [deleteConfirmTodo, setDeleteConfirmTodo] = useState(null);
   const [checkedItems, setCheckedItems] = useState({});
   const [modalDeleteVisible, setModalDeleteVisible] = useState(false);
+  const [scheduledNotifications, setScheduledNotifications] = useState({});
   const { height, width } = Dimensions.get('window');
 
   const isFocused = useIsFocused();
@@ -58,31 +59,30 @@ const TodoScreen = ({ navigation }) => {
         const notificationsToSchedule = [];
     
         todoList.forEach((item) => {
-          console.log('Checking item:', item);
-    
+
           // Skip checked tasks
           if (checkedItems[item.id]) {
             return;
           }
     
-          const dueDate = new Date(item.due).getDate();
-          const currentDate = new Date().getDate();
-          const currentTime = new Date().getTime();
-          const dueTime = new Date(item.due).getTime();
-          const notificationMinutes = parseInt(item.mins); // Get the notification minutes from the item
+          const taskId = item.id;
+          if (!scheduledNotifications[taskId]) {
 
-          
-          const hour = new Date(dueTime).getHours();
-          const minute = new Date(dueTime).getMinutes() - notificationMinutes
-          
-          console.log(minute)
+            const dueDate = new Date(item.due).getDate();
+            const currentDate = new Date().getDate();
 
-          if (currentDate == dueDate) {
-            notificationsToSchedule.push(scheduleDateNotification(item));
-            notificationsToSchedule.push(scheduleTimeNotification(item));
+            if (currentDate === dueDate) {
+              notificationsToSchedule.push(scheduleDateNotification(item));
+              notificationsToSchedule.push(scheduleTimeNotification(item));
+
+              setScheduledNotifications((prevState) => ({
+                ...prevState,
+                [taskId]: true,
+              }));
+            }
           }
         });
-    
+
         await Promise.all(notificationsToSchedule);
       } catch (error) {
         console.error('Error scheduling notifications: ', error);
