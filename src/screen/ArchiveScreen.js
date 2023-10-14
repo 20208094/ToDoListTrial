@@ -83,24 +83,6 @@ const ArchiveScreen = ({ navigation }) => {
         navigation.navigate('Edit', { nestedObject: { id: item.id, title: item.title, due: item.due, desc: item.desc } });
     };
 
-    const formatTime = (rawTime) => {
-        let time = new Date(rawTime);
-        let hour = time.getHours();
-        let min = time.getMinutes();
-    
-        return `${('0' + hour).slice(-2)}:${('0' + min).slice(-2)}`;
-    }
-
-    const formatDate = (rawDate) =>{
-        let date = new Date(rawDate)
-    
-        let year = date.getFullYear();
-        let month = date.getMonth() + 1;
-        let day = date.getDate()
-    
-        return `${year}-${month < 10 ? '0' : ''}${month}-${day < 10 ? '0' : ''}${day}`;
-    }
-
     const [selectedTodo, setSelectedTodo] = useState(null);
     const [visible, setVisible] = useState(false);
 
@@ -120,7 +102,7 @@ const ArchiveScreen = ({ navigation }) => {
 
     const renderTodos = ({ item, index }) => {
         // Check if the item is unchecked
-        const formattedDate = moment(item.due).format('YYYY-MM-DD, h:mm a');
+        const formattedDate = moment(item.due).format('YYYY-MM-DD h:mm a');
         if (checkedItems[item.id]) {
             return (
                 <View style={{marginBottom: 10}}>
@@ -141,7 +123,7 @@ const ArchiveScreen = ({ navigation }) => {
                                 />
                                 <View style={{flex: 1}} >
                                     <Text style={{color: 'black', fontSize: 25, fontWeight: '800'}} numberOfLines={1} ellipsizeMode="tail">{data.item.title}</Text>
-                                    <Text style={{ color: 'gray', fontSize: 15 }}>{formattedDate} </Text>
+                                    <Text style={{ color: 'gray', fontSize: 15 }}>DUE: {formattedDate} </Text>
                                 </View>
                                 <View style={{ flexDirection: 'row', alignItems: 'center'}}>
                                     <IconButton style={{ margin: 0 }} icon="eye" iconColor='#3498db' onPress={() => showDialog(data.item)} />
@@ -151,7 +133,7 @@ const ArchiveScreen = ({ navigation }) => {
                                             <Dialog.Description>
                                                 {selectedTodo?.desc}
                                             </Dialog.Description>
-                                            <Text>{selectedTodo?.formattedDate}</Text>
+                                            <Text>DUE: {selectedTodo?.formattedDate}</Text>
                                             <Dialog.Button label="Done" onPress={handleCancel} />
                                         </Dialog.Container>
                                 </View>
