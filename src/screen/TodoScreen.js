@@ -125,33 +125,40 @@ const TodoScreen = ({ navigation }) => {
     }
   };
 
-  const scheduleNotification = async (item) => {
-    try {
+  const scheduleDateNotification = async (item) => {    
+    try {   
       await Notifications.scheduleNotificationAsync({
         content: {
-          title: 'Task Reminder',
-          body: `Your task "${item.title}" is in "${item.notifTime}" minutes.!`,
-        },
-        trigger: null
-      });
+            title: 'Task Reminder',
+            body: `Your task "${item.title}" is due today!`,
+          },
+          trigger: null
+        });
 
     } catch (error) {
       console.error('Error scheduling notification:', error);
     }
   };
-
-  const schedulePastDueNotification = async (item) => {
+  
+  const scheduleTimeNotification = async (item) => {
     try {
-      await Notifications.scheduleNotificationAsync({
-        content: {
-          title: 'Task Reminder',
-          body: `Your task "${item.title}" is past its due!`,
-        },
-        trigger: null
-      });
+        const dueTime = new Date(item.due).getTime();
+        const notificationMinutes = item.mins; // Get the notification minutes from the item
+
+        const hour = new Date(dueTime).getHours();
+        const minute = new Date(dueTime).getMinutes() - notificationMinutes
+        await Notifications.scheduleNotificationAsync({
+            content: {
+                title: 'Task Reminder',
+                body: `Your task "${item.title}" deadline is in "${item.mins}" minutes.!`,
+                },
+                trigger: {hour: hour,
+                            minute: minute,
+                            repeats: true}
+            });
 
     } catch (error) {
-      console.error('Error scheduling notification:', error);
+        console.error('Error scheduling notification:', error);
     }
   };
 
@@ -184,7 +191,7 @@ const TodoScreen = ({ navigation }) => {
   };
 
   const handleEditPress = (item) => {
-    navigation.navigate('Edit', { nestedObject: { id: item.id, title: item.title, due: item.due, desc: item.desc, notifTime: item.notifTime } });
+    navigation.navigate('Edit', { nestedObject: { id: item.id, title: item.title, due: item.due, mins: item.mins, desc: item.desc } });
   };
 
   const formatTime = (rawTime) => {

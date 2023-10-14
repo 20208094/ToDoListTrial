@@ -9,6 +9,8 @@ const EditScreen = ({ navigation }) => {
   const [todo, setTodo] = useState("");
   const [due, setDue] = useState(new Date());
   const [desc, setDesc] = useState("");
+  const [mins, setMins] = useState(0);
+  const [minsError, setMinsError] = useState(null);
   const [showPicker, setShowPicker] = useState(false);
   const [todoList, setTodoList] = useState([]);
   const [editedTodo, setEditedTodo] = useState(null);
@@ -21,19 +23,20 @@ const EditScreen = ({ navigation }) => {
   const taskId = route.params?.nestedObject?.id;
   const taskTitle = route.params?.nestedObject?.title;
   const taskDue = route.params?.nestedObject?.due;
-  const taskNotifTime = route.params?.nestedObject?.notifTime;
+  const taskMin = route.params?.nestedObject?.mins;
   const taskDesc = route.params?.nestedObject?.desc;
 
   useEffect(() => {
-    if (taskId !== undefined && taskTitle !== undefined && taskDue !== undefined && taskDesc !== undefined) {
+    if (taskId !== undefined && taskTitle !== undefined && taskDue !== undefined && taskDesc !== undefined && taskMin !== undefined) {
       setTodo(taskTitle);
       setDue(taskDue)
       setDesc(taskDesc);
       setNotifTime(taskNotifTime);
       setTime(new Date(taskDue));
-      setEditedTodo({ id: taskId, title: taskTitle, due: taskDue, desc: taskDesc, notifTime: taskNotifTime });
+      setMins(taskMin)
+      setEditedTodo({ id: taskId, title: taskTitle, due: taskDue, mins: taskMin, desc: taskDesc });
     }
-  }, [taskId, taskTitle, taskDue, taskDesc, taskNotifTime]);
+  }, [taskId, taskTitle, taskDue, taskMin, taskDesc]);
 
 
   useEffect(() => {
@@ -124,7 +127,7 @@ const EditScreen = ({ navigation }) => {
   
     const updatedTodos = todoList.map((item) => {
       if (item.id === editedTodo.id) {
-        return { ...item, title: todo, due: updatedDue, desc: desc, notifTime:notifTime };
+        return { ...item, title: todo, due: updatedDue, mins: mins, desc: desc };
       }
       return item;
     });
@@ -138,6 +141,17 @@ const EditScreen = ({ navigation }) => {
   const handleCancel = () => {
     // Navigate back to the previous screen
     navigation.goBack();
+  };
+
+  const validateMins = (input) => {
+    const minsPattern = /^[0-9]*$/; 
+  
+    if (!minsPattern.test(input) || input < 0 || input > 60) {
+      setMinsError('Please enter a valid number between 0 and 60');
+    } else {
+      setMinsError(null);
+      setMins(input); 
+    }
   };
 
   return (
@@ -195,9 +209,16 @@ const EditScreen = ({ navigation }) => {
           </Pressable>
         )}
 
-        {/* Notif Due */}
-        <Text style={styles.subtitle}>Minutes before Notification Popup:</Text>
-        <TextInput style={styles.input} value={notifTime} onChangeText={(userText) => setNotifTime(userText)} />
+         {/* Minutes */}
+         <Text style={styles.subtitle}>Minutes</Text>
+        <TextInput
+            style={styles.input}
+            value={mins}
+            onChangeText={(userText) => {validateMins(userText);
+          }}
+        />
+        {minsError && <Text style={styles.errorText}>{minsError}</Text>}
+
 
         <Text style={[styles.subtitle, { marginTop: 10 }]}>Task Description</Text>
         <TextInput
@@ -288,6 +309,11 @@ const styles = StyleSheet.create({
   cancelbuttonText: {
     color: 'black',
   },
+  errorText: {
+    color: 'red',
+    fontSize: 12,
+    marginBottom: 10,
+  }
 });
 
 export default EditScreen;

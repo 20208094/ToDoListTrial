@@ -9,7 +9,8 @@ import { Dimensions } from 'react-native';
 const AddScreen = ({ navigation }) => {
   const [todo, setTodo] = useState("");
   const [desc, setDesc] = useState("");
-  const [notifTime, setNotifTime] = useState("");
+  const [mins, setMins] = useState(0);
+  const [minsError, setMinsError] = useState(null);
   const [todoList, setTodoList] = useState([]);
   const { height, width } = Dimensions.get('window');
   // date
@@ -78,6 +79,17 @@ const AddScreen = ({ navigation }) => {
     }
   };
 
+  const validateMins = (input) => {
+    const minsPattern = /^[0-9]*$/; 
+  
+    if (!minsPattern.test(input) || input < 0 || input > 60) {
+      setMinsError('Please enter a valid number between 0 and 60');
+    } else {
+      setMinsError(null);
+      setMins(input); 
+    }
+  };
+  
   const formatDate = (rawDate) => {
     let date = new Date(rawDate)
 
@@ -97,7 +109,7 @@ const AddScreen = ({ navigation }) => {
   }
 
   const handleAddTodo = async () => {
-    if (todo === "") {
+    if (todo === "" || minsError) {
       return;
     }
 
@@ -105,7 +117,7 @@ const AddScreen = ({ navigation }) => {
     const combinedDue = new Date(due);
     combinedDue.setHours(time.getHours(), time.getMinutes());
 
-    const newTodo = { id: Date.now().toString(), title: todo, due: combinedDue, desc: desc, notifTime:notifTime };
+    const newTodo = { id: Date.now().toString(), title: todo, due: combinedDue, desc: desc, mins: mins };
 
     try {
       // Fetch the current todoList from AsyncStorage
@@ -189,10 +201,16 @@ const AddScreen = ({ navigation }) => {
             />
           </Pressable>
         )}
-        
-        {/* Notif Due */}
-        <Text style={styles.subtitle}>Minutes before Notification Popup:</Text>
-        <TextInput style={styles.input} value={notifTime} onChangeText={(userText) => setNotifTime(userText)} />
+
+        {/* Minutes */}
+        <Text style={styles.subtitle}>Minutes</Text>
+        <TextInput
+            style={styles.input}
+            value={mins}
+            onChangeText={(userText) => {validateMins(userText);
+          }}
+        />
+        {minsError && <Text style={styles.errorText}>{minsError}</Text>}
 
         {/* Task Description */}
         <Text style={[styles.subtitle, { marginTop: 10 }]}>Task Description</Text>
@@ -287,6 +305,11 @@ const styles = StyleSheet.create({
   datePicker: {
     height: 120,
     marginTop: -10
+  },
+  errorText: {
+    color: 'red',
+    fontSize: 12,
+    marginBottom: 10,
   }
 });
 
