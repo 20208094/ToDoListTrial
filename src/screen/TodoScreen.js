@@ -1,13 +1,11 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { FlatList, StyleSheet, Text, View, Modal, Pressable, Image, TouchableOpacity } from 'react-native';
+import { FlatList, StyleSheet, Text, View, Modal, Pressable, Image, TouchableOpacity, Button, Dimensions } from 'react-native';
 import { IconButton, Checkbox } from 'react-native-paper';
 import Fallback from "../components/Fallback";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import BottomNavigation from '../navigation/BottomNav';
 import { useIsFocused } from '@react-navigation/native';
 import { LinearGradient } from 'expo-linear-gradient';
-import {Dimensions} from 'react-native';
-import { Button } from "react-native";
 import Dialog from "react-native-dialog";
 
 const TodoScreen = ({ navigation }) => {
@@ -108,47 +106,48 @@ const TodoScreen = ({ navigation }) => {
   // Check if the item is unchecked
   if (!checkedItems[item.id]) {
     return (
-      <View style={{ backgroundColor: "white", borderRadius: 6, paddingTop: 15, marginBottom: 12 }} numberOfLines={1} ellipsizeMode="tail">
-        <View>
-          <Text style={{ color: 'black', fontSize: 15, fontWeight: '800', flex: 1, marginLeft: 10, marginTop: -10, marginBottom: -20 }}>{item.title}</Text>
+      <View style={{ backgroundColor: 'white', borderRadius: 4, width: '100%', height: 75, justifyContent: 'center', marginBottom: 10 }}>
+        <View style={{ flexDirection: 'row'}}>
+            <Checkbox 
+            status={checkedItems[item.id] ? 'checked' : 'unchecked'} 
+            onPress={() => { const newCheckedItems = { ...checkedItems }; 
+            newCheckedItems[item.id] = !checkedItems[item.id]; 
+            setCheckedItems(newCheckedItems); 
+            saveCheckedItemsToStorage(newCheckedItems); }} />
+            <View style={{flex:1}} >
+                <Text style={{color: 'black', fontSize: 25, fontWeight: '800'}} numberOfLines={1} ellipsizeMode="tail">{item.title}</Text>
+                <Text style={{ color: 'gray', fontSize: 15 }}>
+                    {formatDate(new Date(item.due))}
+                    {'      '}
+                    {formatTime(new Date(item.due))}
+                </Text>
+            </View>
+            
+            <View style={{ flexDirection: 'row', alignItems: 'center'}}>
+                <IconButton style={{ margin: 0 }} icon="eye" iconColor='#3498db' onPress={() => showDialog(item)} />
+                    {/* Popup dialog */}
+                    <Dialog.Container visible={visible}>
+                        <Dialog.Title>{selectedTodo?.title}</Dialog.Title>
+                        <Dialog.Description>
+                            {selectedTodo?.desc}
+                        </Dialog.Description>
+                        <Text>{formatDate(new Date(selectedTodo?.due))}</Text>
+                        <Text>{formatTime(new Date(selectedTodo?.due))}</Text>
+                        <Dialog.Button label="Done" onPress={handleCancel} />
+                    </Dialog.Container>
+                <IconButton style={{ margin: 0 }} icon="pencil" iconColor='#f39c12' onPress={() => handleEditPress(item)} />
+                <IconButton style={{ margin: 0 }} icon="trash-can" iconColor='#e74c3c' onPress={() => handleDeleteConfirmTodo(item)} />
+            </View>
         </View>
-        <View style={{ flexDirection: 'row', alignItems: "center" }}>
-          <Checkbox
-            status={checkedItems[item.id] ? 'checked' : 'unchecked'}
-            onPress={() => {
-              const newCheckedItems = { ...checkedItems };
-              newCheckedItems[item.id] = !checkedItems[item.id];
-              setCheckedItems(newCheckedItems);
-              saveCheckedItemsToStorage(newCheckedItems);
-            }}
-          />
-          <Text style={{ color: 'black', fontSize: 12, fontWeight: '800', flex: 1 }} numberOfLines={2} ellipsizeMode="tail">{item.desc}</Text>
-          <IconButton style={{ marginHorizontal: 5 }} icon="pencil" iconColor='darkblue' onPress={() => handleEditPress(item)} />
-          <IconButton style={{ marginLeft: -15 }} icon="trash-can" iconColor='red' onPress={() => handleDeleteConfirmTodo(item)} />
-        </View>
-        <View>
-          <Text style={{ color: 'gray', fontSize: 10, flex: 1, marginLeft: 37, marginTop: -10, marginBottom: 2 }}>
+
+         {/* <View>
+          <Text style={{ color: 'gray', fontSize: 12,  marginLeft: 37,  }}>
             {formatDate(new Date(item.due))}
             {'      '}
             {formatTime(new Date(item.due))}
           </Text>
-        </View>
+        </View>  */}
 
-        <Button title="Show More Details" onPress={() => showDialog(item)} />
-        <TouchableOpacity
-          style={styles.button}
-          onPress={() => showDialog(item)} >
-          <Text style={styles.buttonText}>Show More Details</Text>
-        </TouchableOpacity>
-        <Dialog.Container visible={visible}>
-          <Dialog.Title>{selectedTodo?.title}</Dialog.Title>
-          <Dialog.Description>
-            {selectedTodo?.desc}
-          </Dialog.Description>
-          <Text>{formatDate(new Date(selectedTodo?.due))}</Text>
-          <Text>{formatTime(new Date(selectedTodo?.due))}</Text>
-          <Dialog.Button label="Done" onPress={handleCancel} />
-        </Dialog.Container>
       </View>
     );
   } else {

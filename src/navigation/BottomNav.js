@@ -11,13 +11,15 @@ const BottomNavigation = ({ navigation }) => {
 
   const getButtonStyle = (screenName) => ({
     ...styles.ButtonContainer,
-    backgroundColor: route.name === screenName ? 'blue' : '#FC5858',
-    borderWidth: route.name === screenName ? 2 : 0,
+    backgroundColor: route.name === screenName ? 'maroon' : '#FC5858',
+    borderWidth: route.name === screenName ? 3 : 0,
     borderColor: 'white',
+    width: route.name === screenName ? 55 : 50,
+    height: route.name === screenName ? 55 : 50,
   });
 
   return (
-    <LinearGradient colors={['#FC5858', 'pink']} style={styles.bottomContainer}>
+    <LinearGradient colors={['#FC5858', 'pink', 'pink', 'pink', '#FC5858']} style={styles.bottomContainer}>
       {/* ARCHIVE BUTTON */}
       <TouchableOpacity style={getButtonStyle('Archive')} onPress={() => navigation.navigate('Archive')}>
         <Image source={doubleCheck} style={styles.icon} />
