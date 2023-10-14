@@ -142,9 +142,10 @@ const TodoScreen = ({ navigation }) => {
                 title: 'Task Reminder',
                 body: `Your task "${item.title}" deadline is in "${item.mins}" minutes.!`,
                 },
-                trigger: {hour: hour,
-                            minute: minute,
-                            repeats: true}
+                trigger: {
+                  hour: hour,
+                  minute: minute,
+                  repeats: true}
             });
 
     } catch (error) {
