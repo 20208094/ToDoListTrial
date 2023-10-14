@@ -10,9 +10,6 @@ DEPENDENCY INSTALLATION:
     npm install react-native-dialog
     npm install expo-notifications
 
-
-
-
 ----------------------------------------------------------------------------------
 EXPORT GUIDE:
     WATCH:
