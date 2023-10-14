@@ -245,7 +245,7 @@ const TodoScreen = ({ navigation }) => {
                                     <Dialog.Description>
                                         {selectedTodo?.desc}
                                     </Dialog.Description>
-                                    <Text>DUE: {selectedTodo?.formattedDate}</Text>
+                                    <Text>DUE: {formatDate(new Date(selectedTodo?.due))} {formatTime(new Date(selectedTodo?.due))}</Text>
                                     <Dialog.Button label="Done" onPress={handleCancel} />
                                 </Dialog.Container>
                         </View>
@@ -294,7 +294,7 @@ const TodoScreen = ({ navigation }) => {
           </Text>
 
           {/* Display the total of unfinished task */}
-          <View style={{ backgroundColor: 'pink', width: 180, height: 20, borderRadius: 5, borderColor: '#FC5858', borderWidth: 1 }}>
+          <View style={{ backgroundColor: 'pink', width: 200, height: 20, borderRadius: 5, borderColor: '#FC5858', borderWidth: 1 }}>
             <Text style={{ fontWeight: 'bold', fontSize: 16, marginHorizontal: 5 }}>Unfinished Tasks: {uncheckedItemsCount}</Text>
           </View>
         </View>
