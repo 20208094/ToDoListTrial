@@ -205,10 +205,12 @@ const AddScreen = ({ navigation }) => {
         {/* Minutes */}
         <Text style={styles.subtitle}>Minutes</Text>
         <TextInput
-            style={styles.input}
-            value={mins}
-            onChangeText={(userText) => {validateMins(userText);
+          style={styles.input}
+          value={mins.toString()}
+          onChangeText={(userText) => {
+            validateMins(userText);
           }}
+          keyboardType="numeric"
         />
         {minsError && <Text style={styles.errorText}>{minsError}</Text>}
 

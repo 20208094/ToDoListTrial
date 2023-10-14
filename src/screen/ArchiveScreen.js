@@ -145,7 +145,7 @@ const ArchiveScreen = ({ navigation }) => {
                                             <Dialog.Description>
                                                 {selectedTodo?.desc}
                                             </Dialog.Description>
-                                            <Text>DUE: {selectedTodo?.formattedDate}</Text>
+                                            <Text>DUE: {formatDate(selectedTodo?.due)} at {formatTime(selectedTodo?.due)}</Text>
                                             <Dialog.Button label="Done" onPress={handleCancel} />
                                         </Dialog.Container>
                                 </View>
