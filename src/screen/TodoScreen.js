@@ -170,7 +170,7 @@ const TodoScreen = ({ navigation }) => {
     <>
         <View style={{ marginHorizontal: 16, marginTop: 200, fontSize: 20}}>
 
-            <View style={{flexDirection: 'row', borderColor: '#FC5858', backgroundColor: '#dbdbdb', borderWidth: 5, marginStart: -30, paddingStart: 40, alignItems: 'center', borderTopRightRadius: 50, borderBottomRightRadius: 50, justifyContent: 'flex-end', width: width - 170, marginTop: -150}}>
+            <View style={{flexDirection: 'row', borderColor: '#FC5858', backgroundColor: '#dbdbdb', borderWidth: 5, marginStart: -30, paddingStart: 40, alignItems: 'center', borderTopRightRadius: 50, borderBottomRightRadius: 50, justifyContent: 'flex-end', width: width * 0.70, marginTop: -150}}>
                 <Text style={{fontSize: 15, fontWeight: 'bold'}}>Assigment Application</Text>
                 <Image
                     source={require("../../assets/splash.png")}
@@ -197,20 +197,20 @@ const TodoScreen = ({ navigation }) => {
             </LinearGradient>
 
             {/* Add Button */}
-        <Pressable style={{position: 'absolute', bottom: 1, right: 1,}} onPress={() => navigation.navigate('Add')}>
-                    <View style={{backgroundColor: '#FC5858',
-                        width: 80,
-                        height: 80,
-                        borderRadius: 80,
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        borderWidth: 7,
-                        borderColor: 'white',
-                        bottom: 8,
-                        right: 8,}}>
-                    <Text style={{fontSize: 50, color: 'white',}}>+</Text>
-                    </View>
-                </Pressable>
+            <Pressable style={{position: 'absolute', bottom: 1, right: 1,}} onPress={() => navigation.navigate('Add')}>
+                <View style={{backgroundColor: '#FC5858',
+                    width: 80,
+                    height: 80,
+                    borderRadius: 80,
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    borderWidth: 7,
+                    borderColor: 'white',
+                    bottom: 8,
+                    right: 8,}}>
+                <Text style={{fontSize: 50, color: 'white',}}>+</Text>
+                </View>
+            </Pressable>
 
         {/* DELETE MODAL */}
         <Modal
@@ -255,7 +255,6 @@ const TodoScreen = ({ navigation }) => {
         </View>
 
         
-
         {/* Bottom Navigation Container */}
         <View style={{ width: width, position: 'absolute', right: 0, left: 0, bottom: 0, flex: 1}}>
             <BottomNavigation navigation={navigation} />
