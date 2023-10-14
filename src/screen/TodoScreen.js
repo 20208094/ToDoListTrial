@@ -169,10 +169,14 @@ const TodoScreen = ({ navigation }) => {
     setSelectedTodo(null);
     setVisible(false);
   };
+
+    //Get the total number of current unfinished task
+  const uncheckedItemsCount = Object.values(checkedItems).filter(isChecked => !isChecked).length;
   
     return (
     <>
         <View style={{ marginHorizontal: 16, marginTop: 200, fontSize: 20}}>
+
             <View style={{flexDirection: 'row', borderColor: '#FC5858', backgroundColor: '#dbdbdb', borderWidth: 5, marginStart: -30, paddingStart: 40, alignItems: 'center', borderTopRightRadius: 50, borderBottomRightRadius: 50, justifyContent: 'flex-end', width: width - 170, marginTop: -150}}>
                 <Text style={{fontSize: 15, fontWeight: 'bold'}}>Assigment Application</Text>
                 <Image
@@ -184,6 +188,11 @@ const TodoScreen = ({ navigation }) => {
                 <Text style={{ fontSize: 35, textAlign: 'center', fontWeight: 'bold', marginBottom: 10, marginTop: 15 }}>
                     TASKS
                 </Text>
+
+                {/* Display the total of unfinished task */}
+                <View style={{backgroundColor: 'pink', width: 145, height: 20, borderRadius: 5, borderColor: '#FC5858', borderWidth: 1}}>
+                    <Text style={{ fontWeight: 'bold', fontSize: 16, marginHorizontal: 5}}>Unfinished Tasks: {uncheckedItemsCount}</Text>
+                </View>
             </View>
             <LinearGradient colors={['#FC5858', 'pink']} style={{borderTopRightRadius: 40, borderBottomLeftRadius: 40, height: height / 1.5, marginTop: 5, padding: 20, fontSize: 20}}>
                 <View style={{ backgroundColor: '#dbdbdb', padding: 10, height: taskCon - 50, borderRadius: 6, borderColor: '#fff', borderWidth: 5 }}>

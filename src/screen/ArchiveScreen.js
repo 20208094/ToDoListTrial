@@ -6,6 +6,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import BottomNavigation from '../navigation/BottomNav';
 import { useIsFocused } from '@react-navigation/native';
 import Dialog from "react-native-dialog";
+import { LinearGradient } from 'expo-linear-gradient';
 
 const ArchiveScreen = ({ navigation }) => {
     const [todo, setTodo] = useState("");
@@ -115,7 +116,7 @@ const ArchiveScreen = ({ navigation }) => {
         // Check if the item is unchecked
         if (checkedItems[item.id]) {
             return (
-                <View style={{ backgroundColor: 'white', borderRadius: 4, width: '100%', height: 75, justifyContent: 'center', marginBottom: 10 }}>
+                <View style={{ backgroundColor: 'lightgreen', borderRadius: 4, width: '100%', height: 75, justifyContent: 'center', marginBottom: 10 }}>
                     <View style={{ flexDirection: 'row'}}>
                         <Checkbox 
                         status={checkedItems[item.id] ? 'checked' : 'unchecked'} 
@@ -155,24 +156,24 @@ const ArchiveScreen = ({ navigation }) => {
         }
     };
   
-
     return (
         <>
-        <View style={{ marginHorizontal: 16, marginTop: 200, fontSize: 20}}>
+        <View style={{ marginHorizontal: 16, marginVertical: 200, fontSize: 20}}>
             <View>
                 <Text style={{ fontSize: 35, textAlign: 'center', fontWeight: 'bold', marginBottom: 10, marginTop: 15 }}>
                     ARCHIVES
                 </Text>
             </View>
-            <View style={{ backgroundColor: '#FC5858', borderTopRightRadius: 40, borderBottomLeftRadius: 40, height: 500, marginTop: 5, padding: 20, fontSize: 20 }}>
+            <LinearGradient colors={['#FC5858', 'pink']} style={{ borderTopRightRadius: 40, borderBottomLeftRadius: 40, height: 500, marginTop: 5, padding: 20, fontSize: 20 }}>
 
                 <View style={{ backgroundColor: '#dbdbdb', padding: 10, height: 450, borderRadius: 6, borderColor: '#fff', borderWidth: 5 }}>
                     {todoList.length <= 0 && <Fallback2 />}
 
                     {/* RENDER TO DO LIST */}
                     <FlatList data={todoList} renderItem={renderTodos} />
+
                 </View>
-            </View>
+            </LinearGradient>
 
       {/* DELETE MODAL */}
       <Modal
