@@ -65,15 +65,18 @@ const TodoScreen = ({ navigation }) => {
           const dueTime = new Date(item.due).getTime();
           const notificationMinutes = item.mins; // Get the notification minutes from the item
 
-          const notifTime = new Date(dueTime - notificationMinutes * 60 * 1000).getTime();
+          
+        const hour = new Date(dueTime).getHours();
+        const minute = new Date(dueTime).getMinutes() - notificationMinutes
+
+          console.log(hour)
+          console.log(minute)
 
             if (currentDate == dueDate) {
-                notificationsToSchedule.push(scheduleDateNotification(item, currentDate));
+                notificationsToSchedule.push(scheduleDateNotification(item));
+                notificationsToSchedule.push(scheduleTimeNotification(item));
             }
 
-            if (notifTime <= currentTime) {
-                notificationsToSchedule.push(scheduleTimeNotification(item, notifTime));
-            }
         });
 
         // Wait for all notifications to be scheduled before continuing
@@ -111,7 +114,7 @@ const TodoScreen = ({ navigation }) => {
     }
   };
 
-  const scheduleDateNotification = async (item) => {
+  const scheduleDateNotification = async (item) => {    
     try {   
       await Notifications.scheduleNotificationAsync({
         content: {
@@ -128,12 +131,19 @@ const TodoScreen = ({ navigation }) => {
   
   const scheduleTimeNotification = async (item) => {
     try {
+        const dueTime = new Date(item.due).getTime();
+        const notificationMinutes = item.mins; // Get the notification minutes from the item
+
+        const hour = new Date(dueTime).getHours();
+        const minute = new Date(dueTime).getMinutes() - notificationMinutes
         await Notifications.scheduleNotificationAsync({
             content: {
                 title: 'Task Reminder',
-                body: `Your task "${item.title}" is in "${item.mins}" minutes.!`,
+                body: `Your task "${item.title}" deadline is in "${item.mins}" minutes.!`,
                 },
-                trigger: null
+                trigger: {hour: hour,
+                            minute: minute,
+                            repeats: true}
             });
 
     } catch (error) {

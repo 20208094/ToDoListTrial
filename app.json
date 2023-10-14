@@ -6,10 +6,18 @@
     "assetBundlePatterns": [
       "**/*"
     ],
+    "notification": {
+      "icon": "./assets/splash.png"
+    },
     "splash": {
       "image": "./assets/splash.png",
       "resizeMode": "contain",
       "backgroundColor": "#FFC0CB"
+    }
+  },
+  "extra": {
+    "expoNotifications": {
+      "handleNotifications": false
     }
   },
   "name": "ToDoList"
