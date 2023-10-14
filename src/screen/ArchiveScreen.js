@@ -170,15 +170,15 @@ const ArchiveScreen = ({ navigation }) => {
   
     return (
         <>
-        <View style={{ marginHorizontal: 16, marginVertical: 200, fontSize: 20}}>
+        <View style={{ marginHorizontal: 16, marginTop: '25%', fontSize: 20}}>
             <View>
                 <Text style={{ fontSize: 35, textAlign: 'center', fontWeight: 'bold', marginBottom: 10, marginTop: 15 }}>
                     ARCHIVES
                 </Text>
             </View>
-            <LinearGradient colors={['#FC5858', 'pink']} style={{ borderTopRightRadius: 40, borderBottomLeftRadius: 40, height: 500, marginTop: 5, padding: 20, fontSize: 20 }}>
+            <LinearGradient colors={['#FC5858', 'pink']} style={{ borderTopRightRadius: 40, borderBottomLeftRadius: 40, height: 500, marginTop: 5, padding: 20, fontSize: 20, height: '80%' }}>
 
-                <View style={{ backgroundColor: '#dbdbdb', padding: 10, height: 450, borderRadius: 6, borderColor: '#fff', borderWidth: 5 }}>
+                <View style={{ backgroundColor: '#dbdbdb', padding: 10, height: '100%', borderRadius: 6, borderColor: '#fff', borderWidth: 5 }}>
                     {todoList.length <= 0 && <Fallback2 />}
 
                     {/* RENDER TO DO LIST */}
