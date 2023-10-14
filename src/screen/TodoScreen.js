@@ -69,12 +69,14 @@ const TodoScreen = ({ navigation }) => {
           const currentDate = new Date().getDate();
           const currentTime = new Date().getTime();
           const dueTime = new Date(item.due).getTime();
-          const notificationMinutes = item.mins; // Get the notification minutes from the item
+          const notificationMinutes = parseInt(item.mins); // Get the notification minutes from the item
 
           
           const hour = new Date(dueTime).getHours();
           const minute = new Date(dueTime).getMinutes() - notificationMinutes
-    
+          
+          console.log(minute)
+
           if (currentDate == dueDate) {
             notificationsToSchedule.push(scheduleDateNotification(item));
             notificationsToSchedule.push(scheduleTimeNotification(item));
