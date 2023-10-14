@@ -5,6 +5,7 @@ import Fallback2 from "../components/Fallback2";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import BottomNavigation from '../navigation/BottomNav';
 import { useIsFocused } from '@react-navigation/native';
+import Dialog from "react-native-dialog";
 
 const ArchiveScreen = ({ navigation }) => {
     const [todo, setTodo] = useState("");
@@ -79,29 +80,73 @@ const ArchiveScreen = ({ navigation }) => {
         navigation.navigate('Edit', { nestedObject: { id: item.id, title: item.title, due: item.due, desc: item.desc } });
     };
 
+    const formatTime = (rawTime) => {
+        let time = new Date(rawTime);
+        let hour = time.getHours();
+        let min = time.getMinutes();
+    
+        return `${('0' + hour).slice(-2)}:${('0' + min).slice(-2)}`;
+    }
+
+    const formatDate = (rawDate) =>{
+        let date = new Date(rawDate)
+    
+        let year = date.getFullYear();
+        let month = date.getMonth() + 1;
+        let day = date.getDate()
+    
+        return `${year}-${month < 10 ? '0' : ''}${month}-${day < 10 ? '0' : ''}${day}`;
+    }
+
+    const [selectedTodo, setSelectedTodo] = useState(null);
+    const [visible, setVisible] = useState(false);
+
+    const showDialog = (item) => {
+        setSelectedTodo(item);
+        setVisible(true);
+    };
+    
+    const handleCancel = () => {
+        setSelectedTodo(null);
+        setVisible(false);
+    };
+
     const renderTodos = ({ item, index }) => {
         // Check if the item is unchecked
         if (checkedItems[item.id]) {
             return (
-                <View style={{ backgroundColor: "lightgreen", borderRadius: 6, paddingTop: 15, marginBottom: 12}} numberOfLines={1} ellipsizeMode="tail">
-                    <View>
-                        <Text style={{ color: 'black', fontSize: 15, fontWeight: '800', flex: 1, marginLeft: 10, marginTop: -10, marginBottom: -20}}>{item.title}</Text>
-                    </View>
-                    <View style={{flexDirection: 'row', alignItems: "center"}}>
-                        <Checkbox
-                            status={checkedItems[item.id] ? 'checked' : 'unchecked'}
-                            onPress={() => {
-                                const newCheckedItems = { ...checkedItems };
-                                newCheckedItems[item.id] = !checkedItems[item.id];
-                                setCheckedItems(newCheckedItems);
-                                saveCheckedItemsToStorage(newCheckedItems);
-                            }}
-                        />
-                        <Text style={{ color: 'black', fontSize: 12, fontWeight: '800', flex: 1}} numberOfLines={2} ellipsizeMode="tail">{item.desc}</Text>
-                        <IconButton style={{marginLeft: 1}} icon="trash-can" iconColor='red' onPress={() => handleDeleteConfirmTodo(item)} />
-                    </View>
-                    <View>
-                        <Text style={{ color: 'gray', fontSize: 8, flex: 1, marginLeft: 37, marginTop: -10, marginBottom: 2}}>{item.due}</Text>
+                <View style={{ backgroundColor: 'white', borderRadius: 4, width: '100%', height: 75, justifyContent: 'center', marginBottom: 10 }}>
+                    <View style={{ flexDirection: 'row'}}>
+                        <Checkbox 
+                        status={checkedItems[item.id] ? 'checked' : 'unchecked'} 
+                        onPress={() => { const newCheckedItems = { ...checkedItems }; 
+                        newCheckedItems[item.id] = !checkedItems[item.id]; 
+                        setCheckedItems(newCheckedItems); 
+                        saveCheckedItemsToStorage(newCheckedItems); }} 
+                        style={{ paddingHorizontal: 5}}/>
+                        <View style={{flex:1}} >
+                            <Text style={{color: 'black', fontSize: 25, fontWeight: '800'}} numberOfLines={1} ellipsizeMode="tail">{item.title}</Text>
+                            <Text style={{ color: 'gray', fontSize: 15 }}>
+                                {formatDate(new Date(item.due))}
+                                {'      '}
+                                {formatTime(new Date(item.due))}
+                            </Text>
+                        </View>
+                        
+                        <View style={{ flexDirection: 'row', alignItems: 'center'}}>
+                            <IconButton style={{ margin: 0 }} icon="eye" iconColor='#3498db' onPress={() => showDialog(item)} />
+                                {/* Popup dialog */}
+                                <Dialog.Container visible={visible}>
+                                    <Dialog.Title>{selectedTodo?.title}</Dialog.Title>
+                                    <Dialog.Description>
+                                        {selectedTodo?.desc}
+                                    </Dialog.Description>
+                                    <Text>{formatDate(new Date(selectedTodo?.due))}</Text>
+                                    <Text>{formatTime(new Date(selectedTodo?.due))}</Text>
+                                    <Dialog.Button label="Done" onPress={handleCancel} />
+                                </Dialog.Container>
+                            <IconButton style={{ margin: 0 }} icon="trash-can" iconColor='#e74c3c' onPress={() => handleDeleteConfirmTodo(item)} />
+                        </View>
                     </View>
                 </View>
             );
@@ -114,13 +159,6 @@ const ArchiveScreen = ({ navigation }) => {
     return (
         <>
         <View style={{ marginHorizontal: 16, marginTop: 200, fontSize: 20}}>
-            <View style={{flexDirection: 'row', borderColor: '#FC5858', backgroundColor: '#dbdbdb', borderWidth: 5, marginStart: -30, paddingStart: 40, alignItems: 'center', borderTopRightRadius: 50, borderBottomRightRadius: 50, justifyContent: 'flex-end', width: 250, marginTop: -150}}>
-                <Text style={{fontSize: 15, fontWeight: 'bold'}}>Assigment Application</Text>
-                <Image
-                    source={require("../../assets/splash.png")}
-                    style={{ height: 60, width: 60, marginBottom: 5, marginEnd: 10}}
-                />
-            </View>
             <View>
                 <Text style={{ fontSize: 35, textAlign: 'center', fontWeight: 'bold', marginBottom: 10, marginTop: 15 }}>
                     ARCHIVES

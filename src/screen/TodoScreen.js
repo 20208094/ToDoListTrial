@@ -88,7 +88,7 @@ const TodoScreen = ({ navigation }) => {
         let min = time.getMinutes();
     
         return `${('0' + hour).slice(-2)}:${('0' + min).slice(-2)}`;
-      }
+    }
 
     const formatDate = (rawDate) =>{
         let date = new Date(rawDate)
@@ -98,7 +98,7 @@ const TodoScreen = ({ navigation }) => {
         let day = date.getDate()
     
         return `${year}-${month < 10 ? '0' : ''}${month}-${day < 10 ? '0' : ''}${day}`;
-      }
+    }
     
     const [selectedTodo, setSelectedTodo] = useState(null);
 
@@ -113,7 +113,8 @@ const TodoScreen = ({ navigation }) => {
             onPress={() => { const newCheckedItems = { ...checkedItems }; 
             newCheckedItems[item.id] = !checkedItems[item.id]; 
             setCheckedItems(newCheckedItems); 
-            saveCheckedItemsToStorage(newCheckedItems); }} />
+            saveCheckedItemsToStorage(newCheckedItems); }} 
+            style={{ paddingHorizontal: 5}}/>
             <View style={{flex:1}} >
                 <Text style={{color: 'black', fontSize: 25, fontWeight: '800'}} numberOfLines={1} ellipsizeMode="tail">{item.title}</Text>
                 <Text style={{ color: 'gray', fontSize: 15 }}>
