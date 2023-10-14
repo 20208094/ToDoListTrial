@@ -69,14 +69,10 @@ const TodoScreen = ({ navigation }) => {
 
             if (currentDate == dueDate) {
                 notificationsToSchedule.push(scheduleDateNotification(item, currentDate));
-            }else{
-                return
             }
 
             if (notifTime <= currentTime) {
                 notificationsToSchedule.push(scheduleTimeNotification(item, notifTime));
-            }else if(currentTime == dueTime){
-                return
             }
         });
 
