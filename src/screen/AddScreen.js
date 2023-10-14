@@ -9,6 +9,7 @@ import { Dimensions } from 'react-native';
 const AddScreen = ({ navigation }) => {
   const [todo, setTodo] = useState("");
   const [desc, setDesc] = useState("");
+  const [mins, setMins] = useState(0);
   const [todoList, setTodoList] = useState([]);
   const { height, width } = Dimensions.get('window');
   // date
@@ -104,7 +105,7 @@ const AddScreen = ({ navigation }) => {
     const combinedDue = new Date(due);
     combinedDue.setHours(time.getHours(), time.getMinutes());
 
-    const newTodo = { id: Date.now().toString(), title: todo, due: combinedDue, desc: desc };
+    const newTodo = { id: Date.now().toString(), title: todo, due: combinedDue, desc: desc, mins: mins };
 
     try {
       // Fetch the current todoList from AsyncStorage
@@ -188,6 +189,12 @@ const AddScreen = ({ navigation }) => {
             />
           </Pressable>
         )}
+
+        {/* Minutes */}
+        <Text style={styles.subtitle}>Minutes</Text>
+        <TextInput style={styles.input} value={mins}
+         onChangeText={(userText) => setMins(parseInt(userText))} 
+         />
 
         {/* Task Description */}
         <Text style={[styles.subtitle, { marginTop: 10 }]}>Task Description</Text>

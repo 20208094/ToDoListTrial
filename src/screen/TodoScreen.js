@@ -58,28 +58,26 @@ const TodoScreen = ({ navigation }) => {
 
         // Check for each item in the todoList
         todoList.forEach((item) => {
-          console.log('Checking item:', item);
-
-          const dueTime = new Date(item.due).getTime();
-          const currentTime = new Date().getTime();
 
           const dueDate = new Date(item.due).getDate();
           const currentDate = new Date().getDate();
+          const currentTime = new Date().getTime();
+          const dueTime = new Date(item.due).getTime();
+          const notificationMinutes = item.mins; // Get the notification minutes from the item
 
-          console.log('Due Time:', new Date(dueTime));
-          console.log('Current Time:', new Date(currentTime));
+          const notifTime = new Date(dueTime - notificationMinutes * 60 * 1000).getTime();
 
+            if (currentDate == dueDate) {
+                notificationsToSchedule.push(scheduleDateNotification(item, currentDate));
+            }else{
+                return
+            }
 
-
-          // Check if the due time is within the next 5 minutes
-          if (dueTime - currentTime <= 2 * 60 * 1000 && dueTime > currentTime) {
-            // Schedule a notification for this item
-            console.log('Scheduling notification for:', item);
-            notificationsToSchedule.push(scheduleNotification(item));
-          }else if(currentDate == dueDate){
-            notificationsToSchedule.push(scheduleNotification(item)); 
-          }
-
+            if (notifTime <= currentTime) {
+                notificationsToSchedule.push(scheduleTimeNotification(item, notifTime));
+            }else if(currentTime == dueTime){
+                return
+            }
         });
 
         // Wait for all notifications to be scheduled before continuing
@@ -117,35 +115,33 @@ const TodoScreen = ({ navigation }) => {
     }
   };
 
-  const scheduleNotification = async (item) => {
-    console.log('About to schedule notification for:', item);
-    try {
-      const dueDate = new Date(item.due).getDate();
-      const currentDate = new Date().getDate();
-  
-      if (dueDate === currentDate) {
-        // Task is due today, schedule a notification for it
-        await Notifications.scheduleNotificationAsync({
-          content: {
+  const scheduleDateNotification = async (item) => {
+    try {   
+      await Notifications.scheduleNotificationAsync({
+        content: {
             title: 'Task Reminder',
             body: `Your task "${item.title}" is due today!`,
           },
           trigger: null
         });
-        console.log('Notification scheduled successfully for today.');
-      } else {
-        // Task is due in the future, schedule a standard reminder
-        await Notifications.scheduleNotificationAsync({
-          content: {
-            title: 'Task Reminder',
-            body: `Your task "${item.title}" is due in 2 minutes!`,
-          },
-          trigger: null
-        });
-        console.log('Notification scheduled successfully for the future.');
-      }
+
     } catch (error) {
       console.error('Error scheduling notification:', error);
+    }
+  };
+  
+  const scheduleTimeNotification = async (item) => {
+    try {
+        await Notifications.scheduleNotificationAsync({
+            content: {
+                title: 'Task Reminder',
+                body: `Your task "${item.title}" is in "${item.mins}" minutes.!`,
+                },
+                trigger: null
+            });
+
+    } catch (error) {
+        console.error('Error scheduling notification:', error);
     }
   };
   
