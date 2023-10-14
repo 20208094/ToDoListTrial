@@ -9,6 +9,14 @@ import { LinearGradient } from 'expo-linear-gradient';
 import Dialog from "react-native-dialog";
 import * as Notifications from 'expo-notifications';
 
+Notifications.setNotificationHandler({
+  handleNotification: async () => ({
+    shouldShowAlert: true,
+    shouldPlaySound: true,
+    shouldSetBadge: false,
+  }),
+});
+
 const TodoScreen = ({ navigation }) => {
   const [todo, setTodo] = useState("");
   const [todoList, setTodoList] = useState([]);
@@ -111,36 +119,13 @@ const TodoScreen = ({ navigation }) => {
           body: `Your task "${item.title}" is due in 5 minutes!`,
         },
         trigger: {
-          seconds: 5, // You can customize the delay as needed
+          seconds: 1, // You can customize the delay as needed
         },
       });
       console.log('Notification scheduled successfully.');
     } catch (error) {
       console.error('Error scheduling notification:', error);
     }
-  };
-
-  const handleTestNotification = () => {
-    // Function to trigger a test notification
-    const testNotification = async () => {
-      try {
-        await Notifications.scheduleNotificationAsync({
-          content: {
-            title: 'Test Notification',
-            body: 'This is a test notification!',
-          },
-          trigger: {
-            seconds: 5, // You can customize the delay as needed
-          },
-        });
-        console.log('Test notification scheduled successfully.');
-      } catch (error) {
-        console.error('Error scheduling test notification:', error);
-      }
-    };
-
-    // Call the testNotification function
-    testNotification();
   };
 
   const saveCheckedItemsToStorage = async (items) => {
@@ -283,9 +268,6 @@ const TodoScreen = ({ navigation }) => {
           <Text style={{ fontSize: 35, textAlign: 'center', fontWeight: 'bold', marginBottom: 10, marginTop: 15 }}>
             TASKS
           </Text>
-          <View style={{ position: 'absolute', bottom: 100, right: 10 }}>
-            <Button title="Test Notification" onPress={handleTestNotification} />
-          </View>
 
           {/* Display the total of unfinished task */}
           <View style={{ backgroundColor: 'pink', width: 145, height: 20, borderRadius: 5, borderColor: '#FC5858', borderWidth: 1 }}>
