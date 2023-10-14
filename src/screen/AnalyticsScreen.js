@@ -62,7 +62,7 @@ const MyLineChart = () => {
 const AnalyticsScreen = ({ navigation }) => {
   return (
     <View style={styles.container}>
-     <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
+     <ScrollView contentContainerStyle={{ flexGrow: 1, paddingTop: '25%' }}>
         {/* Title Container */}
         {/* <View style={styles.titleContainer}>
           <Text style={styles.titleText}>Assignment Apps</Text>
@@ -95,8 +95,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "white",
-    padding: 20,
-    paddingTop:60,
+    padding: 20
   },
   titleContainer: {
     backgroundColor: "pink",
