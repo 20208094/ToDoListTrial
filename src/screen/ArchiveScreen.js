@@ -7,6 +7,7 @@ import BottomNavigation from '../navigation/BottomNav';
 import { useIsFocused } from '@react-navigation/native';
 import Dialog from "react-native-dialog";
 import { LinearGradient } from 'expo-linear-gradient';
+import { SwipeListView } from 'react-native-swipe-list-view';
 
 const ArchiveScreen = ({ navigation }) => {
     const [todo, setTodo] = useState("");
@@ -116,43 +117,54 @@ const ArchiveScreen = ({ navigation }) => {
         // Check if the item is unchecked
         if (checkedItems[item.id]) {
             return (
-                <View style={{ backgroundColor: 'lightgreen', borderRadius: 4, width: '100%', height: 75, justifyContent: 'center', marginBottom: 10 }}>
-                    <View style={{ flexDirection: 'row'}}>
-                        <Checkbox 
-                        status={checkedItems[item.id] ? 'checked' : 'unchecked'} 
-                        onPress={() => { const newCheckedItems = { ...checkedItems }; 
-                        newCheckedItems[item.id] = !checkedItems[item.id]; 
-                        setCheckedItems(newCheckedItems); 
-                        saveCheckedItemsToStorage(newCheckedItems); }} 
-                        style={{ paddingHorizontal: 5}}/>
-                        <View style={{flex:1}} >
-                            <Text style={{color: 'black', fontSize: 25, fontWeight: '800'}} numberOfLines={1} ellipsizeMode="tail">{item.title}</Text>
-                            <Text style={{ color: 'gray', fontSize: 15 }}>
-                                {formatDate(new Date(item.due))}
-                                {'      '}
-                                {formatTime(new Date(item.due))}
-                            </Text>
+                <View style={{marginBottom: 10}}>
+                    <SwipeListView
+                    data={[item]} 
+                    renderItem={(data, rowMap) => (
+                        <View style={{ backgroundColor: 'lightgreen', borderRadius: 4, width: '100%', height: 75, justifyContent: 'center' }}>
+                            <View style={{ flexDirection: 'row' }}>
+                                <Checkbox 
+                                    status={checkedItems[data.item.id] ? 'checked' : 'unchecked'} 
+                                    onPress={() => { 
+                                        const newCheckedItems = { ...checkedItems }; 
+                                        newCheckedItems[data.item.id] = !checkedItems[data.item.id]; 
+                                        setCheckedItems(newCheckedItems); 
+                                        saveCheckedItemsToStorage(newCheckedItems); 
+                                    }}
+                                    style={{ paddingHorizontal: 5}}
+                                />
+                                <View style={{flex: 1}} >
+                                    <Text style={{color: 'black', fontSize: 25, fontWeight: '800'}} numberOfLines={1} ellipsizeMode="tail">{data.item.title}</Text>
+                                    <Text style={{ color: 'gray', fontSize: 15 }}>DUE: {formatDate(new Date(item.due))} {formatTime(new Date(item.due))}</Text>
+                                </View>
+                                <View style={{ flexDirection: 'row', alignItems: 'center'}}>
+                                    <IconButton style={{ margin: 0 }} icon="eye" iconColor='#3498db' onPress={() => showDialog(data.item)} />
+                                        {/* Popup dialog */}
+                                        <Dialog.Container visible={visible}>
+                                            <Dialog.Title>{selectedTodo?.title}</Dialog.Title>
+                                            <Dialog.Description>
+                                                {selectedTodo?.desc}
+                                            </Dialog.Description>
+                                            <Text>DUE: {selectedTodo?.formattedDate}</Text>
+                                            <Dialog.Button label="Done" onPress={handleCancel} />
+                                        </Dialog.Container>
+                                </View>
+                            </View>
                         </View>
-                        
-                        <View style={{ flexDirection: 'row', alignItems: 'center'}}>
-                            <IconButton style={{ margin: 0 }} icon="eye" iconColor='#3498db' onPress={() => showDialog(item)} />
-                                {/* Popup dialog */}
-                                <Dialog.Container visible={visible}>
-                                    <Dialog.Title>{selectedTodo?.title}</Dialog.Title>
-                                    <Dialog.Description>
-                                        {selectedTodo?.desc}
-                                    </Dialog.Description>
-                                    <Text>{formatDate(new Date(selectedTodo?.due))}</Text>
-                                    <Text>{formatTime(new Date(selectedTodo?.due))}</Text>
-                                    <Dialog.Button label="Done" onPress={handleCancel} />
-                                </Dialog.Container>
-                            <IconButton style={{ margin: 0 }} icon="trash-can" iconColor='#e74c3c' onPress={() => handleDeleteConfirmTodo(item)} />
+                    )}
+                    renderHiddenItem={(data, rowMap) => (
+                        <View style={{ flex: 1, flexDirection: 'row', alignItems: 'center', justifyContent: 'flex-end', backgroundColor: 'gray', height: 75, width: '100%', position: 'absolute', right: 0, borderRadius: 4}}>
+                            <Pressable style={{backgroundColor: '#e74c3c', width: 60, height: '100%', alignItems: 'center', justifyContent: 'center', borderTopEndRadius: 4, borderBottomEndRadius: 4}} onPress={() => handleDeleteConfirmTodo(data.item)}>
+                                <IconButton style={{ margin: 0, backgroundColor: '#e74c3c' }} icon="trash-can" iconColor='black'  />
+                            </Pressable>
                         </View>
-                    </View>
+                    )}
+                    rightOpenValue={-60}
+                    />
                 </View>
-            );
-        } else {
-            return null; // Don't render checked tasks
+                    );
+                } else {
+                    return null; // Don't render checked tasks
         }
     };
   

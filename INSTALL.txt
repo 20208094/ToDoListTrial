@@ -9,6 +9,7 @@ DEPENDENCY INSTALLATION:
     npm install react-time-range
     npm install react-native-dialog
     npm install expo-notifications
+    npm install react-native-swipe-list-view
 
 ----------------------------------------------------------------------------------
 EXPORT GUIDE:

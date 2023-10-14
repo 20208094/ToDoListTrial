@@ -8,6 +8,7 @@ import { useIsFocused } from '@react-navigation/native';
 import { LinearGradient } from 'expo-linear-gradient';
 import Dialog from "react-native-dialog";
 import * as Notifications from 'expo-notifications';
+import { SwipeListView } from 'react-native-swipe-list-view';
 
 Notifications.setNotificationHandler({
   handleNotification: async () => ({
@@ -205,57 +206,6 @@ const TodoScreen = ({ navigation }) => {
   }
 
   const [selectedTodo, setSelectedTodo] = useState(null);
-
-  const renderTodos = ({ item, index }) => {
-    // Check if the item is unchecked
-    if (!checkedItems[item.id]) {
-      return (
-        <View style={{ backgroundColor: 'white', borderRadius: 4, width: '100%', height: 75, justifyContent: 'center', marginBottom: 10 }}>
-          <View style={{ flexDirection: 'row' }}>
-            <Checkbox
-              status={checkedItems[item.id] ? 'checked' : 'unchecked'}
-              onPress={() => {
-                const newCheckedItems = { ...checkedItems };
-                newCheckedItems[item.id] = !checkedItems[item.id];
-                setCheckedItems(newCheckedItems);
-                saveCheckedItemsToStorage(newCheckedItems);
-              }}
-              style={{ paddingHorizontal: 5 }} />
-            <View style={{ flex: 1 }} >
-              <Text style={{ color: 'black', fontSize: 25, fontWeight: '800' }} numberOfLines={1} ellipsizeMode="tail">{item.title}</Text>
-              <Text style={{ color: 'gray', fontSize: 15 }}>
-                {formatDate(new Date(item.due))}
-                {'      '}
-                {formatTime(new Date(item.due))}
-              </Text>
-            </View>
-
-            <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-              <IconButton style={{ margin: 0 }} icon="eye" iconColor='#3498db' onPress={() => showDialog(item)} />
-              {/* Popup dialog */}
-              <Dialog.Container visible={visible}>
-                <Dialog.Title>{selectedTodo?.title}</Dialog.Title>
-                <Dialog.Description>
-                  {selectedTodo?.desc}
-                </Dialog.Description>
-                <Text>{formatDate(new Date(selectedTodo?.due))}</Text>
-                <Text>{formatTime(new Date(selectedTodo?.due))}</Text>
-                <Text>{selectedTodo?.notifTime}</Text>
-                <Dialog.Button label="Done" onPress={handleCancel} />
-              </Dialog.Container>
-              <IconButton style={{ margin: 0 }} icon="pencil" iconColor='#f39c12' onPress={() => handleEditPress(item)} />
-              <IconButton style={{ margin: 0 }} icon="trash-can" iconColor='#e74c3c' onPress={() => handleDeleteConfirmTodo(item)} />
-            </View>
-          </View>
-        </View>
-      );
-    } else {
-      return null; // Don't render checked tasks
-    }
-  };
-
-
-  const taskCon = height / 1.5;
   const [visible, setVisible] = useState(false);
 
   const showDialog = (item) => {
@@ -268,6 +218,67 @@ const TodoScreen = ({ navigation }) => {
     setVisible(false);
   };
 
+  const renderTodos = ({ item, index }) => {
+    // Check if the item is unchecked
+    if (!checkedItems[item.id]) {
+      return (
+        <View style={{marginBottom: 10}}>
+            <SwipeListView
+            data={[item]} 
+            renderItem={(data, rowMap) => (
+                <View style={{ backgroundColor: 'white', borderRadius: 4, width: '100%', height: 75, justifyContent: 'center' }}>
+                    <View style={{ flexDirection: 'row' }}>
+                        <Checkbox 
+                            status={checkedItems[data.item.id] ? 'checked' : 'unchecked'} 
+                            onPress={() => { 
+                                const newCheckedItems = { ...checkedItems }; 
+                                newCheckedItems[data.item.id] = !checkedItems[data.item.id]; 
+                                setCheckedItems(newCheckedItems); 
+                                saveCheckedItemsToStorage(newCheckedItems); 
+                            }}
+                            style={{ paddingHorizontal: 5}}
+                        />
+                        <View style={{flex: 1}} >
+                            <Text style={{color: 'black', fontSize: 25, fontWeight: '800'}} numberOfLines={1} ellipsizeMode="tail">{data.item.title}</Text>
+                            <Text style={{ color: 'gray', fontSize: 15 }}>DUE: {formatDate(new Date(item.due))} {formatTime(new Date(item.due))}</Text>
+                        </View>
+                        <View style={{ flexDirection: 'row', alignItems: 'center'}}>
+                            <IconButton style={{ margin: 0 }} icon="eye" iconColor='#3498db' onPress={() => showDialog(data.item)} />
+                                {/* Popup dialog */}
+                                <Dialog.Container visible={visible}>
+                                    <Dialog.Title>{selectedTodo?.title}</Dialog.Title>
+                                    <Dialog.Description>
+                                        {selectedTodo?.desc}
+                                    </Dialog.Description>
+                                    <Text>DUE: {selectedTodo?.formattedDate}</Text>
+                                    <Dialog.Button label="Done" onPress={handleCancel} />
+                                </Dialog.Container>
+                        </View>
+                    </View>
+                </View>
+            )}
+            renderHiddenItem={(data, rowMap) => (
+                <View style={{ flex: 1, flexDirection: 'row', alignItems: 'center', justifyContent: 'flex-end', backgroundColor: 'gray', height: 75, width: '100%', position: 'absolute', right: 0, borderRadius: 4}}>
+                    <Pressable style={{backgroundColor: '#f39c12', width: 60, height: '100%', alignItems: 'center', justifyContent: 'center'}} >
+                        <IconButton style={{ margin: 0, backgroundColor: '#f39c12', marginEnd: 5 }} icon="pencil" iconColor='black' onPress={() => handleEditPress(data.item)}/>
+                    </Pressable>
+                    <Pressable style={{backgroundColor: '#e74c3c', width: 60, height: '100%', alignItems: 'center', justifyContent: 'center', borderTopEndRadius: 4, borderBottomEndRadius: 4}} onPress={() => handleDeleteConfirmTodo(data.item)}>
+                        <IconButton style={{ margin: 0, backgroundColor: '#e74c3c' }} icon="trash-can" iconColor='black'  />
+                    </Pressable>
+                </View>
+            )}
+            rightOpenValue={-120}
+            />
+        </View>
+      );
+    } else {
+      return null; // Don't render checked tasks
+    }
+  };
+
+
+  const taskCon = height / 1.5;
+  
   //Get the total number of current unfinished task
   const uncheckedItemsCount = Object.values(checkedItems).filter(isChecked => !isChecked).length;
 
@@ -275,7 +286,7 @@ const TodoScreen = ({ navigation }) => {
     <>
       <View style={{ marginHorizontal: 16, marginTop: 200, fontSize: 20 }}>
 
-        <View style={{ flexDirection: 'row', borderColor: '#FC5858', backgroundColor: '#dbdbdb', borderWidth: 5, marginStart: -30, paddingStart: 40, alignItems: 'center', borderTopRightRadius: 50, borderBottomRightRadius: 50, justifyContent: 'flex-end', width: width - 170, marginTop: -150 }}>
+        <View style={{ flexDirection: 'row', borderColor: '#FC5858', backgroundColor: '#dbdbdb', borderWidth: 5, marginStart: -30, paddingStart: 40, alignItems: 'center', borderTopRightRadius: 50, borderBottomRightRadius: 50, justifyContent: 'flex-end', width: width * 0.70, marginTop: -150 }}>
           <Text style={{ fontSize: 15, fontWeight: 'bold' }}>Assigment Application</Text>
           <Image
             source={require("../../assets/splash.png")}
