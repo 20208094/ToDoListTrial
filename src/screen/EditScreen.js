@@ -31,7 +31,6 @@ const EditScreen = ({ navigation }) => {
       setTodo(taskTitle);
       setDue(taskDue)
       setDesc(taskDesc);
-      setNotifTime(taskNotifTime);
       setTime(new Date(taskDue));
       setMins(taskMin)
       setEditedTodo({ id: taskId, title: taskTitle, due: taskDue, mins: taskMin, desc: taskDesc });
