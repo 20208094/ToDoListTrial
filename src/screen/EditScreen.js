@@ -12,6 +12,7 @@ const EditScreen = ({ navigation }) => {
   const [showPicker, setShowPicker] = useState(false);
   const [todoList, setTodoList] = useState([]);
   const [editedTodo, setEditedTodo] = useState(null);
+  const [notifTime, setNotifTime] = useState("");
   // time
   const [time, setTime] = useState(new Date());
   const [showTimePicker, setshowTimePicker] = useState(false);
@@ -20,6 +21,7 @@ const EditScreen = ({ navigation }) => {
   const taskId = route.params?.nestedObject?.id;
   const taskTitle = route.params?.nestedObject?.title;
   const taskDue = route.params?.nestedObject?.due;
+  const taskNotifTime = route.params?.nestedObject?.notifTime;
   const taskDesc = route.params?.nestedObject?.desc;
 
   useEffect(() => {
@@ -27,10 +29,11 @@ const EditScreen = ({ navigation }) => {
       setTodo(taskTitle);
       setDue(taskDue)
       setDesc(taskDesc);
+      setNotifTime(taskNotifTime);
       setTime(new Date(taskDue));
-      setEditedTodo({ id: taskId, title: taskTitle, due: taskDue, desc: taskDesc });
+      setEditedTodo({ id: taskId, title: taskTitle, due: taskDue, desc: taskDesc, notifTime: taskNotifTime });
     }
-  }, [taskId, taskTitle, taskDue, taskDesc]);
+  }, [taskId, taskTitle, taskDue, taskDesc, taskNotifTime]);
 
 
   useEffect(() => {
@@ -121,7 +124,7 @@ const EditScreen = ({ navigation }) => {
   
     const updatedTodos = todoList.map((item) => {
       if (item.id === editedTodo.id) {
-        return { ...item, title: todo, due: updatedDue, desc: desc };
+        return { ...item, title: todo, due: updatedDue, desc: desc, notifTime:notifTime };
       }
       return item;
     });
@@ -191,6 +194,10 @@ const EditScreen = ({ navigation }) => {
             />
           </Pressable>
         )}
+
+        {/* Notif Due */}
+        <Text style={styles.subtitle}>Minutes before Notification Popup:</Text>
+        <TextInput style={styles.input} value={notifTime} onChangeText={(userText) => setNotifTime(userText)} />
 
         <Text style={[styles.subtitle, { marginTop: 10 }]}>Task Description</Text>
         <TextInput

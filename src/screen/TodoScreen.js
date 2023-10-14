@@ -157,7 +157,7 @@ const TodoScreen = ({ navigation }) => {
   };
 
   const handleEditPress = (item) => {
-    navigation.navigate('Edit', { nestedObject: { id: item.id, title: item.title, due: item.due, desc: item.desc } });
+    navigation.navigate('Edit', { nestedObject: { id: item.id, title: item.title, due: item.due, desc: item.desc, notifTime:item.notifTime } });
   };
 
   const formatTime = (rawTime) => {
@@ -214,21 +214,13 @@ const TodoScreen = ({ navigation }) => {
                 </Dialog.Description>
                 <Text>{formatDate(new Date(selectedTodo?.due))}</Text>
                 <Text>{formatTime(new Date(selectedTodo?.due))}</Text>
+                <Text>{selectedTodo?.notifTime}</Text>
                 <Dialog.Button label="Done" onPress={handleCancel} />
               </Dialog.Container>
               <IconButton style={{ margin: 0 }} icon="pencil" iconColor='#f39c12' onPress={() => handleEditPress(item)} />
               <IconButton style={{ margin: 0 }} icon="trash-can" iconColor='#e74c3c' onPress={() => handleDeleteConfirmTodo(item)} />
             </View>
           </View>
-
-          {/* <View>
-          <Text style={{ color: 'gray', fontSize: 12,  marginLeft: 37,  }}>
-            {formatDate(new Date(item.due))}
-            {'      '}
-            {formatTime(new Date(item.due))}
-          </Text>
-        </View>  */}
-
         </View>
       );
     } else {
