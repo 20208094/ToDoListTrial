@@ -8,6 +8,7 @@ import { useIsFocused } from '@react-navigation/native';
 import { LinearGradient } from 'expo-linear-gradient';
 import Dialog from "react-native-dialog";
 import { SwipeListView } from 'react-native-swipe-list-view';
+import moment from 'moment';
 
 const TodoScreen = ({ navigation }) => {
     const [todo, setTodo] = useState("");
@@ -106,6 +107,7 @@ const TodoScreen = ({ navigation }) => {
     const renderTodos = ({ item, index }) => {
   // Check if the item is unchecked
   if (!checkedItems[item.id]) {
+    const formattedDate = moment(item.due).format('YYYY-MM-DD, h:mm a');
     return (
         <View style={{marginBottom: 10}}>
             <SwipeListView
@@ -125,13 +127,8 @@ const TodoScreen = ({ navigation }) => {
                         />
                         <View style={{flex: 1}} >
                             <Text style={{color: 'black', fontSize: 25, fontWeight: '800'}} numberOfLines={1} ellipsizeMode="tail">{data.item.title}</Text>
-                            <Text style={{ color: 'gray', fontSize: 15 }}>
-                                {formatDate(new Date(data.item.due))}
-                                {'      '}
-                                {formatTime(new Date(data.item.due))}
-                            </Text>
+                            <Text style={{ color: 'gray', fontSize: 15 }}>{formattedDate} </Text>
                         </View>
-                        
                         <View style={{ flexDirection: 'row', alignItems: 'center'}}>
                             <IconButton style={{ margin: 0 }} icon="eye" iconColor='#3498db' onPress={() => showDialog(data.item)} />
                                 {/* Popup dialog */}
@@ -140,8 +137,7 @@ const TodoScreen = ({ navigation }) => {
                                     <Dialog.Description>
                                         {selectedTodo?.desc}
                                     </Dialog.Description>
-                                    <Text>{formatDate(new Date(selectedTodo?.due))}</Text>
-                                    <Text>{formatTime(new Date(selectedTodo?.due))}</Text>
+                                    <Text>{selectedTodo?.formattedDate}</Text>
                                     <Dialog.Button label="Done" onPress={handleCancel} />
                                 </Dialog.Container>
                         </View>
@@ -149,22 +145,16 @@ const TodoScreen = ({ navigation }) => {
                 </View>
             )}
             renderHiddenItem={(data, rowMap) => (
-                <View style={{ flex: 1, flexDirection: 'row', alignItems: 'center', justifyContent: 'flex-end', padding: 10, backgroundColor: 'gray', height: 75, width: '50%', position: 'absolute', right: 0, borderRadius: 4}}>
-                    <IconButton 
-                        style={{ margin: 0, backgroundColor: '#f39c12', marginEnd: 5 }} 
-                        icon="pencil" 
-                        iconColor='black' 
-                        onPress={() => handleEditPress(data.item)} 
-                    />
-                    <IconButton 
-                        style={{ margin: 0, backgroundColor: '#e74c3c' }} 
-                        icon="trash-can" 
-                        iconColor='black' 
-                        onPress={() => handleDeleteConfirmTodo(data.item)} 
-                    />
+                <View style={{ flex: 1, flexDirection: 'row', alignItems: 'center', justifyContent: 'flex-end', backgroundColor: 'gray', height: 75, width: '100%', position: 'absolute', right: 0, borderRadius: 4}}>
+                    <Pressable style={{backgroundColor: '#f39c12', width: 60, height: '100%', alignItems: 'center', justifyContent: 'center'}} >
+                        <IconButton style={{ margin: 0, backgroundColor: '#f39c12', marginEnd: 5 }} icon="pencil" iconColor='black'  />
+                    </Pressable>
+                    <Pressable style={{backgroundColor: '#e74c3c', width: 60, height: '100%', alignItems: 'center', justifyContent: 'center', borderTopEndRadius: 4, borderBottomEndRadius: 4}} onPress={() => handleDeleteConfirmTodo(data.item)}>
+                        <IconButton style={{ margin: 0, backgroundColor: '#e74c3c' }} icon="trash-can" iconColor='black'  />
+                    </Pressable>
                 </View>
             )}
-            rightOpenValue={-100}
+            rightOpenValue={-120}
             />
         </View>
     );
@@ -178,7 +168,11 @@ const TodoScreen = ({ navigation }) => {
   const [visible, setVisible] = useState(false);
 
   const showDialog = (item) => {
-    setSelectedTodo(item);
+    const formattedDate = moment(item.due).format('YYYY-MM-DD, h:mm a');
+    setSelectedTodo({
+      ...item,
+      formattedDate
+    });
     setVisible(true);
   };
   
