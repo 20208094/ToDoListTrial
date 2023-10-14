@@ -63,15 +63,23 @@ const TodoScreen = ({ navigation }) => {
           const dueTime = new Date(item.due).getTime();
           const currentTime = new Date().getTime();
 
+          const dueDate = new Date(item.due).getDate();
+          const currentDate = new Date().getDate();
+
           console.log('Due Time:', new Date(dueTime));
           console.log('Current Time:', new Date(currentTime));
 
+
+
           // Check if the due time is within the next 5 minutes
-          if (dueTime - currentTime <= 5 * 60 * 1000 && dueTime > currentTime) {
+          if (dueTime - currentTime <= 2 * 60 * 1000 && dueTime > currentTime) {
             // Schedule a notification for this item
             console.log('Scheduling notification for:', item);
             notificationsToSchedule.push(scheduleNotification(item));
+          }else if(currentDate == dueDate){
+            notificationsToSchedule.push(scheduleNotification(item)); 
           }
+
         });
 
         // Wait for all notifications to be scheduled before continuing
@@ -109,24 +117,38 @@ const TodoScreen = ({ navigation }) => {
     }
   };
 
-  // Function to schedule a notification
   const scheduleNotification = async (item) => {
     console.log('About to schedule notification for:', item);
     try {
-      await Notifications.scheduleNotificationAsync({
-        content: {
-          title: 'Task Reminder',
-          body: `Your task "${item.title}" is due in 2 minutes!`,
-        },
-        trigger: {
-          seconds: 1, // You can customize the delay as needed
-        },
-      });
-      console.log('Notification scheduled successfully.');
+      const dueDate = new Date(item.due).getDate();
+      const currentDate = new Date().getDate();
+  
+      if (dueDate === currentDate) {
+        // Task is due today, schedule a notification for it
+        await Notifications.scheduleNotificationAsync({
+          content: {
+            title: 'Task Reminder',
+            body: `Your task "${item.title}" is due today!`,
+          },
+          trigger: null
+        });
+        console.log('Notification scheduled successfully for today.');
+      } else {
+        // Task is due in the future, schedule a standard reminder
+        await Notifications.scheduleNotificationAsync({
+          content: {
+            title: 'Task Reminder',
+            body: `Your task "${item.title}" is due in 2 minutes!`,
+          },
+          trigger: null
+        });
+        console.log('Notification scheduled successfully for the future.');
+      }
     } catch (error) {
       console.error('Error scheduling notification:', error);
     }
   };
+  
 
   const saveCheckedItemsToStorage = async (items) => {
     try {
