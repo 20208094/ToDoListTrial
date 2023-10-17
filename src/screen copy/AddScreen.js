@@ -6,12 +6,6 @@ import DateTimePicker from "@react-native-community/datetimepicker";
 import { LinearGradient } from 'expo-linear-gradient';
 import { Dimensions } from 'react-native';
 
-// Import SQLite
-import * as SQLite from 'expo-sqlite';
-
-// Open the SQLite database
-const db = SQLite.openDatabase('db.assignmentDB');
-
 const AddScreen = ({ navigation }) => {
   const [todo, setTodo] = useState("");
   const [desc, setDesc] = useState("");
@@ -26,21 +20,19 @@ const AddScreen = ({ navigation }) => {
   const [time, setTime] = useState(new Date());
   const [showTimePicker, setshowTimePicker] = useState(false);
 
-  // Function to create the table
-  const createTable = () => {
-    db.transaction((tx) => {
-      tx.executeSql(
-        'CREATE TABLE IF NOT EXISTS todos (id INTEGER PRIMARY KEY AUTOINCREMENT, title TEXT, due TEXT, mins INTEGER, desc TEXT)',
-        [],
-        () => console.log('Table created successfully'),
-        (_, error) => console.error('Error creating table: ', error)
-      );
-    });
-  };
-
-  // Call the createTable function in the component
   useEffect(() => {
-    createTable();
+    const fetchTodoList = async () => {
+      try {
+        const storedTodoList = await AsyncStorage.getItem('todoList');
+        if (storedTodoList) {
+          setTodoList(JSON.parse(storedTodoList));
+        }
+      } catch (error) {
+        console.error('Error fetching todoList: ', error);
+      }
+    };
+
+    fetchTodoList();
   }, []);
 
   const saveTodoListToStorage = async (list) => {
@@ -88,16 +80,16 @@ const AddScreen = ({ navigation }) => {
   };
 
   const validateMins = (input) => {
-    const minsPattern = /^[0-9]*$/;
-
+    const minsPattern = /^[0-9]*$/; 
+  
     if (!minsPattern.test(input) || input < 0 || input > 60) {
       setMinsError('Please enter a valid number between 0 and 60');
     } else {
       setMinsError(null);
-      setMins(input);
+      setMins(input); 
     }
   };
-
+  
   const formatDate = (rawDate) => {
     let date = new Date(rawDate)
 
@@ -120,48 +112,33 @@ const AddScreen = ({ navigation }) => {
     if (todo === "" || minsError) {
       return;
     }
-  
+
     // Combine date and time for the due value
     const combinedDue = new Date(due);
     combinedDue.setHours(time.getHours(), time.getMinutes());
-  
-    const newTodo = { title: todo, due: combinedDue, desc: desc, mins: mins };
 
-    console.log('add pressed successfully');
-  
+    const newTodo = { id: Date.now().toString(), title: todo, due: combinedDue, desc: desc, mins: mins };
+
     try {
-      // Insert the newTodo into the SQLite table
-      db.transaction((tx) => {
-        tx.executeSql(
-          'INSERT INTO todos (title, due, mins, desc) VALUES (?, ?, ?, ?)',
-          [newTodo.title, newTodo.due, newTodo.mins, newTodo.desc],
-          (_, result) => {
-            console.log('Todo added successfully');
-            console.log('Result:', result);
-      
-            // Fetch the current todoList from the SQLite table
-            tx.executeSql(
-              'SELECT * FROM todos',
-              [],
-              (_, result) => {
-                const todos = result.rows.raw();
-                console.log('Current todoList:', todos);
-                setTodoList(todos);
-      
-                // Navigate back to TodoScreen
-                navigation.navigate('Todo');
-              },
-              (_, error) => console.error('Error fetching todoList: ', error)
-            );
-          },
-          (_, error) => console.error('Error adding todo: ', error)  // Log any error during insertion
-        );
-      });      
+      // Fetch the current todoList from AsyncStorage
+      const storedTodoList = await AsyncStorage.getItem('todoList');
+      const currentTodoList = storedTodoList ? JSON.parse(storedTodoList) : [];
+
+      // Add the newTodo to the list
+      const updatedTodoList = [...currentTodoList, newTodo];
+
+      // Save the updated todoList to AsyncStorage
+      await AsyncStorage.setItem('todoList', JSON.stringify(updatedTodoList));
+
+      // Update the state in the TodoScreen component
+      setTodoList(updatedTodoList);
+
+      // Navigate back to TodoScreen
+      navigation.navigate('Todo');
     } catch (error) {
       console.error('Error adding todo: ', error);
     }
   };
-  
 
   return (
     <View style={styles.container}>
@@ -183,7 +160,7 @@ const AddScreen = ({ navigation }) => {
           <DateTimePicker
             mode='date'
             display='calendar'
-            value={due} // Use the state value directly
+            value={new Date()}
             minimumDate={new Date()}
             onChange={onChange}
             style={styles.datePicker}
@@ -210,7 +187,7 @@ const AddScreen = ({ navigation }) => {
           <DateTimePicker
             mode='time'
             display='clock'
-            value={time} // Use the state value directly
+            value={new Date()}
             onChange={onChangeTime}
           />
         )}
