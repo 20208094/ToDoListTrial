@@ -5,6 +5,7 @@ import BottomNavigation from '../navigation/BottomNav';
 import DateTimePicker from "@react-native-community/datetimepicker";
 import { LinearGradient } from 'expo-linear-gradient';
 import { Dimensions } from 'react-native';
+import * as SQLite from 'expo-sqlite'
 
 const AddScreen = ({ navigation }) => {
   const [todo, setTodo] = useState("");
@@ -19,6 +20,7 @@ const AddScreen = ({ navigation }) => {
   // time
   const [time, setTime] = useState(new Date());
   const [showTimePicker, setshowTimePicker] = useState(false);
+
 
   useEffect(() => {
     const fetchTodoList = async () => {

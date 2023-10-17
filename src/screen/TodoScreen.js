@@ -308,11 +308,11 @@ const TodoScreen = ({ navigation }) => {
 
           {/* Display the total of unfinished task */}
            <View style={{ backgroundColor: 'pink', width: 200, height: 20, borderRadius: 5, borderColor: '#FC5858', borderWidth: 1 }}>
-            <Text style={{ fontWeight: 'bold', fontSize: 16, marginHorizontal: 5 }}>Unfinished Tasks: {  uncheckedItemsCount }</Text>
+            <Text style={{ fontWeight: 'bold', fontSize: 16, marginHorizontal: 5 }}>Todo Tasks: {  uncheckedItemsCount }</Text>
           </View> 
         </View>
-        <LinearGradient colors={['#FC5858', 'pink']} style={{ borderTopRightRadius: 40, borderBottomLeftRadius: 40, height: height / 1.5, marginTop: 5, padding: 20, fontSize: 20 }}>
-          <View style={{ backgroundColor: '#dbdbdb', padding: 10, height: taskCon - 50, borderRadius: 6, borderColor: '#fff', borderWidth: 5 }}>
+        <LinearGradient colors={['#FC5858', 'pink']} style={{ borderTopRightRadius: 40, borderBottomLeftRadius: 40, height: '80%', marginTop: 5, padding: 20, fontSize: 20 }}>
+          <View style={{ backgroundColor: '#dbdbdb', padding: 10, height: '100%', borderRadius: 6, borderColor: '#fff', borderWidth: 5 }}>
             {todoList.length <= 0 && <Fallback />}
 
             {/* RENDER TO DO LIST */}
@@ -335,6 +335,24 @@ const TodoScreen = ({ navigation }) => {
             right: 8,
           }}>
             <Text style={{ fontSize: 50, color: 'white', }}>+</Text>
+          </View>
+        </Pressable>
+
+
+        <Pressable style={{ position: 'absolute', bottom: 1, right: 1, }} onPress={() => navigation.navigate('DB')}>
+          <View style={{
+            backgroundColor: '#FC5858',
+            width: 80,
+            height: 80,
+            borderRadius: 80,
+            alignItems: 'center',
+            justifyContent: 'center',
+            borderWidth: 7,
+            borderColor: 'white',
+            bottom: 8,
+            right: 8,
+          }}>
+            <Text style={{ fontSize: 50, color: 'white', }}>.</Text>
           </View>
         </Pressable>
 

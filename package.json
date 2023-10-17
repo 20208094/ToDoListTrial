@@ -35,7 +35,8 @@
     "react-native-safe-area-context": "4.6.3",
     "react-native-screens": "~3.22.0",
     "react-native-swipe-list-view": "^3.2.9",
-    "react-time-range": "^1.0.4"
+    "react-time-range": "^1.0.4",
+    "expo-sqlite": "~11.3.3"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0"
