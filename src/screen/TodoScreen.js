@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useCallback } from 'react';
 import { View, Text, Button, FlatList, Dimensions, Image, Pressable, Modal, TextInput } from 'react-native';
 import { IconButton, Checkbox } from 'react-native-paper';
-import { deleteItem, initDatabase, updateItem, getUncheckedItems } from './Database';
+import { deleteItem, initDatabase, updateItem, getUncheckedItems, updateItemStatus } from './Database';
 import { LinearGradient } from 'expo-linear-gradient';
 import BottomNavigation from '../navigation/BottomNav';
 import { SwipeListView } from 'react-native-swipe-list-view';
@@ -81,7 +81,7 @@ const TodoScreen = ({ navigation }) => {
                   setItems(updatedItems);
 
                   // Update the status in the SQLite database
-                  updateItem(
+                  updateItemStatus(
                     item.id,
                     item.name,
                     item.description,

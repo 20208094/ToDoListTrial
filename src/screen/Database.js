@@ -2,7 +2,7 @@
 
 import * as SQLite from 'expo-sqlite';
 
-const db = SQLite.openDatabase('dada3.db');
+const db = SQLite.openDatabase('db21.db');
 
 const initDatabase = () => {
   db.transaction((tx) => {
@@ -42,7 +42,22 @@ const insertItem = (name, description, mins, duedate, duetime, callback) => {
   );
 };
 
-const updateItem = (id, name, description, mins, duedate, duetime, status, callback) => {
+const updateItem = (id, name, description, mins, duedate, duetime, callback) => {
+  db.transaction((tx) => {
+    tx.executeSql(
+      'UPDATE items SET name = ?, description = ?, mins = ?, duedate = ?, duetime = ? WHERE id = ?',
+      [name, description, mins, duedate, duetime, id],
+      () => {
+        callback();
+      },
+      (error) => {
+        console.log('Error updating item:', error);
+      }
+    );
+  });
+};
+
+const updateItemStatus = (id, name, description, mins, duedate, duetime, status, callback) => {
   db.transaction((tx) => {
     tx.executeSql(
       'UPDATE items SET name = ?, description = ?, mins = ?, duedate = ?, duetime = ?, status = ? WHERE id = ?',
@@ -151,4 +166,4 @@ const getItemById = (id, callback) => {
   });
 };
 
-export { initDatabase, insertItem, updateItem, deleteItem, getAllItems, getUncheckedItems, getCheckedItems , getItemById };
+export { initDatabase, insertItem, updateItem, deleteItem, getAllItems, getUncheckedItems, getCheckedItems , getItemById, updateItemStatus };

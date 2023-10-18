@@ -37,6 +37,11 @@ const EditScreen = ({ route, navigation }) => {
     );
   };
 
+  const handleCancel = () => {
+    // Navigate back to the previous screen
+    navigation.goBack();
+  };
+
   const validateMins = (input) => {
     const minsPattern = /^[0-9]*$/;
 
@@ -66,7 +71,7 @@ const EditScreen = ({ route, navigation }) => {
           />
 
           {/* DUE DATE */}
-          <Text style={styles.subtitle}>Title</Text>
+          <Text style={styles.subtitle}>Due Date</Text>
           <TextInput
             style={styles.input}
             placeholder="Enter item due date (YYYY-MM-DD)"
@@ -75,7 +80,7 @@ const EditScreen = ({ route, navigation }) => {
           />
 
           {/* DUE TIME */}
-          <Text style={styles.subtitle}>Title</Text>
+          <Text style={styles.subtitle}>Due Time</Text>
           <TextInput
             style={styles.input}
             placeholder="Enter item due time (HH:mm:ss)"
