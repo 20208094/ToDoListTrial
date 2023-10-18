@@ -11,6 +11,7 @@ DEPENDENCY INSTALLATION:
     npm install react-native-dialog
     npm install expo-notifications
     npm install react-native-swipe-list-view
+    npx expo install expo-sqlite
 
 ----------------------------------------------------------------------------------
 EXPORT GUIDE:

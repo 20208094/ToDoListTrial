@@ -64,14 +64,14 @@ const TodoScreen = ({ navigation }) => {
     const checkDueNotifications = async () => {
       try {
         const notificationsToSchedule = [];
-    
+
         todoList.forEach((item) => {
 
           // Skip checked tasks
           if (checkedItems[item.id]) {
             return;
           }
-    
+
           const taskId = item.id;
           if (!scheduledNotifications[taskId]) {
 
@@ -80,7 +80,7 @@ const TodoScreen = ({ navigation }) => {
 
             const dueTime = new Date(item.due).getTime();
             const notificationMinutes = item.mins;
-    
+
             const hour = new Date(dueTime).getHours();
             const minute = new Date(dueTime).getMinutes() - notificationMinutes
 
@@ -103,7 +103,7 @@ const TodoScreen = ({ navigation }) => {
         console.error('Error scheduling notifications: ', error);
       }
     };
-    
+
     checkDueNotifications();
   }, [todoList]);
 
@@ -130,41 +130,42 @@ const TodoScreen = ({ navigation }) => {
     }
   };
 
-  const scheduleDateNotification = async (item) => {    
-    try {   
+  const scheduleDateNotification = async (item) => {
+    try {
       await Notifications.scheduleNotificationAsync({
         content: {
-            title: 'Task Reminder',
-            body: `Your task "${item.title}" is due today!`,
-          },
-          trigger: null
-        });
+          title: 'Task Reminder',
+          body: `Your task "${item.title}" is due today!`,
+        },
+        trigger: null
+      });
 
     } catch (error) {
       console.error('Error scheduling notification:', error);
     }
   };
-  
+
   const scheduleTimeNotification = async (item) => {
     try {
-        const dueTime = new Date(item.due).getTime();
-        const notificationMinutes = item.mins;
+      const dueTime = new Date(item.due).getTime();
+      const notificationMinutes = item.mins;
 
-        const hour = new Date(dueTime).getHours();
-        const minute = new Date(dueTime).getMinutes() - notificationMinutes
-        await Notifications.scheduleNotificationAsync({
-            content: {
-                title: 'Task Reminder',
-                body: `Your task "${item.title}" deadline is in "${item.mins}" minutes.!`,
-                },
-                trigger: {
-                  hour: hour,
-                  minute: minute,
-                  repeats: true}
-            });
+      const hour = new Date(dueTime).getHours();
+      const minute = new Date(dueTime).getMinutes() - notificationMinutes
+      await Notifications.scheduleNotificationAsync({
+        content: {
+          title: 'Task Reminder',
+          body: `Your task "${item.title}" deadline is in "${item.mins}" minutes.!`,
+        },
+        trigger: {
+          hour: hour,
+          minute: minute,
+          repeats: true
+        }
+      });
 
     } catch (error) {
-        console.error('Error scheduling notification:', error);
+      console.error('Error scheduling notification:', error);
     }
   };
 
@@ -235,53 +236,52 @@ const TodoScreen = ({ navigation }) => {
     // Check if the item is unchecked
     if (!checkedItems[item.id]) {
       return (
-        <View style={{marginBottom: 10}}>
-            <SwipeListView
-            data={[item]} 
+        <View style={{ marginBottom: 10 }}>
+          <SwipeListView
+            data={[item]}
             renderItem={(data, rowMap) => (
-                <View style={{ backgroundColor: 'white', borderRadius: 4, width: '100%', height: 75, justifyContent: 'center' }}>
-                    <View style={{ flexDirection: 'row' }}>
-                        <Checkbox 
-                            status={checkedItems[data.item.id] ? 'checked' : 'unchecked'} 
-                            onPress={() => { 
-                                const newCheckedItems = { ...checkedItems }; 
-                                newCheckedItems[data.item.id] = !checkedItems[data.item.id]; 
-                                setCheckedItems(newCheckedItems); 
-                                saveCheckedItemsToStorage(newCheckedItems); 
-                            }}
-                            style={{ paddingHorizontal: 5}}
-                        />
-                        <View style={{flex: 1}} >
-                            <Text style={{color: 'black', fontSize: 25, fontWeight: '800'}} numberOfLines={1} ellipsizeMode="tail">{data.item.title}</Text>
-                            <Text style={{ color: 'gray', fontSize: 15 }}>DUE: {formatDate(new Date(item.due))} {formatTime(new Date(item.due))}</Text>
-                        </View>
-                        <View style={{ flexDirection: 'row', alignItems: 'center'}}>
-                            <IconButton style={{ margin: 0 }} icon="eye" iconColor='#3498db' onPress={() => showDialog(data.item)} />
-                                {/* Popup dialog */}
-                                <Dialog.Container visible={visible}>
-                                    <Dialog.Title>{selectedTodo?.title}</Dialog.Title>
-                                    <Dialog.Description>
-                                        {selectedTodo?.desc}
-                                    </Dialog.Description>
-                                    <Text>DUE: {formatDate(new Date(selectedTodo?.due))} {formatTime(new Date(selectedTodo?.due))}</Text>
-                                    <Dialog.Button label="Done" onPress={handleCancel} />
-                                </Dialog.Container>
-                        </View>
-                    </View>
+              <View style={{ backgroundColor: 'white', borderRadius: 4, width: '100%', height: 75, justifyContent: 'center' }}>
+                <View style={{ flexDirection: 'row' }}>
+                  <Checkbox
+                    status={checkedItems[data.item.id] ? 'checked' : 'unchecked'}
+                    onPress={() => {
+                      const newCheckedItems = { ...checkedItems };
+                      newCheckedItems[data.item.id] = !checkedItems[data.item.id];
+                      setCheckedItems(newCheckedItems);
+                      saveCheckedItemsToStorage(newCheckedItems);
+                    }}
+                    style={{ paddingHorizontal: 5 }}
+                  />
+                  <View style={{ flex: 1 }} >
+                    <Text style={{ color: 'black', fontSize: 25, fontWeight: '800' }} numberOfLines={1} ellipsizeMode="tail">{data.item.title}</Text>
+                    <Text style={{ color: 'gray', fontSize: 15 }}>DUE: {formatDate(new Date(item.due))} {formatTime(new Date(item.due))}</Text>
+                  </View>
+                  <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                    <IconButton style={{ margin: 0 }} icon="eye" iconColor='#3498db' onPress={() => showDialog(data.item)} />
+                    <Dialog.Container visible={visible}>
+                      <Dialog.Title>{selectedTodo?.title}</Dialog.Title>
+                      <Dialog.Description>
+                        {selectedTodo?.desc}
+                      </Dialog.Description>
+                      <Text>DUE: {formatDate(new Date(selectedTodo?.due))} {formatTime(new Date(selectedTodo?.due))}</Text>
+                      <Dialog.Button label="Done" onPress={handleCancel} />
+                    </Dialog.Container>
+                  </View>
                 </View>
+              </View>
             )}
             renderHiddenItem={(data, rowMap) => (
-                <View style={{ flex: 1, flexDirection: 'row', alignItems: 'center', justifyContent: 'flex-end', backgroundColor: 'gray', height: 75, width: '100%', position: 'absolute', right: 0, borderRadius: 4}}>
-                    <Pressable style={{backgroundColor: '#f39c12', width: 60, height: '100%', alignItems: 'center', justifyContent: 'center'}} >
-                        <IconButton style={{ margin: 0, backgroundColor: '#f39c12', marginEnd: 5 }} icon="pencil" iconColor='black' onPress={() => handleEditPress(data.item)}/>
-                    </Pressable>
-                    <Pressable style={{backgroundColor: '#e74c3c', width: 60, height: '100%', alignItems: 'center', justifyContent: 'center', borderTopEndRadius: 4, borderBottomEndRadius: 4}} onPress={() => handleDeleteConfirmTodo(data.item)}>
-                        <IconButton style={{ margin: 0, backgroundColor: '#e74c3c' }} icon="trash-can" iconColor='black'  />
-                    </Pressable>
-                </View>
+              <View style={{ flex: 1, flexDirection: 'row', alignItems: 'center', justifyContent: 'flex-end', backgroundColor: 'gray', height: 100, width: '100%', position: 'absolute', right: 0, borderRadius: 4 }}>
+                <Pressable style={{ backgroundColor: '#f39c12', width: 60, height: '100%', alignItems: 'center', justifyContent: 'center' }} >
+                  <IconButton style={{ margin: 0, backgroundColor: '#f39c12', marginEnd: 5 }} icon="pencil" iconColor='black' onPress={() => handleEditPress(data.item)} />
+                </Pressable>
+                <Pressable style={{ backgroundColor: '#e74c3c', width: 60, height: '100%', alignItems: 'center', justifyContent: 'center', borderTopEndRadius: 4, borderBottomEndRadius: 4 }} onPress={() => handleDeleteConfirmTodo(data.item)}>
+                  <IconButton style={{ margin: 0, backgroundColor: '#e74c3c' }} icon="trash-can" iconColor='black' />
+                </Pressable>
+              </View>
             )}
             rightOpenValue={-120}
-            />
+          />
         </View>
       );
     } else {
@@ -291,11 +291,10 @@ const TodoScreen = ({ navigation }) => {
 
 
   const taskCon = height / 1.5;
-  
-  //Get the total number of current unfinished task
-  
-  const uncheckedItemsCount = todoList.filter(todo => !checkedItems[todo.id]).length;
 
+  //Get the total number of current unfinished task
+
+  const uncheckedItemsCount = todoList.filter(todo => !checkedItems[todo.id]).length;
 
   return (
     <>
@@ -314,9 +313,9 @@ const TodoScreen = ({ navigation }) => {
           </Text>
 
           {/* Display the total of unfinished task */}
-           <View style={{ backgroundColor: 'pink', width: 200, height: 20, borderRadius: 5, borderColor: '#FC5858', borderWidth: 1 }}>
-            <Text style={{ fontWeight: 'bold', fontSize: 16, marginHorizontal: 5 }}>Unfinished Tasks: {  uncheckedItemsCount }</Text>
-          </View> 
+          <View style={{ backgroundColor: 'pink', width: 200, height: 20, borderRadius: 5, borderColor: '#FC5858', borderWidth: 1 }}>
+            <Text style={{ fontWeight: 'bold', fontSize: 16, marginHorizontal: 5 }}>Unfinished Tasks: {uncheckedItemsCount}</Text>
+          </View>
         </View>
         <LinearGradient colors={['#FC5858', 'pink']} style={{ borderTopRightRadius: 40, borderBottomLeftRadius: 40, height: height / 1.5, marginTop: 5, padding: 20, fontSize: 20 }}>
           <View style={{ backgroundColor: '#dbdbdb', padding: 10, height: taskCon - 50, borderRadius: 6, borderColor: '#fff', borderWidth: 5 }}>

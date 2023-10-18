@@ -1,241 +1,542 @@
-import React, { useState, useEffect, useCallback } from 'react';
-import { FlatList, StyleSheet, Text, View, Modal, Pressable, Image } from 'react-native';
+// import React, { useEffect, useState, useCallback } from 'react';
+// import { View, Text, Button, FlatList, Dimensions, Image, Pressable, Modal } from 'react-native';
+// import { IconButton, Checkbox } from 'react-native-paper';
+// import { deleteItem, initDatabase, updateItem, getCheckedItems } from './Database';
+// import { LinearGradient } from 'expo-linear-gradient';
+// import BottomNavigation from '../navigation/BottomNav';
+// import { SwipeListView } from 'react-native-swipe-list-view';
+
+// const TodoScreen = ({ navigation }) => {
+//     const [items, setItems] = useState([]);
+//     const [modalDeleteVisible, setModalDeleteVisible] = useState(false);
+//     const [deleteConfirmTodo, setDeleteConfirmTodo] = useState(null);
+
+//     const { height, width } = Dimensions.get('window');
+//     const taskCon = height / 1.5;
+
+//     const fetchItems = useCallback(() => {
+//         console.log('Fetching items...');
+//         getCheckedItems((items) => {
+//             console.log('Fetched items:', items);
+//             setItems(items);
+//         });
+//     }, []);
+
+//     useEffect(() => {
+//         initDatabase();
+//         fetchItems();
+//         const unsubscribe = navigation.addListener('focus', () => {
+//             fetchItems();
+//         });
+//         return unsubscribe;
+//     }, []);
+
+//     useEffect(() => {
+//         console.log('Items updated:', items);
+//     }, [items]);
+
+//     const deleteItemById = (id) => {
+//         deleteItem(id, () => {
+//             console.log('Item deleted successfully');
+//             fetchItems();
+//             setDeleteConfirmTodo(null);
+//             setModalDeleteVisible(false);
+//         });
+//     };
+
+//     useEffect(() => {
+//         navigation.setOptions({
+//             headerRight: () => (
+//                 <Button title="Refresh" onPress={() => fetchItems()} />
+//             ),
+//         });
+//     }, [fetchItems]);
+
+//     const handleDeleteConfirmTodo = (itemId) => {
+//         setDeleteConfirmTodo(itemId);
+//         setModalDeleteVisible(true);
+//     };
+
+//     const renderTodoItem = ({ item, index }) => (
+
+//         <View style={{ marginBottom: 10 }}>
+//             <SwipeListView
+//                 data={[item]}
+//                 renderItem={(data, rowMap) => (
+//                     <View style={{ backgroundColor: '#47e647', borderRadius: 4, width: '100%', justifyContent: 'center', padding: 5 }}>
+//                         <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+//                             <Checkbox
+//                                 status="checked"
+//                                 onPress={() => {
+//                                     const updatedItems = [...items];
+//                                     updatedItems[index].checked = !updatedItems[index].checked;
+//                                     setItems(updatedItems);
+
+//                                     // Update the status in the SQLite database
+//                                     updateItem(
+//                                         item.id,
+//                                         item.name,
+//                                         item.description,
+//                                         item.mins,
+//                                         item.duedate,
+//                                         item.duetime,
+//                                         'unchecked',
+//                                         () => {
+//                                             console.log('Item status updated successfully');
+
+//                                             fetchItems();
+//                                         }
+//                                     );
+//                                 }}
+//                                 style={{ alignSelf: 'center' }}
+//                                 checkedIcon="checkbox-marked"
+//                             />
+//                             <View style={{ flex: 1, paddingStart: 10 }}>
+//                                 <Text style={{ color: 'black', fontSize: 30, fontWeight: '800', marginBottom: 6 }} numberOfLines={1} ellipsizeMode="tail">{data.item.name}</Text>
+//                                 <Text style={{ color: 'black', fontSize: 12 }}>DUE DATE: {data.item.duedate}</Text>
+//                                 <Text style={{ color: 'black', fontSize: 12 }}>DUE TIME: {data.item.duetime}</Text>
+//                             </View>
+//                             {/* <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+//                     <IconButton style={{ margin: 0 }} icon="eye" iconColor='#3498db' onPress={() => showDialog(data.item)} />
+//                     <Dialog.Container visible={visible}>
+//                       <Dialog.Title>{selectedTodo?.title}</Dialog.Title>
+//                       <Dialog.Description>
+//                         {selectedTodo?.desc}
+//                       </Dialog.Description>
+//                       <Text>DUE: {formatDate(new Date(selectedTodo?.due))} {formatTime(new Date(selectedTodo?.due))}</Text>
+//                       <Dialog.Button label="Done" onPress={handleCancel} />
+//                     </Dialog.Container>
+//                   </View> */}
+//                         </View>
+//                     </View>
+//                 )}
+//                 renderHiddenItem={(data, rowMap) => (
+//                     <View style={{ flex: 1, flexDirection: 'row', alignItems: 'center', justifyContent: 'flex-end', backgroundColor: 'gray', height: 100, width: '100%', position: 'absolute', right: 0, borderRadius: 4 }}>
+//                         {/* <Pressable style={{ backgroundColor: '#f39c12', width: 60, height: '100%', alignItems: 'center', justifyContent: 'center' }} >
+//               <IconButton style={{ margin: 0, backgroundColor: '#f39c12', marginEnd: 5 }} icon="pencil" iconColor='black' onPress={() => navigation.navigate('Edit', { itemId: data.item.id })} />
+//             </Pressable> */}
+//                         <Pressable style={{ backgroundColor: '#e74c3c', width: 60, height: '100%', alignItems: 'center', justifyContent: 'center', borderTopEndRadius: 4, borderBottomEndRadius: 4 }} onPress={() => handleDeleteConfirmTodo(data.item.id)}>
+//                             <IconButton style={{ margin: 0, backgroundColor: '#e74c3c' }} icon="trash-can" iconColor='black' />
+//                         </Pressable>
+//                     </View>
+//                 )}
+//                 rightOpenValue={-60}
+//             />
+//         </View>
+//     );
+
+//     return (
+//         <>
+//             <View style={{ marginHorizontal: 16, marginTop: 200, fontSize: 20 }}>
+
+//                 <View style={{ flexDirection: 'row', borderColor: '#FC5858', backgroundColor: '#dbdbdb', borderWidth: 5, marginStart: -30, paddingStart: 40, alignItems: 'center', borderTopRightRadius: 50, borderBottomRightRadius: 50, justifyContent: 'flex-end', width: width * 0.70, marginTop: -150 }}>
+//                     <Text style={{ fontSize: 15, fontWeight: 'bold' }}>Assigment Application</Text>
+//                     <Image
+//                         source={require("../../assets/splash.png")}
+//                         style={{ height: 60, width: 60, marginBottom: 5, marginEnd: 10 }}
+//                     />
+//                 </View>
+//                 <View>
+//                     <Text style={{ fontSize: 35, textAlign: 'center', fontWeight: 'bold', marginBottom: 10, marginTop: 15 }}>
+//                         TASKS
+//                     </Text>
+//                 </View>
+//                 <LinearGradient colors={['#FC5858', 'pink']} style={{ borderTopRightRadius: 40, borderBottomLeftRadius: 40, height: height / 1.5, marginTop: 5, padding: 20, fontSize: 20 }}>
+//                     <View style={{ backgroundColor: '#dbdbdb', padding: 10, height: taskCon - 50, borderRadius: 6, borderColor: '#fff', borderWidth: 5 }}>
+//                         {/* RENDER TO DO LIST */}
+//                         <FlatList
+//                             data={items}
+//                             keyExtractor={(item) => item.id.toString()}
+//                             renderItem={renderTodoItem}
+//                             ListEmptyComponent={<Text>No items found</Text>}
+//                         />
+//                     </View>
+//                 </LinearGradient>
+
+//                 {/* Add Button */}
+//                 <Pressable style={{ position: 'absolute', bottom: 1, right: 1, }} onPress={() => navigation.navigate('Add')}>
+//                     <View style={{
+//                         backgroundColor: '#FC5858',
+//                         width: 80,
+//                         height: 80,
+//                         borderRadius: 80,
+//                         alignItems: 'center',
+//                         justifyContent: 'center',
+//                         borderWidth: 7,
+//                         borderColor: 'white',
+//                         bottom: 8,
+//                         right: 8,
+//                     }}>
+//                         <Text style={{ fontSize: 50, color: 'white', }}>+</Text>
+//                     </View>
+//                 </Pressable>
+
+//                 {/* DELETE MODAL */}
+//                 <Modal
+//                     transparent={true}
+//                     visible={modalDeleteVisible}
+//                     onRequestClose={() => {
+//                         Alert.alert('Modal has been closed.');
+//                         setModalDeleteVisible(!modalDeleteVisible);
+//                     }}>
+//                     <View style={{ justifyContent: 'center', alignItems: 'center' }}>
+//                         <View style={{
+//                             margin: 10,
+//                             marginTop: 290,
+//                             width: 330,
+//                             height: 220,
+//                             backgroundColor: 'white',
+//                             padding: 35,
+//                             alignItems: 'center',
+//                             elevation: 10,
+//                             fontSize: 20,
+//                             borderColor: '#FC5858',
+//                             borderTopRightRadius: 50,
+//                             borderBottomLeftRadius: 50,
+//                             borderWidth: 5
+//                         }}>
+//                             <Text style={{ fontSize: 20, backgroundColor: 'white', fontWeight: 'bold', padding: 5, width: 300, textAlign: 'center', borderRadius: 20, marginTop: 20, borderColor: '#FC5858', borderWidth: 3, marginBottom: 25 }}>Do you really want to delete this task?</Text>
+
+//                             <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignContent: 'center', overflow: 'hidden', paddingStart: 30 }}>
+//                                 <Pressable
+//                                     style={{
+//                                         backgroundColor: '#FB3854',
+//                                         width: '60%',
+//                                         height: 40,
+//                                         justifyContent: 'center',
+//                                         alignItems: 'center',
+//                                         borderRadius: 30,
+//                                         zIndex: 1
+//                                     }}
+//                                     onPress={() => {
+//                                         if (deleteConfirmTodo !== null) {
+//                                             deleteItemById(deleteConfirmTodo);
+//                                         }
+//                                     }}
+//                                 >
+//                                     <Text style={{ color: 'white', fontWeight: 'bold' }}>Delete</Text>
+//                                 </Pressable>
+
+//                                 <Pressable style={{ backgroundColor: 'white', width: '60%', height: 40, justifyContent: 'center', alignItems: 'center', borderRadius: 30, position: 'relative', left: -30, borderColor: '#FB3854', borderWidth: 2 }} onPress={() => setModalDeleteVisible(!modalDeleteVisible)}>
+//                                     <Text style={{ color: '#FC5858', fontWeight: 'bold' }}>Cancel</Text>
+//                                 </Pressable>
+//                             </View>
+//                         </View>
+//                     </View>
+//                 </Modal>
+//             </View>
+//             {/* Bottom Navigation Container */}
+//             <View style={{ width: width, position: 'absolute', right: 0, left: 0, bottom: 0, flex: 1 }}>
+//                 <BottomNavigation navigation={navigation} />
+//             </View>
+//         </>
+//     );
+// };
+
+// export default TodoScreen;
+
+import React, { useEffect, useState, useCallback } from 'react';
+import { View, Text, Button, FlatList, Dimensions, Image, Pressable, Modal, TextInput } from 'react-native';
 import { IconButton, Checkbox } from 'react-native-paper';
-import Fallback2 from "../components/Fallback2";
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import BottomNavigation from '../navigation/BottomNav';
-import { useIsFocused } from '@react-navigation/native';
-import Dialog from "react-native-dialog";
+import { deleteItem, initDatabase, updateItem, getCheckedItems } from './Database';
 import { LinearGradient } from 'expo-linear-gradient';
+import BottomNavigation from '../navigation/BottomNav';
 import { SwipeListView } from 'react-native-swipe-list-view';
 
 const ArchiveScreen = ({ navigation }) => {
-    const [todo, setTodo] = useState("");
-    const [todoList, setTodoList] = useState([]);
-    const [deleteConfirmTodo, setDeleteConfirmTodo] = useState(null);
-    const [checkedItems, setCheckedItems] = useState({});
+    const [items, setItems] = useState([]);
     const [modalDeleteVisible, setModalDeleteVisible] = useState(false);
+    const [deleteConfirmTodo, setDeleteConfirmTodo] = useState(null);
+    const [modalViewVisible, setModalViewVisible] = useState(false);
+    const [viewTaskDetails, setViewTaskDetails] = useState(null);
 
-    const isFocused = useIsFocused();
+    const { height, width } = Dimensions.get('window');
+    const taskCon = height / 1.5;
 
-    // Load the todoList and checkedItems from AsyncStorage when the component mounts or when the screen is focused
-    const fetchTodoList = useCallback(async () => {
-        try {
-            const storedTodoList = await AsyncStorage.getItem('todoList');
-            const storedCheckedItems = await AsyncStorage.getItem('checkedItems');
-
-            if (storedTodoList) {
-                const parsedTodoList = JSON.parse(storedTodoList);
-                setTodoList(parsedTodoList);
-            }
-
-            if (storedCheckedItems) {
-                const parsedCheckedItems = JSON.parse(storedCheckedItems);
-                setCheckedItems(parsedCheckedItems);
-            }
-        } catch (error) {
-            console.error('Error loading data: ', error);
-        }
+    const fetchItems = useCallback(() => {
+        console.log('Fetching items...');
+        getCheckedItems((items) => {
+            console.log('Fetched items:', items);
+            setItems(items);
+        });
     }, []);
 
     useEffect(() => {
-        fetchTodoList();
-    }, [isFocused, fetchTodoList]);
+        initDatabase();
+        fetchItems();
+        const unsubscribe = navigation.addListener('focus', () => {
+            fetchItems();
+        });
+        return unsubscribe;
+    }, []);
 
-    const saveTodoListToStorage = async (list) => {
-        try {
-            await AsyncStorage.setItem('todoList', JSON.stringify(list));
-        } catch (error) {
-            console.error('Error saving todoList: ', error);
-        }
+    useEffect(() => {
+        console.log('Items updated:', items);
+    }, [items]);
+
+    const deleteItemById = (id) => {
+        deleteItem(id, () => {
+            console.log('Item deleted successfully');
+            fetchItems();
+            setDeleteConfirmTodo(null);
+            setModalDeleteVisible(false);
+        });
     };
 
-    const saveCheckedItemsToStorage = async (items) => {
-        try {
-            await AsyncStorage.setItem('checkedItems', JSON.stringify(items));
-        } catch (error) {
-            console.error('Error saving checkedItems: ', error);
-        }
-    };
+    useEffect(() => {
+        navigation.setOptions({
+            headerRight: () => (
+                <Button title="Refresh" onPress={() => fetchItems()} />
+            ),
+        });
+    }, [fetchItems]);
 
-    const handleDeleteConfirmTodo = (todo) => {
-        setDeleteConfirmTodo(todo);
+    const handleDeleteConfirmTodo = (itemId) => {
+        setDeleteConfirmTodo(itemId);
         setModalDeleteVisible(true);
     };
 
-    const handleDeleteTodo = () => {
-        const idToDelete = deleteConfirmTodo.id;
-        const updatedTodoList = todoList.filter((todo) => todo.id !== idToDelete);
-        setTodoList(updatedTodoList);
-        saveTodoListToStorage(updatedTodoList);
-
-        // Remove the checked status for the deleted item
-        const updatedCheckedItems = { ...checkedItems };
-        delete updatedCheckedItems[idToDelete];
-        setCheckedItems(updatedCheckedItems);
-        saveCheckedItemsToStorage(updatedCheckedItems);
-
-        setModalDeleteVisible(false);
+    const handleViewTask = (itemId) => {
+        const taskToView = items.find((item) => item.id === itemId);
+        setViewTaskDetails(taskToView);
+        setModalViewVisible(true);
     };
 
-    const handleEditPress = (item) => {
-        navigation.navigate('Edit', { nestedObject: { id: item.id, title: item.title, due: item.due, desc: item.desc } });
-    };
+    const renderTodoItem = ({ item, index }) => (
 
-    const formatTime = (rawTime) => {
-        let time = new Date(rawTime);
-        let hour = time.getHours();
-        let min = time.getMinutes();
-    
-        return `${('0' + hour).slice(-2)}:${('0' + min).slice(-2)}`;
-    }
+        <View style={{ marginBottom: 10 }}>
+            <SwipeListView
+                data={[item]}
+                renderItem={(data, rowMap) => (
+                    <View style={{ backgroundColor: '#66d966', borderRadius: 4, width: '100%', justifyContent: 'center', padding: 5 }}>
+                        <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                            <Checkbox
+                                status="checked"
+                                onPress={() => {
+                                    const updatedItems = [...items];
+                                    updatedItems[index].checked = !updatedItems[index].checked;
+                                    setItems(updatedItems);
 
-    const formatDate = (rawDate) =>{
-        let date = new Date(rawDate)
-    
-        let year = date.getFullYear();
-        let month = date.getMonth() + 1;
-        let day = date.getDate()
-    
-        return `${year}-${month < 10 ? '0' : ''}${month}-${day < 10 ? '0' : ''}${day}`;
-    }
+                                    // Update the status in the SQLite database
+                                    updateItem(
+                                        item.id,
+                                        item.name,
+                                        item.description,
+                                        item.mins,
+                                        item.duedate,
+                                        item.duetime,
+                                        'unchecked',
+                                        () => {
+                                            console.log('Item status updated successfully');
 
-    const [selectedTodo, setSelectedTodo] = useState(null);
-    const [visible, setVisible] = useState(false);
-
-    const showDialog = (item) => {
-        setSelectedTodo(item);
-        setVisible(true);
-    };
-    
-    const handleCancel = () => {
-        setSelectedTodo(null);
-        setVisible(false);
-    };
-
-    const renderTodos = ({ item, index }) => {
-        // Check if the item is unchecked
-        if (checkedItems[item.id]) {
-            return (
-                <View style={{marginBottom: 10}}>
-                    <SwipeListView
-                    data={[item]} 
-                    renderItem={(data, rowMap) => (
-                        <View style={{ backgroundColor: 'lightgreen', borderRadius: 4, width: '100%', height: 75, justifyContent: 'center' }}>
-                            <View style={{ flexDirection: 'row' }}>
-                                <Checkbox 
-                                    status={checkedItems[data.item.id] ? 'checked' : 'unchecked'} 
-                                    onPress={() => { 
-                                        const newCheckedItems = { ...checkedItems }; 
-                                        newCheckedItems[data.item.id] = !checkedItems[data.item.id]; 
-                                        setCheckedItems(newCheckedItems); 
-                                        saveCheckedItemsToStorage(newCheckedItems); 
-                                    }}
-                                    style={{ paddingHorizontal: 5}}
-                                />
-                                <View style={{flex: 1}} >
-                                    <Text style={{color: 'black', fontSize: 25, fontWeight: '800'}} numberOfLines={1} ellipsizeMode="tail">{data.item.title}</Text>
-                                    <Text style={{ color: 'gray', fontSize: 15 }}>DUE: {formatDate(new Date(item.due))} {formatTime(new Date(item.due))}</Text>
-                                </View>
-                                <View style={{ flexDirection: 'row', alignItems: 'center'}}>
-                                    <IconButton style={{ margin: 0 }} icon="eye" iconColor='#3498db' onPress={() => showDialog(data.item)} />
-                                        {/* Popup dialog */}
-                                        <Dialog.Container visible={visible}>
-                                            <Dialog.Title>{selectedTodo?.title}</Dialog.Title>
-                                            <Dialog.Description>
-                                                {selectedTodo?.desc}
-                                            </Dialog.Description>
-                                            <Text>DUE: {formatDate(selectedTodo?.due)} at {formatTime(selectedTodo?.due)}</Text>
-                                            <Dialog.Button label="Done" onPress={handleCancel} />
-                                        </Dialog.Container>
-                                </View>
+                                            fetchItems();
+                                        }
+                                    );
+                                }}
+                                style={{ alignSelf: 'center' }}
+                                checkedIcon="checkbox-marked"
+                            />
+                            <View style={{ flex: 1, paddingStart: 10 }}>
+                                <Text style={{ color: 'black', fontSize: 30, fontWeight: '800', marginBottom: 6 }} numberOfLines={1} ellipsizeMode="tail">{data.item.name}</Text>
+                                <Text style={{ color: 'black', fontSize: 12 }}>DUE DATE: {data.item.duedate}</Text>
+                                <Text style={{ color: 'black', fontSize: 12 }}>DUE TIME: {data.item.duetime}</Text>
+                            </View>
+                            <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                                <IconButton style={{ margin: 0 }} icon="eye" iconColor='#3498db' onPress={() => handleViewTask(item.id)} />
                             </View>
                         </View>
-                    )}
-                    renderHiddenItem={(data, rowMap) => (
-                        <View style={{ flex: 1, flexDirection: 'row', alignItems: 'center', justifyContent: 'flex-end', backgroundColor: 'gray', height: 75, width: '100%', position: 'absolute', right: 0, borderRadius: 4}}>
-                            <Pressable style={{backgroundColor: '#e74c3c', width: 60, height: '100%', alignItems: 'center', justifyContent: 'center', borderTopEndRadius: 4, borderBottomEndRadius: 4}} onPress={() => handleDeleteConfirmTodo(data.item)}>
-                                <IconButton style={{ margin: 0, backgroundColor: '#e74c3c' }} icon="trash-can" iconColor='black'  />
-                            </Pressable>
-                        </View>
-                    )}
-                    rightOpenValue={-60}
-                    />
-                </View>
-                    );
-                } else {
-                    return null; // Don't render checked tasks
-        }
-    };
-  
+                    </View>
+                )}
+                renderHiddenItem={(data, rowMap) => (
+                    <View style={{ flex: 1, flexDirection: 'row', alignItems: 'center', justifyContent: 'flex-end', backgroundColor: 'gray', height: 100, width: '100%', position: 'absolute', right: 0, borderRadius: 4 }}>
+                        {/* <Pressable style={{ backgroundColor: '#f39c12', width: 60, height: 100, alignItems: 'center', justifyContent: 'center' }} >
+                            <IconButton style={{ margin: 0, backgroundColor: '#f39c12', marginEnd: 5 }} icon="pencil" iconColor='black' onPress={() => navigation.navigate('Edit', { itemId: data.item.id })} />
+                        </Pressable> */}
+                        <Pressable style={{ backgroundColor: '#e74c3c', width: 60, height: 100, alignItems: 'center', justifyContent: 'center', borderTopEndRadius: 4, borderBottomEndRadius: 4 }} onPress={() => handleDeleteConfirmTodo(data.item.id)}>
+                            <IconButton style={{ margin: 0, backgroundColor: '#e74c3c' }} icon="trash-can" iconColor='black' />
+                        </Pressable>
+                    </View>
+                )}
+                rightOpenValue={-60}
+            />
+        </View>
+    );
+
     return (
         <>
-        <View style={{ marginHorizontal: 16, marginTop: '25%', fontSize: 20}}>
-            <View>
-                <Text style={{ fontSize: 35, textAlign: 'center', fontWeight: 'bold', marginBottom: 10, marginTop: 15 }}>
-                    ARCHIVES
-                </Text>
-            </View>
-            <LinearGradient colors={['#FC5858', 'pink']} style={{ borderTopRightRadius: 40, borderBottomLeftRadius: 40, height: 500, marginTop: 5, padding: 20, fontSize: 20, height: '80%' }}>
+            <View style={{ marginHorizontal: 16, marginTop: 200, fontSize: 20 }}>
 
-                <View style={{ backgroundColor: '#dbdbdb', padding: 10, height: '100%', borderRadius: 6, borderColor: '#fff', borderWidth: 5 }}>
-                    {todoList.length <= 0 && <Fallback2 />}
-
-                    {/* RENDER TO DO LIST */}
-                    <FlatList data={todoList} renderItem={renderTodos} />
-
+                <View style={{ flexDirection: 'row', borderColor: '#FC5858', backgroundColor: '#dbdbdb', borderWidth: 5, marginStart: -30, paddingStart: 40, alignItems: 'center', borderTopRightRadius: 50, borderBottomRightRadius: 50, justifyContent: 'flex-end', width: width * 0.70, marginTop: -150 }}>
+                    <Text style={{ fontSize: 15, fontWeight: 'bold' }}>Assigment Application</Text>
+                    <Image
+                        source={require("../../assets/splash.png")}
+                        style={{ height: 60, width: 60, marginBottom: 5, marginEnd: 10 }}
+                    />
                 </View>
-            </LinearGradient>
+                <View>
+                    <Text style={{ fontSize: 35, textAlign: 'center', fontWeight: 'bold', marginBottom: 10, marginTop: 15 }}>
+                        ARCHIVE
+                    </Text>
+                </View>
+                <LinearGradient colors={['#FC5858', 'pink']} style={{ borderTopRightRadius: 40, borderBottomLeftRadius: 40, height: height / 1.5, marginTop: 5, padding: 20, fontSize: 20 }}>
+                    <View style={{ backgroundColor: '#dbdbdb', padding: 10, height: taskCon - 50, borderRadius: 6, borderColor: '#fff', borderWidth: 5 }}>
+                        {/* RENDER TO DO LIST */}
+                        <FlatList
+                            data={items}
+                            keyExtractor={(item) => item.id.toString()}
+                            renderItem={renderTodoItem}
+                            ListEmptyComponent={
+                                <Text style={{ fontSize: 35, textAlign: 'center', fontWeight: 'bold', marginBottom: 10, marginTop: 15 }}>
+                                    It appears you haven't completed any tasks yet!
+                                </Text>
+                            }
+                        />
+                    </View>
+                </LinearGradient>
 
-      {/* DELETE MODAL */}
-      <Modal
-          transparent={true}
-          visible={modalDeleteVisible}
-          onRequestClose={() => {
-            Alert.alert('Modal has been closed.');
-            setModalDeleteVisible(!modalDeleteVisible);
-          }}>
-          <View style={{ justifyContent: 'center', alignItems: 'center' }}>
-            <View style={{
-              margin: 10,
-              marginTop: 290,
-              width: 330,
-              height: 220,
-              backgroundColor: 'white',
-              padding: 35,
-              alignItems: 'center',
-              elevation: 10,
-              fontSize: 20,
-              borderColor: '#FC5858',
-              borderTopRightRadius: 50,
-              borderBottomLeftRadius: 50,
-              borderWidth: 5
-            }}>
-              <Text style={{ fontSize: 20, backgroundColor: 'white', fontWeight: 'bold', padding: 5, width: 300, textAlign: 'center', borderRadius: 20, marginTop: 20, borderColor: '#FC5858', borderWidth: 3, marginBottom: 25 }}>Do you really want to delete this task?</Text>
-
-              <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignContent: 'center', overflow: 'hidden', paddingStart: 30 }}>
-                <Pressable style={{ backgroundColor: '#FB3854', width: '60%', height: 40, justifyContent: 'center', alignItems: 'center', borderRadius: 30, zIndex: 1 }} onPress={() => handleDeleteTodo()}>
-                  <Text style={{ color: 'white', fontWeight: 'bold' }}>Delete</Text>
+                {/* Add Button */}
+                <Pressable style={{ position: 'absolute', bottom: 1, right: 1, }} onPress={() => navigation.navigate('Add')}>
+                    <View style={{
+                        backgroundColor: '#FC5858',
+                        width: 80,
+                        height: 80,
+                        borderRadius: 80,
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        borderWidth: 7,
+                        borderColor: 'white',
+                        bottom: 8,
+                        right: 8,
+                    }}>
+                        <Text style={{ fontSize: 50, color: 'white', }}>+</Text>
+                    </View>
                 </Pressable>
 
-                <Pressable style={{ backgroundColor: 'white', width: '60%', height: 40, justifyContent: 'center', alignItems: 'center', borderRadius: 30, position: 'relative', left: -30, borderColor: '#FB3854', borderWidth: 2 }} onPress={() => setModalDeleteVisible(!modalDeleteVisible)}>
-                  <Text style={{ color: '#FC5858', fontWeight: 'bold' }}>Cancel</Text>
-                </Pressable>
-              </View>
+                {/* DELETE MODAL */}
+                <Modal
+                    transparent={true}
+                    visible={modalDeleteVisible}
+                    onRequestClose={() => {
+                        Alert.alert('Modal has been closed.');
+                        setModalDeleteVisible(!modalDeleteVisible);
+                    }}>
+                    <View style={{ justifyContent: 'center', alignItems: 'center' }}>
+                        <View style={{
+                            margin: 10,
+                            marginTop: 290,
+                            width: 330,
+                            height: 220,
+                            backgroundColor: 'white',
+                            padding: 35,
+                            alignItems: 'center',
+                            elevation: 10,
+                            fontSize: 20,
+                            borderColor: '#FC5858',
+                            borderTopRightRadius: 50,
+                            borderBottomLeftRadius: 50,
+                            borderWidth: 5
+                        }}>
+                            <Text style={{ fontSize: 20, backgroundColor: 'white', fontWeight: 'bold', padding: 5, width: 300, textAlign: 'center', borderRadius: 20, marginTop: 20, borderColor: '#FC5858', borderWidth: 3, marginBottom: 25 }}>Do you really want to delete this task?</Text>
+
+                            <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignContent: 'center', overflow: 'hidden', paddingStart: 30 }}>
+                                <Pressable
+                                    style={{
+                                        backgroundColor: '#FB3854',
+                                        width: '60%',
+                                        height: 40,
+                                        justifyContent: 'center',
+                                        alignItems: 'center',
+                                        borderRadius: 30,
+                                        zIndex: 1
+                                    }}
+                                    onPress={() => {
+                                        if (deleteConfirmTodo !== null) {
+                                            deleteItemById(deleteConfirmTodo);
+                                        }
+                                    }}
+                                >
+                                    <Text style={{ color: 'white', fontWeight: 'bold' }}>Delete</Text>
+                                </Pressable>
+
+                                <Pressable style={{ backgroundColor: 'white', width: '60%', height: 40, justifyContent: 'center', alignItems: 'center', borderRadius: 30, position: 'relative', left: -30, borderColor: '#FB3854', borderWidth: 2 }} onPress={() => setModalDeleteVisible(!modalDeleteVisible)}>
+                                    <Text style={{ color: '#FC5858', fontWeight: 'bold' }}>Cancel</Text>
+                                </Pressable>
+                            </View>
+                        </View>
+                    </View>
+                </Modal>
+
+                {/* VIEW DETAILS MODAL */}
+                <Modal
+                    animationType="slide"
+                    transparent={true}
+                    visible={modalViewVisible}
+                    onRequestClose={() => {
+                        Alert.alert('Modal has been closed.');
+                        setViewTaskDetails(null);
+                        setModalViewVisible(!modalViewVisible);
+                    }}>
+                    <View style={{ justifyContent: 'center', alignItems: 'center', backgroundColor: 'rgba(51, 13, 13, 0.7)', height: '100%' }}>
+                        <View style={{
+                            margin: 20,
+                            width: 390,
+                            backgroundColor: 'white',
+                            padding: 35,
+                            paddingTop: 10,
+                            alignItems: 'center',
+                            elevation: 10,
+                            fontSize: 20,
+                            borderColor: '#FC5858',
+                            borderTopRightRadius: 50,
+                            borderBottomLeftRadius: 50,
+                            borderWidth: 5
+                        }}>
+                            <Text style={{ fontSize: 30, fontWeight: 'bold', padding: 5, textAlign: 'center', borderRadius: 20, }}>View Task</Text>
+
+                            <View style={{ borderColor: '#FC5858', borderWidth: 3, padding: 10, margin: 10, borderRadius: 20, marginBottom: 30, width: '100%' }}>
+                                {/* TITLE */}
+                                <View style={{ borderColor: '#FC5858', borderWidth: 1, borderRadius: 20, padding: 5, marginTop: 5, }}>
+                                    <Text style={{ fontSize: 20, marginBottom: 10, marginStart: 10 }}>Title: </Text>
+                                    <Text style={{ fontSize: 35, marginBottom: 10, textAlign: 'center' }}>{viewTaskDetails ? viewTaskDetails.name : ''}</Text>
+                                </View>
+                                {/* DESCRIPTION */}
+                                <View style={{ borderColor: '#FC5858', borderWidth: 1, borderRadius: 20, padding: 5, marginTop: 5, }}>
+                                    <Text style={{ fontSize: 20, marginBottom: 10, marginStart: 10 }}>Description: </Text>
+                                    <Text style={{ fontSize: 35, marginBottom: 10, textAlign: 'center' }}>{viewTaskDetails ? viewTaskDetails.description : ''}</Text>
+                                </View>
+                                {/* DUE DATE */}
+                                <View style={{ borderColor: '#FC5858', borderWidth: 1, borderRadius: 20, padding: 5, marginTop: 5, }}>
+                                    <Text style={{ fontSize: 20, marginBottom: 10, marginStart: 10 }}>Due Date: </Text>
+                                    <Text style={{ fontSize: 35, marginBottom: 10, textAlign: 'center' }}>{viewTaskDetails ? viewTaskDetails.duedate : ''}</Text>
+                                </View>
+                                {/* DUE TIME */}
+                                <View style={{ borderColor: '#FC5858', borderWidth: 1, borderRadius: 20, padding: 5, marginTop: 5, }}>
+                                    <Text style={{ fontSize: 20, marginBottom: 10, marginStart: 10 }}>Due Time: </Text>
+                                    <Text style={{ fontSize: 35, marginBottom: 10, textAlign: 'center' }}>{viewTaskDetails ? viewTaskDetails.duetime : ''}</Text>
+                                </View>
+                                {/* NOTIF MINS */}
+                                <View style={{ borderColor: '#FC5858', borderWidth: 1, borderRadius: 20, padding: 5, marginTop: 5, }}>
+                                    <Text style={{ fontSize: 20, marginBottom: 10, marginStart: 10 }}>Minutes Until Notification: </Text>
+                                    <Text style={{ fontSize: 35, marginBottom: 10, textAlign: 'center' }}>{viewTaskDetails ? viewTaskDetails.mins : ''}</Text>
+                                </View>
+
+                            </View>
+                            <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignContent: 'center', overflow: 'hidden' }}>
+                                <Pressable style={{ backgroundColor: 'white', width: '60%', height: 40, justifyContent: 'center', alignItems: 'center', borderRadius: 30, position: 'relative', borderColor: '#FB3854', borderWidth: 2 }} onPress={() => setModalViewVisible(!modalViewVisible)}>
+                                    <Text style={{ color: '#FC5858', fontWeight: 'bold' }}>Close</Text>
+                                </Pressable>
+                            </View>
+                        </View>
+                    </View>
+                </Modal>
             </View>
-          </View>
-        </Modal>
-        </View>
+            {/* Bottom Navigation Container */}
+            <View style={{ width: width, position: 'absolute', right: 0, left: 0, bottom: 0, flex: 1 }}>
+                <BottomNavigation navigation={navigation} />
+            </View>
+        </>
+    );
+};
 
-        {/* Bottom Navigation Container */}
-        <BottomNavigation navigation={navigation} />
-    </>
-    )
-}
-
-const styles = StyleSheet.create({
-});
-
-export default ArchiveScreen
-
+export default ArchiveScreen;
 

@@ -1,248 +1,125 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet, Pressable } from 'react-native';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import { View, Text, TextInput, TouchableOpacity, StyleSheet, Pressable, Button } from 'react-native';
+import { updateItem, getItemById } from './Database';
 import BottomNavigation from '../navigation/BottomNav';
-import DateTimePicker from "@react-native-community/datetimepicker";
-import { useRoute } from '@react-navigation/native';
 
-const EditScreen = ({ navigation }) => {
-  const [todo, setTodo] = useState("");
-  const [due, setDue] = useState(new Date());
-  const [desc, setDesc] = useState("");
-  const [mins, setMins] = useState(0);
+const EditScreen = ({ route, navigation }) => {
+  const { itemId } = route.params;
+  const [itemName, setItemName] = useState('');
+  const [itemDescription, setItemDescription] = useState('');
+  const [itemMins, setItemMins] = useState('');
+  const [itemDueDate, setItemDueDate] = useState('');
+  const [itemDueTime, setItemDueTime] = useState('');
   const [minsError, setMinsError] = useState(null);
-  const [showPicker, setShowPicker] = useState(false);
-  const [todoList, setTodoList] = useState([]);
-  const [editedTodo, setEditedTodo] = useState(null);
-  const [notifTime, setNotifTime] = useState("");
-  // time
-  const [time, setTime] = useState(new Date());
-  const [showTimePicker, setshowTimePicker] = useState(false);
-
-  const route = useRoute();
-  const taskId = route.params?.nestedObject?.id;
-  const taskTitle = route.params?.nestedObject?.title;
-  const taskDue = route.params?.nestedObject?.due;
-  const taskMin = route.params?.nestedObject?.mins;
-  const taskDesc = route.params?.nestedObject?.desc;
 
   useEffect(() => {
-    if (taskId !== undefined && taskTitle !== undefined && taskDue !== undefined && taskDesc !== undefined && taskMin !== undefined) {
-      setTodo(taskTitle);
-      setDue(taskDue)
-      setDesc(taskDesc);
-      setTime(new Date(taskDue));
-      setMins(taskMin)
-      setEditedTodo({ id: taskId, title: taskTitle, due: taskDue, mins: taskMin, desc: taskDesc });
-    }
-  }, [taskId, taskTitle, taskDue, taskMin, taskDesc]);
-
-
-  useEffect(() => {
-    const fetchTodoList = async () => {
-      try {
-        const storedTodoList = await AsyncStorage.getItem('todoList');
-        if (storedTodoList) {
-          setTodoList(JSON.parse(storedTodoList));
-        }
-      } catch (error) {
-        console.error('Error fetching todoList: ', error);
-      }
-    };
-
-    fetchTodoList();
-  }, []);
-
-  const toggleDatePicker = () => {
-    setShowPicker(!showPicker)
-  };
-
-  const toggleTimePicker = () => {
-    setshowTimePicker(!showTimePicker)
-  };
-
-  const onChange = (event, selectedDate) => {
-    if (event.type === "set") {
-      const currentDate = selectedDate || due;
-      const formattedDate = formatDate(currentDate);
-
-      setDue(currentDate); // Set the Date object directly
-      if (Platform.OS === "android") {
-        toggleDatePicker();
-      }
-    } else {
-      toggleDatePicker();
-    }
-  };
-
-  const onChangeTime = ({ type, nativeEvent }, selectedTime) => {
-    if (type === "set") {
-      const formattedTime = selectedTime || time;
-      const newFormattedTime = formatTime(formattedTime);
-      setTime(new Date(formattedTime));
-
-      if (Platform.OS === "android") {
-        toggleTimePicker();
-      }
-    } else {
-      toggleTimePicker();
-    }
-  };
-
-  const formatDate = (rawDate) => {
-    let date = new Date(rawDate)
-
-    let year = date.getFullYear();
-    let month = date.getMonth() + 1;
-    let day = date.getDate()
-
-    return `${day}/${month}/${year}`;
-  }
-
-  const formatTime = (rawTime) => {
-    let time = new Date(rawTime);
-    let hour = time.getHours();
-    let min = time.getMinutes();
-
-    return `${('0' + hour).slice(-2)}:${('0' + min).slice(-2)}`;
-  }
-
-  const saveTodoListToStorage = async (list) => {
-    try {
-      await AsyncStorage.setItem('todoList', JSON.stringify(list));
-    } catch (error) {
-      console.error('Error saving todoList: ', error);
-    }
-  };
-
-  const handleUpdateTodo = () => {
-    if (editedTodo === null || todo === "") {
-      return;
-    }
-  
-    // Combine date and time for the due value
-    const updatedDue = new Date(due);
-    updatedDue.setHours(time.getHours(), time.getMinutes());
-  
-    const updatedTodos = todoList.map((item) => {
-      if (item.id === editedTodo.id) {
-        return { ...item, title: todo, due: updatedDue, mins: mins, desc: desc };
-      }
-      return item;
+    getItemById(itemId, (item) => {
+      setItemName(item.name);
+      setItemDescription(item.description);
+      setItemMins(item.mins.toString());
+      setItemDueDate(item.duedate);
+      setItemDueTime(item.duetime);
     });
-  
-    setTodoList(updatedTodos);
-    saveTodoListToStorage(updatedTodos);
-    navigation.goBack();
-  };
-  
+  }, [itemId]);
 
-  const handleCancel = () => {
-    // Navigate back to the previous screen
-    navigation.goBack();
+  const editItem = () => {
+    updateItem(
+      itemId,
+      itemName,
+      itemDescription,
+      itemMins,
+      itemDueDate,
+      itemDueTime,
+      () => {
+        console.log('Item updated successfully');
+        navigation.navigate('Todo', { refreshKey: 'todo' + Math.random() });
+      }
+    );
   };
 
   const validateMins = (input) => {
-    const minsPattern = /^[0-9]*$/; 
-  
+    const minsPattern = /^[0-9]*$/;
+
     if (!minsPattern.test(input) || input < 0 || input > 60) {
       setMinsError('Please enter a valid number between 0 and 60');
     } else {
       setMinsError(null);
-      setMins(input); 
+      setItemMins(input);
     }
   };
 
   return (
-    <View style={styles.container}>
-      <View style={styles.noteContainer}>
-        <Text style={styles.noteText}>Edit Task</Text>
-      </View>
-
-      <View style={styles.newContainer}>
-        <Text style={styles.subtitle}>Title</Text>
-        <TextInput style={styles.input} value={todo} onChangeText={(userText) => setTodo(userText)} />
-
-        <Text style={[styles.subtitle, { marginTop: 10 }]}>Due:</Text>
-
-        {showPicker && (
-          <DateTimePicker
-            mode='date'
-            display='calendar'
-            value={new Date()}
-            minimumDate={new Date()}
-            onChange={onChange}
-            style={styles.datePicker}
-          />
-        )}
-
-        {!showPicker && (
-          <Pressable onPress={toggleDatePicker}>
-            <TextInput style={styles.input}
-              value={formatDate(due)}
-              onChangeText={setDue}
-              editable={false}
-              onPressIn={toggleDatePicker} />
-          </Pressable>
-        )}
-
-        {/* Time */}
-        <Text style={[styles.subtitle, { marginTop: 10 }]}>Time:</Text>
-
-        {showTimePicker && (
-          <DateTimePicker
-            mode='time'
-            display='clock'
-            value={time}
-            onChange={onChangeTime}
-          />
-        )}
-
-        {!showTimePicker && (
-          <Pressable onPress={toggleTimePicker}>
-            <TextInput
-              style={styles.input}
-              value={formatTime(time)}
-              onChangeText={setTime}
-              onPressIn={toggleTimePicker}
-            />
-          </Pressable>
-        )}
-
-         {/* Minutes */}
-         <Text style={styles.subtitle}>Minutes</Text>
-        <TextInput
-            style={styles.input}
-            value={mins}
-            onChangeText={(userText) => {validateMins(userText);
-          }}
-        />
-        {minsError && <Text style={styles.errorText}>{minsError}</Text>}
-
-
-        <Text style={[styles.subtitle, { marginTop: 10 }]}>Task Description</Text>
-        <TextInput
-          style={[styles.input, { height: 100, textAlignVertical: 'top' }]}
-          multiline={true}
-          value={desc} onChangeText={(userText) => setDesc(userText)}
-        />
-
-        <View style={styles.buttonsContainer}>
-          <TouchableOpacity style={styles.addButton} onPress={() => handleUpdateTodo()}>
-            <Text style={styles.buttonText}>Edit</Text>
-          </TouchableOpacity>
-
-          <TouchableOpacity style={styles.cancelButton} onPress={() => handleCancel()}>
-            <Text style={styles.cancelbuttonText}>Cancel</Text>
-          </TouchableOpacity>
+    <>
+      <View style={styles.container}>
+        <View style={styles.noteContainer}>
+          <Text style={styles.noteText}>Edit Task</Text>
         </View>
-      </View>
 
-      <BottomNavigation navigation={navigation} />
-    </View>
+        <View style={styles.newContainer}>
+          {/* TITLE */}
+          <Text style={styles.subtitle}>Title</Text>
+          <TextInput
+            style={styles.input}
+            placeholder="Enter item title"
+            value={itemName}
+            onChangeText={(text) => setItemName(text)}
+          />
+
+          {/* DUE DATE */}
+          <Text style={styles.subtitle}>Title</Text>
+          <TextInput
+            style={styles.input}
+            placeholder="Enter item due date (YYYY-MM-DD)"
+            value={itemDueDate}
+            onChangeText={(text) => setItemDueDate(text)}
+          />
+
+          {/* DUE TIME */}
+          <Text style={styles.subtitle}>Title</Text>
+          <TextInput
+            style={styles.input}
+            placeholder="Enter item due time (HH:mm:ss)"
+            value={itemDueTime}
+            onChangeText={(text) => setItemDueTime(text)}
+          />
+
+          {/* Minutes */}
+          <Text style={styles.subtitle}>Minutes</Text>
+          <TextInput
+            style={styles.input}
+            placeholder="Enter item minutes"
+            value={itemMins}
+            onChangeText={(text) => validateMins(text)}
+          />
+          {minsError && <Text style={styles.errorText}>{minsError}</Text>}
+
+          {/* DESCRIPTION */}
+          <Text style={[styles.subtitle, { marginTop: 10 }]}>Task Description</Text>
+
+          <TextInput
+            style={[styles.input, { height: 100, textAlignVertical: 'top' }]}
+            placeholder="Enter item description"
+            multiline={true}
+            value={itemDescription}
+            onChangeText={(text) => setItemDescription(text)}
+          />
+
+          <View style={styles.buttonsContainer}>
+            <TouchableOpacity style={styles.addButton} onPress={() => editItem()}>
+              <Text style={styles.buttonText}>Edit</Text>
+            </TouchableOpacity>
+
+            <TouchableOpacity style={styles.cancelButton} onPress={() => handleCancel()}>
+              <Text style={styles.cancelbuttonText}>Cancel</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+
+        <BottomNavigation navigation={navigation} />
+      </View>
+    </>
   );
 };
-
 
 const styles = StyleSheet.create({
   container: {
