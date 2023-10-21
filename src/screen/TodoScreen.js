@@ -165,12 +165,35 @@ const TodoScreen = ({ navigation }) => {
         trigger: {
           hour: parseInt(hours),
           minute: parseInt(notifMinutes),
-          repeats: true
+          repeats: true,
         },
       });
     } catch (error) {
       console.error("Error scheduling notification:", error);
     }
+  };
+
+  const formatDate = (rawDate) => {
+    let date = new Date(rawDate);
+
+    let year = date.getFullYear();
+    let month = date.getMonth() + 1;
+    let day = date.getDate();
+
+    return `${year}-${month < 10 ? "0" : ""}${month}-${
+      day < 10 ? "0" : ""
+    }${day}`;
+  };
+
+  const formatTime = (rawTime) => {
+    let time = new Date(rawTime);
+    let hours = time.getHours();
+    let minutes = time.getMinutes();
+    let seconds = time.getSeconds();
+
+    return `${("0" + hours).slice(-2)}:${("0" + minutes).slice(-2)}:${(
+      "0" + seconds
+    ).slice(-2)}`;
   };
 
   const renderTodoItem = ({ item, index }) => (
@@ -659,7 +682,7 @@ const TodoScreen = ({ navigation }) => {
                       textAlign: "center",
                     }}
                   >
-                    {viewTaskDetails ? viewTaskDetails.duetime : ""}
+                    {viewTaskDetails ? formatTime(viewTaskDetails.duetime) : ""}
                   </Text>
                 </View>
                 {/* NOTIF MINS */}

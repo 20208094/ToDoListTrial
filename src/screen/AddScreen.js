@@ -78,14 +78,16 @@ const AddScreen = ({ navigation }) => {
     let min = time.getMinutes();
     let seconds = time.getSeconds();
 
-    return `${("0" + hour).slice(-2)}:${("0" + min).slice(-2)}:${("0" + seconds).slice(-2)}`;
+    return `${("0" + hour).slice(-2)}:${("0" + min).slice(-2)}:${(
+      "0" + seconds
+    ).slice(-2)}`;
   };
 
   const validateMins = (input) => {
     const minsPattern = /^[0-9]*$/;
 
-    if (!minsPattern.test(input) || input < 0 || input > 60) {
-      setMinsError("Please enter a valid number between 0 and 60");
+    if (!minsPattern.test(input) || input < 0 || input > 59) {
+      setMinsError("Please enter a valid number between 0 and 59");
     } else {
       setMinsError(null);
       setItemMins(input);
