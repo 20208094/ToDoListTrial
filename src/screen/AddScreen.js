@@ -47,10 +47,10 @@ const AddScreen = ({ navigation }) => {
     }
   };
 
-  const onChangeTime = (event, selectedTime) => {
-    if (event.type === "set") {
-      const currentTime = selectedTime || time;
-      setItemDueTime(currentTime);
+  const onChangeTime = ({ type, nativeEvent }, selectedTime) => {
+    if (type === "set") {
+      const currentTime = selectedTime || itemDueTime;
+      setItemDueTime(new Date(currentTime));
 
       if (Platform.OS === "android") {
         toggleTimePicker();
@@ -76,8 +76,9 @@ const AddScreen = ({ navigation }) => {
     let time = new Date(rawTime);
     let hour = time.getHours();
     let min = time.getMinutes();
+    let seconds = time.getSeconds();
 
-    return `${("0" + hour).slice(-2)}:${("0" + min).slice(-2)}`;
+    return `${("0" + hour).slice(-2)}:${("0" + min).slice(-2)}:${("0" + seconds).slice(-2)}`;
   };
 
   const validateMins = (input) => {
@@ -91,16 +92,19 @@ const AddScreen = ({ navigation }) => {
     }
   };
 
-   const dueDate = formatDate(itemDueDate);
-   const dueTime = formatTime(itemDueTime);
-
-   const addItem = () => {
-     console.log("Add button pressed");
-     insertItem(itemName, itemDescription, itemMins, dueDate, dueTime, (id) => {
-       console.log("Item added with ID:", id);
-       navigation.navigate("Todo", { refreshKey: "todo" + Math.random() });
-     });
-   };
+  const addItem = () => {
+    insertItem(
+      itemName,
+      itemDescription,
+      itemMins,
+      formatDate(itemDueDate),
+      formatTime(itemDueTime),
+      (id) => {
+        console.log("Item added with ID:", id);
+        navigation.navigate("Todo", { refreshKey: "todo" + Math.random() });
+      }
+    );
+  };
 
   return (
     <>
@@ -167,7 +171,7 @@ const AddScreen = ({ navigation }) => {
               <TextInput
                 style={styles.input}
                 value={formatTime(itemDueTime)}
-                onChangeText={setItemDueDate}
+                onChangeText={setItemDueTime}
                 onPressIn={toggleTimePicker}
               />
             </Pressable>
@@ -177,11 +181,13 @@ const AddScreen = ({ navigation }) => {
           <Text style={styles.subtitle}>Minutes</Text>
           <TextInput
             style={styles.input}
-            placeholder="Enter item minutes"
+            placeholder="Minutes until notification"
             value={itemMins}
             onChangeText={(text) => validateMins(text)}
             keyboardType="numeric"
           />
+          {minsError && <Text style={styles.errorText}>{minsError}</Text>}
+
           {minsError && <Text style={styles.errorText}>{minsError}</Text>}
 
           {/* Task Description */}

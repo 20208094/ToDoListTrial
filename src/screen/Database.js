@@ -7,7 +7,7 @@ const db = SQLite.openDatabase("db21.db");
 const initDatabase = () => {
   db.transaction((tx) => {
     tx.executeSql(
-      "CREATE TABLE IF NOT EXISTS items (id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT, description TEXT, mins INTEGER, duedate DATE, duetime TIME, status TEXT)",
+      "CREATE TABLE IF NOT EXISTS items (id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT, description TEXT, mins INTEGER, duedate DATETIME, duetime DATETIME, status TEXT)",
       [],
       () => {
         console.log("Table created successfully");
@@ -19,12 +19,12 @@ const initDatabase = () => {
   });
 };
 
-const insertItem = (name, description, mins, dueDate, dueTime, callback) => {
+const insertItem = (name, description, mins, duedate, duetime, callback) => {
   db.transaction(
     (tx) => {
       tx.executeSql(
         "INSERT INTO items (name, description, mins, duedate, duetime, status) VALUES (?, ?, ?, ?, ?, ?)",
-        [name, description, mins, dueDate, dueTime, "unchecked"],
+        [name, description, mins, duedate, duetime, "unchecked"],
         (_, results) => {
           callback(results.insertId);
         },
