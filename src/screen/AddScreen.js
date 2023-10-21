@@ -24,6 +24,7 @@ const AddScreen = ({ navigation }) => {
   const [showTimePicker, setshowTimePicker] = useState(false);
   const [minsError, setMinsError] = useState(null);
   const { height, width } = Dimensions.get("window");
+  const [titleError, setTitleError] = useState(null);
 
   const toggleDatePicker = () => {
     setShowDatePicker(!showDatePicker);
@@ -95,6 +96,13 @@ const AddScreen = ({ navigation }) => {
   };
 
   const addItem = () => {
+    if (!itemName.trim()) {  // Check if itemName is empty or just whitespace
+      setTitleError('You need to write a title');
+      return;  // Return early so the insert action doesn't proceed
+    } else {
+      setTitleError(null);  // Clear any previous error
+    }
+
     insertItem(
       itemName,
       itemDescription,
@@ -106,6 +114,11 @@ const AddScreen = ({ navigation }) => {
         navigation.navigate("Todo", { refreshKey: "todo" + Math.random() });
       }
     );
+  };
+
+  const handleCancel = () => {
+    // Navigate back to the previous screen
+    navigation.goBack();
   };
 
   return (
@@ -132,6 +145,7 @@ const AddScreen = ({ navigation }) => {
             value={itemName}
             onChangeText={(text) => setItemName(text)}
           />
+          {titleError && <Text style={styles.errorText}>{titleError}</Text>}
 
           {/* Due Date */}
           <Text style={styles.subtitle}>Due Date</Text>
@@ -208,6 +222,9 @@ const AddScreen = ({ navigation }) => {
             {/* Add Button */}
             <TouchableOpacity style={styles.addButton} onPress={addItem}>
               <Text style={styles.buttonText}>Add</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.cancelButton} onPress={handleCancel}>
+              <Text style={styles.cancelbuttonText}>Cancel</Text>
             </TouchableOpacity>
           </View>
         </LinearGradient>

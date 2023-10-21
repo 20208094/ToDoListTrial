@@ -154,9 +154,16 @@ const TodoScreen = ({ navigation }) => {
     try {
       const duetime = item.duetime;
       const [hours, minutes, seconds] = duetime.split(":");
-
-      const notifMinutes = minutes - item.mins;
-
+      
+      let notifMinutes = minutes - item.mins;
+  
+      // Ensure notifMinutes is within the valid range (0-59)
+      if (notifMinutes < 0) {
+        notifMinutes = 0;
+      } else if (notifMinutes > 59) {
+        notifMinutes = 59;
+      }
+  
       await Notifications.scheduleNotificationAsync({
         content: {
           title: "Task Reminder",
