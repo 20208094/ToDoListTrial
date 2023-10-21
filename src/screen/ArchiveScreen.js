@@ -100,9 +100,9 @@ const ArchiveScreen = ({ navigation }) => {
                                 checkedIcon="checkbox-marked"
                             />
                             <View style={{ flex: 1, paddingStart: 10 }}>
-                                <Text style={{ color: 'black', fontSize: 30, fontWeight: '800', marginBottom: 6 }} numberOfLines={1} ellipsizeMode="tail">{data.item.name}</Text>
-                                <Text style={{ color: 'black', fontSize: 12 }}>DUE DATE: {data.item.duedate}</Text>
-                                <Text style={{ color: 'black', fontSize: 12 }}>DUE TIME: {data.item.duetime}</Text>
+                                <Text style={{ color: 'black', fontSize: 30, fontWeight: '800', marginBottom: 6, textDecorationLine: 'line-through' }} numberOfLines={1} ellipsizeMode="tail">{data.item.name}</Text>
+                                <Text style={{ color: 'black', fontSize: 12, textDecorationLine: 'line-through' }}>DUE DATE: {data.item.duedate}</Text>
+                                <Text style={{ color: 'black', fontSize: 12, textDecorationLine: 'line-through' }}>DUE TIME: {data.item.duetime}</Text>
                             </View>
                             <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                                 <IconButton style={{ margin: 0 }} icon="eye" iconColor='#3498db' onPress={() => handleViewTask(item.id)} />
@@ -150,7 +150,7 @@ const ArchiveScreen = ({ navigation }) => {
                             renderItem={renderTodoItem}
                             ListEmptyComponent={
                                 <Text style={{ fontSize: 35, textAlign: 'center', fontWeight: 'bold', marginBottom: 10, marginTop: 15 }}>
-                                    It appears you haven't completed any tasks yet!
+                                It appears you haven't completed any tasks yet!
                                 </Text>
                             }
                         />
@@ -158,7 +158,7 @@ const ArchiveScreen = ({ navigation }) => {
                 </LinearGradient>
 
                 {/* Add Button */}
-                <Pressable style={{ position: 'absolute', bottom: 1, right: 1, }} onPress={() => navigation.navigate('Add')}>
+                {/* <Pressable style={{ position: 'absolute', bottom: 1, right: 1, }} onPress={() => navigation.navigate('Add')}>
                     <View style={{
                         backgroundColor: '#FC5858',
                         width: 80,
@@ -173,7 +173,7 @@ const ArchiveScreen = ({ navigation }) => {
                     }}>
                         <Text style={{ fontSize: 50, color: 'white', }}>+</Text>
                     </View>
-                </Pressable>
+                </Pressable> */}
 
                 {/* DELETE MODAL */}
                 <Modal

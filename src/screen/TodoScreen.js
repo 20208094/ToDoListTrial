@@ -109,8 +109,8 @@ const TodoScreen = ({ navigation }) => {
         )}
         renderHiddenItem={(data, rowMap) => (
           <View style={{ flex: 1, flexDirection: 'row', alignItems: 'center', justifyContent: 'flex-end', backgroundColor: 'gray', height: 100, width: '100%', position: 'absolute', right: 0, borderRadius: 4 }}>
-            <Pressable style={{ backgroundColor: '#f39c12', width: 60, height: 100, alignItems: 'center', justifyContent: 'center' }} >
-              <IconButton style={{ margin: 0, backgroundColor: '#f39c12', marginEnd: 5 }} icon="pencil" iconColor='black' onPress={() => navigation.navigate('Edit', { itemId: data.item.id })} />
+            <Pressable style={{ backgroundColor: '#f39c12', width: 60, height: 100, alignItems: 'center', justifyContent: 'center' }} onPress={() => navigation.navigate('Edit', { itemId: data.item.id })} >
+              <IconButton style={{ margin: 0, backgroundColor: '#f39c12', marginEnd: 5 }} icon="pencil" iconColor='black' />
             </Pressable>
             <Pressable style={{ backgroundColor: '#e74c3c', width: 60, height: 100, alignItems: 'center', justifyContent: 'center', borderTopEndRadius: 4, borderBottomEndRadius: 4 }} onPress={() => handleDeleteConfirmTodo(data.item.id)}>
               <IconButton style={{ margin: 0, backgroundColor: '#e74c3c' }} icon="trash-can" iconColor='black' />
@@ -152,25 +152,26 @@ const TodoScreen = ({ navigation }) => {
               }
             />
           </View>
-        </LinearGradient>
 
-        {/* Add Button */}
-        <Pressable style={{ position: 'absolute', bottom: 1, right: 1, }} onPress={() => navigation.navigate('Add')}>
-          <View style={{
-            backgroundColor: '#FC5858',
-            width: 80,
-            height: 80,
-            borderRadius: 80,
-            alignItems: 'center',
-            justifyContent: 'center',
-            borderWidth: 7,
-            borderColor: 'white',
-            bottom: 8,
-            right: 8,
-          }}>
-            <Text style={{ fontSize: 50, color: 'white', }}>+</Text>
-          </View>
-        </Pressable>
+          {/* Add Button */}
+          <Pressable style={{ position: 'absolute', bottom: 1, right: 1, }} onPress={() => navigation.navigate('Add')}>
+            <View style={{
+              backgroundColor: '#FC5858',
+              width: 80,
+              height: 80,
+              borderRadius: 80,
+              alignItems: 'center',
+              justifyContent: 'center',
+              borderWidth: 7,
+              borderColor: 'white',
+              bottom: 8,
+              right: 8,
+            }}>
+              <Text style={{ fontSize: 50, color: 'white', }}>+</Text>
+            </View>
+          </Pressable>
+        </LinearGradient>
+        
 
         {/* DELETE MODAL */}
         <Modal
