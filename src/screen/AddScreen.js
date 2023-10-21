@@ -23,8 +23,7 @@ const AddScreen = ({ navigation }) => {
   const [itemDueTime, setItemDueTime] = useState(new Date());
   const [showTimePicker, setshowTimePicker] = useState(false);
   const [minsError, setMinsError] = useState(null);
-  const { height, width } = Dimensions.get('window');
-  const [titleError, setTitleError] = useState(null);
+  const { height, width } = Dimensions.get("window");
 
   const toggleDatePicker = () => {
     setShowDatePicker(!showDatePicker);
@@ -93,11 +92,19 @@ const AddScreen = ({ navigation }) => {
     }
   };
 
-  const handleCancel = () => {
-    // Navigate back to the previous screen
-    navigation.goBack();
+  const addItem = () => {
+    insertItem(
+      itemName,
+      itemDescription,
+      itemMins,
+      formatDate(itemDueDate),
+      formatTime(itemDueTime),
+      (id) => {
+        console.log("Item added with ID:", id);
+        navigation.navigate("Todo", { refreshKey: "todo" + Math.random() });
+      }
+    );
   };
-  
 
   return (
     <>
@@ -123,8 +130,6 @@ const AddScreen = ({ navigation }) => {
             value={itemName}
             onChangeText={(text) => setItemName(text)}
           />
-
-          {titleError && <Text style={styles.errorText}>{titleError}</Text>}
 
           {/* Due Date */}
           <Text style={styles.subtitle}>Due Date</Text>
@@ -201,9 +206,6 @@ const AddScreen = ({ navigation }) => {
             {/* Add Button */}
             <TouchableOpacity style={styles.addButton} onPress={addItem}>
               <Text style={styles.buttonText}>Add</Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.cancelButton} onPress={handleCancel}>
-              <Text style={styles.cancelbuttonText}>Cancel</Text>
             </TouchableOpacity>
           </View>
         </LinearGradient>

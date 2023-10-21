@@ -380,22 +380,28 @@ const TodoScreen = ({ navigation }) => {
               }
             />
           </View>
+        </LinearGradient>
 
         {/* Add Button */}
-        <Pressable style={{ position: 'absolute', bottom: 1, right: 1, }} onPress={() => navigation.navigate('Add')}>
-          <View style={{
-            backgroundColor: '#FC5858',
-            width: 80,
-            height: 80,
-            borderRadius: 80,
-            alignItems: 'center',
-            justifyContent: 'center',
-            borderWidth: 7,
-            borderColor: 'white',
-            bottom: 8,
-            right: 8,
-          }}>
-            <Text style={{ fontSize: 50, color: 'white', }}>+</Text>
+        <Pressable
+          style={{ position: "absolute", bottom: 1, right: 1 }}
+          onPress={() => navigation.navigate("Add")}
+        >
+          <View
+            style={{
+              backgroundColor: "#FC5858",
+              width: 80,
+              height: 80,
+              borderRadius: 80,
+              alignItems: "center",
+              justifyContent: "center",
+              borderWidth: 7,
+              borderColor: "white",
+              bottom: 8,
+              right: 8,
+            }}
+          >
+            <Text style={{ fontSize: 50, color: "white" }}>+</Text>
           </View>
         </Pressable>
 
