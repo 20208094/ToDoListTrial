@@ -180,29 +180,6 @@ const TodoScreen = ({ navigation }) => {
     }
   };
 
-  const formatDate = (rawDate) => {
-    let date = new Date(rawDate);
-
-    let year = date.getFullYear();
-    let month = date.getMonth() + 1;
-    let day = date.getDate();
-
-    return `${year}-${month < 10 ? "0" : ""}${month}-${
-      day < 10 ? "0" : ""
-    }${day}`;
-  };
-
-  const formatTime = (rawTime) => {
-    let time = new Date(rawTime);
-    let hours = time.getHours();
-    let minutes = time.getMinutes();
-    let seconds = time.getSeconds();
-
-    return `${("0" + hours).slice(-2)}:${("0" + minutes).slice(-2)}:${(
-      "0" + seconds
-    ).slice(-2)}`;
-  };
-
   const renderTodoItem = ({ item, index }) => (
     <View style={{ marginBottom: 10 }}>
       <SwipeListView
