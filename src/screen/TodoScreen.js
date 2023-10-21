@@ -682,7 +682,7 @@ const TodoScreen = ({ navigation }) => {
                       textAlign: "center",
                     }}
                   >
-                    {viewTaskDetails ? formatTime(viewTaskDetails.duetime) : ""}
+                    {viewTaskDetails ? viewTaskDetails.duetime : ""}
                   </Text>
                 </View>
                 {/* NOTIF MINS */}
