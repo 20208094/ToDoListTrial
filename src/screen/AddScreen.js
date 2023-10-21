@@ -84,7 +84,7 @@ const AddScreen = ({ navigation }) => {
   const validateMins = (input) => {
     const minsPattern = /^[0-9]*$/;
 
-    if (!minsPattern.test(input) || input < 0 || input > 60) {
+    if (!minsPattern.test(input) || input < 0 || input > 59) {
       setMinsError("Please enter a valid number between 0 and 60");
     } else {
       setMinsError(null);
