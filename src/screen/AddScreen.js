@@ -204,8 +204,6 @@ const AddScreen = ({ navigation }) => {
           />
           {minsError && <Text style={styles.errorText}>{minsError}</Text>}
 
-          {minsError && <Text style={styles.errorText}>{minsError}</Text>}
-
           {/* Task Description */}
           <Text style={[styles.subtitle, { marginTop: 10 }]}>
             Task Description
