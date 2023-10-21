@@ -7,7 +7,7 @@ const db = SQLite.openDatabase("db21.db");
 const initDatabase = () => {
   db.transaction((tx) => {
     tx.executeSql(
-      "CREATE TABLE IF NOT EXISTS items (id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT, description TEXT, mins INTEGER, duedate DATETIME, duetime DATETIME, status TEXT)",
+      "CREATE TABLE IF NOT EXISTS items (id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT, description TEXT, mins INTEGER, duedate DATETIME, duetime TEXT, status TEXT)",
       [],
       () => {
         console.log("Table created successfully");
