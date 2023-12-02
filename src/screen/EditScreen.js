@@ -27,13 +27,11 @@ const EditScreen = ({ route, navigation }) => {
     getItemById(itemId, (item) => {
       setItemName(item.name);
       setItemDescription(item.description);
-      setItemMins(item.mins.toString());
+      setItemMins(item.mins);
       setItemDueDate(item.duedate);
       setItemDueTime(item.duetime);
     });
   }, [itemId]);
-
-  const stringTime = itemDueTime.toString();
 
   const toggleDatePicker = () => {
     setShowDatePicker(!showDatePicker);
@@ -181,7 +179,7 @@ const EditScreen = ({ route, navigation }) => {
               <TextInput
                 onPress={toggleTimePicker}
                 style={styles.input}
-                value={stringTime || formatTime(itemDueTime)}
+                value={formatTime(itemDueTime)}
                 onChangeText={setItemDueTime}
                 onPressIn={toggleTimePicker}
               />

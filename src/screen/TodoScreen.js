@@ -1,4 +1,5 @@
 import React, { useEffect, useState, useCallback } from "react";
+
 import {
   View,
   Text,
@@ -13,7 +14,6 @@ import {
 import { IconButton, Checkbox } from "react-native-paper";
 import {
   deleteItem,
-  initDatabase,
   updateItem,
   getUncheckedItems,
   updateItemStatus,
@@ -49,7 +49,6 @@ const TodoScreen = ({ navigation }) => {
   }, []);
 
   useEffect(() => {
-    initDatabase();
     fetchItems();
     const unsubscribe = navigation.addListener("focus", () => {
       fetchItems();
@@ -277,7 +276,8 @@ const TodoScreen = ({ navigation }) => {
                 icon="pencil"
                 iconColor="black"
                 onPress={() =>
-                  navigation.navigate("Edit", { itemId: data.item.id })
+                  //navigation.navigate("Edit", { itemId: data.item.id })
+                  navigation.navigate("Edit", { itemId: data.item.id})
                 }
               />
             </Pressable>
@@ -454,6 +454,7 @@ const TodoScreen = ({ navigation }) => {
                   marginBottom: 25,
                 }}
               >
+                {itemId.name}
                 Do you really want to delete this task?
               </Text>
 

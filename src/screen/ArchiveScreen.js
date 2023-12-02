@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useCallback } from 'react';
 import { View, Text, Button, FlatList, Dimensions, Image, Pressable, Modal, TextInput } from 'react-native';
 import { IconButton, Checkbox } from 'react-native-paper';
-import { deleteItem, initDatabase, updateItemStatus, getCheckedItems } from './Database';
+import { deleteItem, updateItemStatus, getCheckedItems } from './Database';
 import { LinearGradient } from 'expo-linear-gradient';
 import BottomNavigation from '../navigation/BottomNav';
 import { SwipeListView } from 'react-native-swipe-list-view';
@@ -25,7 +25,6 @@ const ArchiveScreen = ({ navigation }) => {
     }, []);
 
     useEffect(() => {
-        initDatabase();
         fetchItems();
         const unsubscribe = navigation.addListener('focus', () => {
             fetchItems();

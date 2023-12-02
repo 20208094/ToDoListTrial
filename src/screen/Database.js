@@ -1,45 +1,39 @@
 // database.js
 
-import * as SQLite from "expo-sqlite";
+import { firebase } from "./../../config.js";
 
-const db = SQLite.openDatabase("db21.db");
+const db = firebase.firestore().collection("assignmentsTable");
 
-const initDatabase = () => {
-  db.transaction((tx) => {
-    tx.executeSql(
-      "CREATE TABLE IF NOT EXISTS items (id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT, description TEXT, mins INTEGER, duedate DATETIME, duetime TEXT, status TEXT)",
-      [],
-      () => {
-        console.log("Table created successfully");
-      },
-      (error) => {
-        console.log("Error creating table:", error);
-      }
-    );
-  });
-};
-
+//natangal callback
 const insertItem = (name, description, mins, duedate, duetime, callback) => {
-  db.transaction(
-    (tx) => {
-      tx.executeSql(
-        "INSERT INTO items (name, description, mins, duedate, duetime, status) VALUES (?, ?, ?, ?, ?, ?)",
-        [name, description, mins, duedate, duetime, "unchecked"],
-        (_, results) => {
-          callback(results.insertId);
-        },
-        (error) => {
-          console.log("Error executing SQL statement:", error);
-          console.log("Failed SQL statement:", error.sqlStatement);
-          console.log("SQL statement parameters:", error.sqlParams);
-          callback(null); // Pass null to indicate an error to the callback
-        }
-      );
-    },
-    (error) => {
-      console.log("Transaction error:", error);
-    }
-  );
+  if (!name && !description && !mins && !duedate && !duetime) {
+    alert("empty fields");
+    return;
+  }
+
+  const timestamp = firebase.firestore.FieldValue.serverTimestamp();
+  const container = {
+    createdAt: timestamp,
+    name: name,
+    description: description,
+    mins: mins,
+    duedate: duedate,
+    duetime: duetime,
+    status: "unchecked",
+  };
+  db.add(container)
+    .then(() => {
+      alert("Successfully added");
+      callback(results.insertId);
+      name = "";
+      description = "";
+      mins = "";
+      duedate = "";
+      duetime = "";
+    })
+    .catch((error) => {
+      console.log(error);
+    });
 };
 
 const updateItem = (
@@ -51,18 +45,24 @@ const updateItem = (
   duetime,
   callback
 ) => {
-  db.transaction((tx) => {
-    tx.executeSql(
-      "UPDATE items SET name = ?, description = ?, mins = ?, duedate = ?, duetime = ? WHERE id = ?",
-      [name, description, mins, duedate, duetime, id],
-      () => {
-        callback();
-      },
-      (error) => {
-        console.log("Error updating item:", error);
-      }
-    );
-  });
+  if (!userInputNew) {
+    alert("Empty fields detected");
+    return;
+  }
+  db.doc(id)
+    .update({
+      name: name,
+      description: description,
+      mins: mins,
+      duedate: duedate,
+      duetime: duetime,
+    })
+    .then(() => {
+      alert("Updated");
+    })
+    .catch((error) => {
+      alert(error);
+    });
 };
 
 const updateItemStatus = (
@@ -75,116 +75,92 @@ const updateItemStatus = (
   status,
   callback
 ) => {
-  db.transaction((tx) => {
-    tx.executeSql(
-      "UPDATE items SET name = ?, description = ?, mins = ?, duedate = ?, duetime = ?, status = ? WHERE id = ?",
-      [name, description, mins, duedate, duetime, status, id],
-      () => {
-        callback();
-      },
-      (error) => {
-        console.log("Error updating item:", error);
-      }
-    );
-  });
+  //code here
 };
 
 const getAllItems = (callback) => {
-  db.transaction((tx) => {
-    tx.executeSql(
-      "SELECT * FROM items",
-      [],
-      (_, results) => {
-        const items = [];
-        for (let i = 0; i < results.rows.length; i++) {
-          items.push(results.rows.item(i));
-        }
-        callback(items);
-      },
-      (error) => {
-        console.log("Error fetching items:", error);
-      }
-    );
+  db.orderBy("createdAt", "desc").onSnapshot((querySnapshot) => {
+    const dataFromFirebase = [];
+    querySnapshot.forEach((document) => {
+      // These variables here are the column names in your firestore
+      const { createdAt, description, duedate, duetime, mins, name, status } =
+        document.data();
+      // Pushes the fetched data into the array container
+      dataFromFirebase.push({
+        id: document.id,
+        description: description,
+        duedate: duedate,
+        duetime: duetime,
+        mins: mins,
+        name: name,
+      });
+    });
+    callback(dataFromFirebase);
   });
 };
 
 const getUncheckedItems = (callback) => {
-  db.transaction((tx) => {
-    tx.executeSql(
-      'SELECT * FROM items WHERE status = "unchecked"',
-      [],
-      (_, results) => {
-        const items = [];
-        for (let i = 0; i < results.rows.length; i++) {
-          items.push(results.rows.item(i));
-        }
-        callback(items);
-      },
-      (error) => {
-        console.log("Error fetching items:", error);
-      }
-    );
-  });
+  db.where("status", "==", "unchecked")
+    .orderBy("createdAt", "desc")
+    .onSnapshot((querySnapshot) => {
+      const dataFromFirebase = [];
+      querySnapshot.forEach((document) => {
+        // These variables here are the column names in your firestore
+        const { createdAt, description, duedate, duetime, mins, name, status } =
+          document.data();
+        // Pushes the fetched data into the array container
+        dataFromFirebase.push({
+          id: document.id,
+          description: description,
+          duedate: duedate,
+          duetime: duetime,
+          mins: mins,
+          name: name,
+        });
+      });
+      callback(dataFromFirebase);
+    });
 };
 
 const getCheckedItems = (callback) => {
-  db.transaction((tx) => {
-    tx.executeSql(
-      'SELECT * FROM items WHERE status = "checked"',
-      [],
-      (_, results) => {
-        const items = [];
-        for (let i = 0; i < results.rows.length; i++) {
-          items.push(results.rows.item(i));
-        }
-        callback(items);
-      },
-      (error) => {
-        console.log("Error fetching items:", error);
-      }
-    );
-  });
+  //code here
 };
 
 const deleteItem = (id, callback) => {
-  db.transaction((tx) => {
-    tx.executeSql(
-      "DELETE FROM items WHERE id = ?",
-      [id],
-      () => {
-        callback();
-      },
-      (error) => {
-        console.log("Error deleting item:", error);
-      }
-    );
-  });
+  db.doc(id)
+    .delete()
+    .then(() => {
+      alert("Deleted");
+      callback();
+    })
+    .catch((error) => {
+      alert("error");
+    });
 };
 
 const getItemById = (id, callback) => {
-  db.transaction((tx) => {
-    tx.executeSql(
-      "SELECT * FROM items WHERE id = ?",
-      [id],
-      (_, results) => {
-        if (results.rows.length > 0) {
-          const item = results.rows.item(0);
-          callback(item);
-        } else {
-          console.log(`No item found with ID ${id}`);
-          callback(null);
-        }
-      },
-      (error) => {
-        console.log("Error fetching item by ID:", error);
-        callback(null);
-      }
-    );
-  });
+  db.where("id", "==", id)
+    .onSnapshot((querySnapshot) => {
+      const dataFromFirebase = [];
+      querySnapshot.forEach((document) => {
+        // These variables here are the column names in your firestore
+        const { createdAt, description, duedate, duetime, mins, name, status } =
+          document.data();
+        // Pushes the fetched data into the array container
+        dataFromFirebase.push({
+          id: document.id,
+          description: description,
+          duedate: duedate,
+          duetime: duetime,
+          mins: mins,
+          name: name,
+        });
+      });
+      callback(dataFromFirebase);
+    });
 };
 
 export {
-  initDatabase,
   insertItem,
   updateItem,
   deleteItem,
