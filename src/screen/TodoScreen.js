@@ -153,16 +153,16 @@ const TodoScreen = ({ navigation }) => {
     try {
       const duetime = item.duetime;
       const [hours, minutes, seconds] = duetime.split(":");
-      
+
       let notifMinutes = minutes - item.mins;
-  
+
       // Ensure notifMinutes is within the valid range (0-59)
       if (notifMinutes < 0) {
         notifMinutes = 0;
       } else if (notifMinutes > 59) {
         notifMinutes = 59;
       }
-  
+
       await Notifications.scheduleNotificationAsync({
         content: {
           title: "Task Reminder",
@@ -276,8 +276,7 @@ const TodoScreen = ({ navigation }) => {
                 icon="pencil"
                 iconColor="black"
                 onPress={() =>
-                  //navigation.navigate("Edit", { itemId: data.item.id })
-                  navigation.navigate("Edit", { itemId: data.item.id})
+                  navigation.navigate("Edit", { itemId: data.item.id })
                 }
               />
             </Pressable>
@@ -417,7 +416,7 @@ const TodoScreen = ({ navigation }) => {
           transparent={true}
           visible={modalDeleteVisible}
           onRequestClose={() => {
-            Alert.alert("Modal has been closed.");
+            //Alert.alert("Modal has been closed.");
             setModalDeleteVisible(!modalDeleteVisible);
           }}
         >
@@ -454,7 +453,6 @@ const TodoScreen = ({ navigation }) => {
                   marginBottom: 25,
                 }}
               >
-                {itemId.name}
                 Do you really want to delete this task?
               </Text>
 
@@ -518,7 +516,7 @@ const TodoScreen = ({ navigation }) => {
           transparent={true}
           visible={modalViewVisible}
           onRequestClose={() => {
-            Alert.alert("Modal has been closed.");
+            //Alert.alert("Modal has been closed.");
             setViewTaskDetails(null);
             setModalViewVisible(!modalViewVisible);
           }}

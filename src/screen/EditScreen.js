@@ -27,11 +27,13 @@ const EditScreen = ({ route, navigation }) => {
     getItemById(itemId, (item) => {
       setItemName(item.name);
       setItemDescription(item.description);
-      setItemMins(item.mins);
+      setItemMins(item.mins.toString());
       setItemDueDate(item.duedate);
       setItemDueTime(item.duetime);
     });
   }, [itemId]);
+
+  const stringTime = itemDueTime.toString();
 
   const toggleDatePicker = () => {
     setShowDatePicker(!showDatePicker);
@@ -101,9 +103,10 @@ const EditScreen = ({ route, navigation }) => {
       itemDueTime,
       () => {
         console.log("Item updated successfully");
-        navigation.navigate("Todo", { refreshKey: "todo" + Math.random() });
       }
     );
+
+      navigation.navigate("Todo");
   };
 
   const handleCancel = () => {
@@ -179,7 +182,7 @@ const EditScreen = ({ route, navigation }) => {
               <TextInput
                 onPress={toggleTimePicker}
                 style={styles.input}
-                value={formatTime(itemDueTime)}
+                value={stringTime || formatTime(itemDueTime)}
                 onChangeText={setItemDueTime}
                 onPressIn={toggleTimePicker}
               />

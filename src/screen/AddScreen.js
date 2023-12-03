@@ -77,11 +77,8 @@ const AddScreen = ({ navigation }) => {
     let time = new Date(rawTime);
     let hour = time.getHours();
     let min = time.getMinutes();
-    let seconds = time.getSeconds();
 
-    return `${("0" + hour).slice(-2)}:${("0" + min).slice(-2)}:${(
-      "0" + seconds
-    ).slice(-2)}`;
+    return `${("0" + hour).slice(-2)}:${("0" + min).slice(-2)}`;
   };
 
   const validateMins = (input) => {
@@ -96,11 +93,12 @@ const AddScreen = ({ navigation }) => {
   };
 
   const addItem = () => {
-    if (!itemName.trim()) {  // Check if itemName is empty or just whitespace
-      setTitleError('You need to write a title');
-      return;  // Return early so the insert action doesn't proceed
+    if (!itemName.trim()) {
+      // Check if itemName is empty or just whitespace
+      setTitleError("You need to write a title");
+      return; // Return early so the insert action doesn't proceed
     } else {
-      setTitleError(null);  // Clear any previous error
+      setTitleError(null); // Clear any previous error
     }
 
     insertItem(
@@ -111,9 +109,10 @@ const AddScreen = ({ navigation }) => {
       formatTime(itemDueTime),
       (id) => {
         console.log("Item added with ID:", id);
-        navigation.navigate("Todo", { refreshKey: "todo" + Math.random() });
       }
     );
+ 
+    navigation.navigate("Todo");
   };
 
   const handleCancel = () => {
@@ -221,7 +220,10 @@ const AddScreen = ({ navigation }) => {
             <TouchableOpacity style={styles.addButton} onPress={addItem}>
               <Text style={styles.buttonText}>Add</Text>
             </TouchableOpacity>
-            <TouchableOpacity style={styles.cancelButton} onPress={handleCancel}>
+            <TouchableOpacity
+              style={styles.cancelButton}
+              onPress={handleCancel}
+            >
               <Text style={styles.cancelbuttonText}>Cancel</Text>
             </TouchableOpacity>
           </View>

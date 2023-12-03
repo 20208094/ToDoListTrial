@@ -5,7 +5,7 @@ import { firebase } from "./../../config.js";
 const db = firebase.firestore().collection("assignmentsTable");
 
 //natangal callback
-const insertItem = (name, description, mins, duedate, duetime, callback) => {
+const insertItem = (name, description, mins, duedate, duetime) => {
   if (!name && !description && !mins && !duedate && !duetime) {
     alert("empty fields");
     return;
@@ -23,8 +23,7 @@ const insertItem = (name, description, mins, duedate, duetime, callback) => {
   };
   db.add(container)
     .then(() => {
-      alert("Successfully added");
-      callback(results.insertId);
+      //callback(results.insertId);
       name = "";
       description = "";
       mins = "";
@@ -45,7 +44,7 @@ const updateItem = (
   duetime,
   callback
 ) => {
-  if (!userInputNew) {
+  if (!name && !description && !mins && !duedate && !duetime) {
     alert("Empty fields detected");
     return;
   }
@@ -56,9 +55,6 @@ const updateItem = (
       mins: mins,
       duedate: duedate,
       duetime: duetime,
-    })
-    .then(() => {
-      alert("Updated");
     })
     .catch((error) => {
       alert(error);
@@ -130,7 +126,6 @@ const deleteItem = (id, callback) => {
   db.doc(id)
     .delete()
     .then(() => {
-      alert("Deleted");
       callback();
     })
     .catch((error) => {
@@ -139,24 +134,31 @@ const deleteItem = (id, callback) => {
 };
 
 const getItemById = (id, callback) => {
-  db.where("id", "==", id)
-    .onSnapshot((querySnapshot) => {
-      const dataFromFirebase = [];
-      querySnapshot.forEach((document) => {
-        // These variables here are the column names in your firestore
+  db.doc(id)
+    .get()
+    .then((document) => {
+      if (document.exists) {
         const { createdAt, description, duedate, duetime, mins, name, status } =
           document.data();
-        // Pushes the fetched data into the array container
-        dataFromFirebase.push({
+
+        const dataFromFirebase = {
           id: document.id,
+          createdAt: createdAt,
           description: description,
           duedate: duedate,
           duetime: duetime,
           mins: mins,
           name: name,
-        });
-      });
-      callback(dataFromFirebase);
+          status: status,
+        };
+
+        callback(dataFromFirebase);
+      } else {
+        console.log("No such document!");
+      }
+    })
+    .catch((error) => {
+      console.log("Error getting document:", error);
     });
 };
 
