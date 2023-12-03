@@ -171,7 +171,7 @@ const TodoScreen = ({ navigation }) => {
         trigger: {
           hour: parseInt(hours),
           minute: parseInt(notifMinutes),
-          repeats: true,
+          repeats: false,
         },
       });
     } catch (error) {
