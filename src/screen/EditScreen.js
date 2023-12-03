@@ -10,6 +10,7 @@ import {
 } from "react-native";
 import { updateItem, getItemById } from "./Database";
 import DateTimePicker from "@react-native-community/datetimepicker";
+import DropDownPicker from "react-native-dropdown-picker";
 import BottomNavigation from "../navigation/BottomNav";
 
 const EditScreen = ({ route, navigation }) => {
@@ -23,6 +24,15 @@ const EditScreen = ({ route, navigation }) => {
   const [showTimePicker, setshowTimePicker] = useState(false);
   const [minsError, setMinsError] = useState(null);
 
+  const [itemSubmission, setItemSubmission] = useState("");
+  const [isOpen, setIsOpen] = useState(false);
+  const submissions = [
+    { label: "1/4 Paper", value: "1/4 Paper" },
+    { label: "1/2 Paper", value: "1/2 Paper" },
+    { label: "Short Bond Paper", value: "Short Bond Paper" },
+    { label: "Long Bond Paper", value: "Long Bond Paper" },
+    { label: "Online", value: "Online" },
+  ];
   useEffect(() => {
     getItemById(itemId, (item) => {
       setItemName(item.name);
@@ -30,6 +40,7 @@ const EditScreen = ({ route, navigation }) => {
       setItemMins(item.mins.toString());
       setItemDueDate(item.duedate);
       setItemDueTime(item.duetime);
+      setItemSubmission(item.submission);
     });
   }, [itemId]);
 
@@ -101,12 +112,13 @@ const EditScreen = ({ route, navigation }) => {
       itemMins,
       formatDate(itemDueDate),
       itemDueTime,
+      itemSubmission,
       () => {
         console.log("Item updated successfully");
       }
     );
 
-      navigation.navigate("Todo");
+    navigation.navigate("Todo");
   };
 
   const handleCancel = () => {
@@ -212,6 +224,23 @@ const EditScreen = ({ route, navigation }) => {
             onChangeText={(text) => setItemDescription(text)}
           />
 
+          {/* Submission */}
+          <Text style={[styles.subtitle, { marginTop: 10 }]}>Submission</Text>
+          <DropDownPicker
+            style={[styles.input]}
+            items={submissions}
+            open={isOpen}
+            setOpen={() => setIsOpen(!isOpen)}
+            value={itemSubmission}
+            setValue={(val) => setItemSubmission(val)}
+            autoScroll
+            maxHeight={200}
+            placeholder="Select Item Submission"
+            showTickIcon={true}
+            showArrowIcon={true}
+            borderColor={false}
+          />
+
           <View style={styles.buttonsContainer}>
             <TouchableOpacity
               style={styles.addButton}
@@ -269,6 +298,7 @@ const styles = StyleSheet.create({
   },
   input: {
     backgroundColor: "white",
+    borderColor: "transparent",
     borderRadius: 10,
     padding: 10,
     marginBottom: 10,

@@ -12,7 +12,9 @@ import { insertItem } from "./Database";
 import { LinearGradient } from "expo-linear-gradient";
 import { Dimensions } from "react-native";
 import DateTimePicker from "@react-native-community/datetimepicker";
+import DropDownPicker from "react-native-dropdown-picker";
 import BottomNavigation from "../navigation/BottomNav";
+import { color } from "@rneui/base";
 
 const AddScreen = ({ navigation }) => {
   const [itemName, setItemName] = useState("");
@@ -26,6 +28,15 @@ const AddScreen = ({ navigation }) => {
   const { height, width } = Dimensions.get("window");
   const [titleError, setTitleError] = useState(null);
 
+  const [itemSubmission, setItemSubmission] = useState("");
+  const [isOpen, setIsOpen] = useState(false);
+  const submissions = [
+    { label: "1/4 Paper", value: "1/4 Paper" },
+    { label: "1/2 Paper", value: "1/2 Paper" },
+    { label: "Short Bond Paper", value: "Short Bond Paper" },
+    { label: "Long Bond Paper", value: "Long Bond Paper" },
+    { label: "Online", value: "Online" },
+  ];
   const toggleDatePicker = () => {
     setShowDatePicker(!showDatePicker);
   };
@@ -107,11 +118,12 @@ const AddScreen = ({ navigation }) => {
       itemMins,
       formatDate(itemDueDate),
       formatTime(itemDueTime),
+      itemSubmission,
       (id) => {
         console.log("Item added with ID:", id);
       }
     );
- 
+
     navigation.navigate("Todo");
   };
 
@@ -214,6 +226,23 @@ const AddScreen = ({ navigation }) => {
             onChangeText={(text) => setItemDescription(text)}
           />
 
+          {/* Submission */}
+          <Text style={[styles.subtitle, { marginTop: 10 }]}>Submission</Text>
+          <DropDownPicker
+            style={[styles.input]}
+            items={submissions}
+            open={isOpen}
+            setOpen={() => setIsOpen(!isOpen)}
+            value={itemSubmission}
+            setValue={(val) => setItemSubmission(val)}
+            autoScroll
+            maxHeight={200}
+            placeholder="Select Item Submission"
+            showTickIcon={true}
+            showArrowIcon={true}
+            borderColor={false}
+          />
+
           {/* Buttons Container */}
           <View style={styles.buttonsContainer}>
             {/* Add Button */}
@@ -281,6 +310,7 @@ const styles = StyleSheet.create({
   },
   input: {
     backgroundColor: "white",
+    borderColor: "transparent",
     borderRadius: 10,
     padding: 10,
     marginBottom: 10,

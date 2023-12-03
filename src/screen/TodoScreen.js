@@ -693,6 +693,32 @@ const TodoScreen = ({ navigation }) => {
                     {viewTaskDetails ? viewTaskDetails.mins : ""}
                   </Text>
                 </View>
+
+                {/* Submission */}
+                <View
+                  style={{
+                    borderColor: "#FC5858",
+                    borderWidth: 1,
+                    borderRadius: 20,
+                    padding: 5,
+                    marginTop: 5,
+                  }}
+                >
+                  <Text
+                    style={{ fontSize: 20, marginBottom: 10, marginStart: 10 }}
+                  >
+                    Submission:{" "}
+                  </Text>
+                  <Text
+                    style={{
+                      fontSize: 35,
+                      marginBottom: 10,
+                      textAlign: "center",
+                    }}
+                  >
+                    {viewTaskDetails ? viewTaskDetails.submission : ""}
+                  </Text>
+                </View>
               </View>
               <View
                 style={{

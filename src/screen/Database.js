@@ -5,7 +5,7 @@ import { firebase } from "./../../config.js";
 const db = firebase.firestore().collection("assignmentsTable");
 
 //natangal callback
-const insertItem = (name, description, mins, duedate, duetime) => {
+const insertItem = (name, description, mins, duedate, duetime, submission) => {
   if (!name && !description && !mins && !duedate && !duetime) {
     alert("empty fields");
     return;
@@ -19,6 +19,7 @@ const insertItem = (name, description, mins, duedate, duetime) => {
     mins: mins,
     duedate: duedate,
     duetime: duetime,
+    submission: submission,
     status: "unchecked",
   };
   db.add(container)
@@ -42,9 +43,10 @@ const updateItem = (
   mins,
   duedate,
   duetime,
+  submission,
   callback
 ) => {
-  if (!name && !description && !mins && !duedate && !duetime) {
+  if (!name && !description && !mins && !duedate && !duetime && !submission) {
     alert("Empty fields detected");
     return;
   }
@@ -55,6 +57,7 @@ const updateItem = (
       mins: mins,
       duedate: duedate,
       duetime: duetime,
+      submission: submission,
     })
     .catch((error) => {
       alert(error);
@@ -69,9 +72,23 @@ const updateItemStatus = (
   duedate,
   duetime,
   status,
+  submission,
   callback
 ) => {
-  //code here
+  db.doc(id)
+    .update({
+      name: name,
+      description: description,
+      mins: mins,
+      duedate: duedate,
+      duetime: duetime,
+      submission: submission,
+      status: status,
+    })
+    .catch((error) => {
+      alert(error);
+    });
+  callback();
 };
 
 const getAllItems = (callback) => {
@@ -79,8 +96,16 @@ const getAllItems = (callback) => {
     const dataFromFirebase = [];
     querySnapshot.forEach((document) => {
       // These variables here are the column names in your firestore
-      const { createdAt, description, duedate, duetime, mins, name, status } =
-        document.data();
+      const {
+        createdAt,
+        description,
+        duedate,
+        duetime,
+        mins,
+        name,
+        submission,
+        status,
+      } = document.data();
       // Pushes the fetched data into the array container
       dataFromFirebase.push({
         id: document.id,
@@ -89,6 +114,7 @@ const getAllItems = (callback) => {
         duetime: duetime,
         mins: mins,
         name: name,
+        submission: submission,
       });
     });
     callback(dataFromFirebase);
@@ -102,8 +128,16 @@ const getUncheckedItems = (callback) => {
       const dataFromFirebase = [];
       querySnapshot.forEach((document) => {
         // These variables here are the column names in your firestore
-        const { createdAt, description, duedate, duetime, mins, name, status } =
-          document.data();
+        const {
+          createdAt,
+          description,
+          duedate,
+          duetime,
+          mins,
+          name,
+          submission,
+          status,
+        } = document.data();
         // Pushes the fetched data into the array container
         dataFromFirebase.push({
           id: document.id,
@@ -112,6 +146,7 @@ const getUncheckedItems = (callback) => {
           duetime: duetime,
           mins: mins,
           name: name,
+          submission: submission,
         });
       });
       callback(dataFromFirebase);
@@ -119,7 +154,35 @@ const getUncheckedItems = (callback) => {
 };
 
 const getCheckedItems = (callback) => {
-  //code here
+  db.where("status", "==", "checked")
+    .orderBy("createdAt", "desc")
+    .onSnapshot((querySnapshot) => {
+      const dataFromFirebase = [];
+      querySnapshot.forEach((document) => {
+        // These variables here are the column names in your firestore
+        const {
+          createdAt,
+          description,
+          duedate,
+          duetime,
+          mins,
+          name,
+          submission,
+          status,
+        } = document.data();
+        // Pushes the fetched data into the array container
+        dataFromFirebase.push({
+          id: document.id,
+          description: description,
+          duedate: duedate,
+          duetime: duetime,
+          mins: mins,
+          name: name,
+          submission: submission,
+        });
+      });
+      callback(dataFromFirebase);
+    });
 };
 
 const deleteItem = (id, callback) => {
@@ -138,8 +201,16 @@ const getItemById = (id, callback) => {
     .get()
     .then((document) => {
       if (document.exists) {
-        const { createdAt, description, duedate, duetime, mins, name, status } =
-          document.data();
+        const {
+          createdAt,
+          description,
+          duedate,
+          duetime,
+          mins,
+          name,
+          submission,
+          status,
+        } = document.data();
 
         const dataFromFirebase = {
           id: document.id,
@@ -150,6 +221,7 @@ const getItemById = (id, callback) => {
           mins: mins,
           name: name,
           status: status,
+          submission: submission,
         };
 
         callback(dataFromFirebase);

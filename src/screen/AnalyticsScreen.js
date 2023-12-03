@@ -6,9 +6,6 @@ import { LineChart } from "react-native-chart-kit";
 
 import BottomNavigation from "../navigation/BottomNav";
 
-// import houseImage from "./house.png";
-// import analyticsImage from "./analytics.png";
-
 const MyLineChart = () => {
   const chartWidth = Dimensions.get("window").width - 40; // Adjusted width
   const chartHeight = 200; // Adjusted height
@@ -25,6 +22,7 @@ const MyLineChart = () => {
             },
           ],
         }}
+        
         width={Dimensions.get("window").width - 80}
         height={510}
         chartConfig={{
@@ -58,6 +56,7 @@ const AnalyticsScreen = ({ navigation }) => {
         {/* Add Task Note Container */}
         <View style={styles.noteContainer}>
           <Text style={styles.noteText}>Analytics</Text>
+          <Text style={styles.noteText}>Activities Done for this Week</Text>
         </View>
 
         {/* New Container */}
