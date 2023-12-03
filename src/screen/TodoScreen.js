@@ -209,6 +209,7 @@ const TodoScreen = ({ navigation }) => {
                     item.mins,
                     item.duedate,
                     item.duetime,
+                    item.submission,
                     "checked",
                     () => {
                       fetchItems();
