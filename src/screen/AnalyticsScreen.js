@@ -1,35 +1,23 @@
-import { StatusBar } from 'expo-status-bar';
 import React from "react";
-import {
-  View,
-  Text,
-  TextInput,
-  TouchableOpacity,
-  Image,
-  StyleSheet,
-  Dimensions,
-  ScrollView,
-} from "react-native";
-import { LinearGradient } from 'expo-linear-gradient';
+import { View, Text, StyleSheet, Dimensions, ScrollView } from "react-native";
+import { LinearGradient } from "expo-linear-gradient";
 
-import {
-  LineChart
-} from 'react-native-chart-kit'
+import { LineChart } from "react-native-chart-kit";
 
-import BottomNavigation from '../navigation/BottomNav';
+import BottomNavigation from "../navigation/BottomNav";
 
 // import houseImage from "./house.png";
 // import analyticsImage from "./analytics.png";
 
 const MyLineChart = () => {
-  const chartWidth = Dimensions.get('window').width - 40; // Adjusted width
+  const chartWidth = Dimensions.get("window").width - 40; // Adjusted width
   const chartHeight = 200; // Adjusted height
   return (
     <>
       <Text style={styles.header}>Line Chart</Text>
       <LineChart
         data={{
-          labels: ['Mon', 'Tue', 'Wed', 'Thurs', 'Fri', 'Sat', 'Sun'],
+          labels: ["Mon", "Tue", "Wed", "Thurs", "Fri", "Sat", "Sun"],
           datasets: [
             {
               data: [1, 3, 5, 7, 9, 10],
@@ -37,12 +25,12 @@ const MyLineChart = () => {
             },
           ],
         }}
-        width={Dimensions.get('window').width - 80}
+        width={Dimensions.get("window").width - 80}
         height={510}
         chartConfig={{
-          backgroundColor: 'white',
-          backgroundGradientFrom: 'white',
-          backgroundGradientTo: 'white',
+          backgroundColor: "white",
+          backgroundGradientFrom: "white",
+          backgroundGradientTo: "white",
           decimalPlaces: 0,
           color: (opacity = 1) => `rgba(0, 0, 0, ${opacity})`,
           style: {
@@ -52,7 +40,6 @@ const MyLineChart = () => {
         style={{
           marginVertical: 16,
           borderRadius: 16,
-          
         }}
       />
     </>
@@ -62,7 +49,7 @@ const MyLineChart = () => {
 const AnalyticsScreen = ({ navigation }) => {
   return (
     <View style={styles.container}>
-     <ScrollView contentContainerStyle={{ flexGrow: 1, paddingTop: '25%' }}>
+      <ScrollView contentContainerStyle={{ flexGrow: 1, paddingTop: "25%" }}>
         {/* Title Container */}
         {/* <View style={styles.titleContainer}>
           <Text style={styles.titleText}>Assignment Apps</Text>
@@ -74,7 +61,10 @@ const AnalyticsScreen = ({ navigation }) => {
         </View>
 
         {/* New Container */}
-        <LinearGradient colors={['#FC5858', 'pink']} style={styles.newContainer}>
+        <LinearGradient
+          colors={["#FC5858", "pink"]}
+          style={styles.newContainer}
+        >
           {/* Title */}
           <Text style={styles.subtitle}>October</Text>
 
@@ -95,50 +85,50 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "white",
-    padding: 20
+    padding: 20,
   },
   titleContainer: {
     backgroundColor: "pink",
     borderRadius: 15,
     padding: 10,
     alignSelf: "flex-start",
-    marginBottom: 10
+    marginBottom: 10,
   },
   titleText: {
     color: "black",
-    fontSize: 20
+    fontSize: 20,
   },
   noteContainer: {
     backgroundColor: "pink",
     borderRadius: 15,
     padding: 10,
     alignSelf: "center",
-    marginBottom: 10
+    marginBottom: 10,
   },
   noteText: {
     color: "black",
-    fontSize: 18
+    fontSize: 18,
   },
   newContainer: {
     borderRadius: 15,
-    padding: 20
+    padding: 20,
   },
   subtitle: {
     color: "black",
     fontSize: 20,
     marginBottom: 10,
-    alignSelf:"center",
-    fontWeight: 'bold',
+    alignSelf: "center",
+    fontWeight: "bold",
   },
   input: {
     backgroundColor: "white",
     borderRadius: 10,
     padding: 10,
-    marginBottom: 10
+    marginBottom: 10,
   },
   buttonsContainer: {
     flexDirection: "row",
-    justifyContent: "space-between"
+    justifyContent: "space-between",
   },
   addButton: {
     backgroundColor: "#B94D4D",
@@ -146,7 +136,7 @@ const styles = StyleSheet.create({
     padding: 10,
     flex: 1,
     marginRight: 5,
-    alignItems: "center"
+    alignItems: "center",
   },
   cancelButton: {
     backgroundColor: "white",
@@ -154,17 +144,17 @@ const styles = StyleSheet.create({
     padding: 10,
     flex: 1,
     marginLeft: 5,
-    alignItems: "center"
+    alignItems: "center",
   },
   buttonText: {
-    color: "white"
+    color: "white",
   },
   cancelbuttonText: {
-    color: "black"
+    color: "black",
   },
   plusbuttonText: {
     color: "white",
-    fontSize: 30
+    fontSize: 30,
   },
   bottomContainer: {
     flexDirection: "row",
@@ -173,17 +163,17 @@ const styles = StyleSheet.create({
     backgroundColor: "pink",
     borderRadius: 15,
     padding: 10,
-    alignItems: "center"
+    alignItems: "center",
   },
   iconContainer: {
     alignItems: "center",
     borderRadius: 50,
-    padding: 10
+    padding: 10,
   },
   icon: {
     width: 30,
     height: 30,
-    borderRadius: 15
+    borderRadius: 15,
   },
   addButtonContainer: {
     backgroundColor: "#B94D4D",
@@ -194,8 +184,8 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     borderWidth: 2,
-    borderColor: "white"
-  }
+    borderColor: "white",
+  },
 });
 
 export default AnalyticsScreen;
