@@ -6,7 +6,7 @@ const db = firebase.firestore().collection("assignmentsTable");
 
 //natangal callback
 const insertItem = (name, description, mins, duedate, duetime, submission) => {
-  if (!name && !description && !mins && !duedate && !duetime) {
+  if (!name && !description && !mins && !duedate && !duetime && !submission) {
     alert("empty fields");
     return;
   }
@@ -19,8 +19,8 @@ const insertItem = (name, description, mins, duedate, duetime, submission) => {
     mins: mins,
     duedate: duedate,
     duetime: duetime,
-    submission: submission,
     status: "unchecked",
+    submission: submission,
   };
   db.add(container)
     .then(() => {
@@ -82,8 +82,8 @@ const updateItemStatus = (
       mins: mins,
       duedate: duedate,
       duetime: duetime,
-      submission: submission,
       status: status,
+      submission: submission,
     })
     .catch((error) => {
       alert(error);
@@ -178,6 +178,7 @@ const getCheckedItems = (callback) => {
           duetime: duetime,
           mins: mins,
           name: name,
+          status: status,
           submission: submission,
         });
       });
@@ -208,8 +209,8 @@ const getItemById = (id, callback) => {
           duetime,
           mins,
           name,
-          submission,
           status,
+          submission,
         } = document.data();
 
         const dataFromFirebase = {

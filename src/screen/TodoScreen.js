@@ -171,7 +171,7 @@ const TodoScreen = ({ navigation }) => {
         trigger: {
           hour: parseInt(hours),
           minute: parseInt(notifMinutes),
-          repeats: false,
+          repeats: true,
         },
       });
     } catch (error) {
@@ -209,8 +209,8 @@ const TodoScreen = ({ navigation }) => {
                     item.mins,
                     item.duedate,
                     item.duetime,
-                    item.submission,
                     "checked",
+                    item.submission,
                     () => {
                       fetchItems();
                     }
