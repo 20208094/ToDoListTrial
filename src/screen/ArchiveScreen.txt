@@ -23,24 +23,17 @@ const ArchiveScreen = ({ navigation }) => {
   const [deleteConfirmTodo, setDeleteConfirmTodo] = useState(null);
   const [modalViewVisible, setModalViewVisible] = useState(false);
   const [viewTaskDetails, setViewTaskDetails] = useState(null);
-  const [selectedDate, setSelectedDate] = useState(new Date());
 
   const { height, width } = Dimensions.get("window");
   const taskCon = height / 1.5;
 
   const fetchItems = useCallback(() => {
-    getCheckedItems((allItems) => {
-      const filteredItems = allItems.filter((item) => {
-        const itemDate = new Date(item.duedate);
-        const selectedDateObj = new Date(selectedDate);
-        return (
-          itemDate.getFullYear() === selectedDateObj.getFullYear() &&
-          itemDate.getMonth() === selectedDateObj.getMonth()
-        );
-      });
-      setItems(filteredItems);
+    console.log("Fetching items...");
+    getCheckedItems((items) => {
+      console.log("Fetched items:", items);
+      setItems(items);
     });
-  }, [selectedDate]);
+  }, []);
 
   useEffect(() => {
     fetchItems();
@@ -48,7 +41,11 @@ const ArchiveScreen = ({ navigation }) => {
       fetchItems();
     });
     return unsubscribe;
-  }, [fetchItems, selectedDate]);
+  }, []);
+
+  useEffect(() => {
+    console.log("Items updated:", items);
+  }, [items]);
 
   const deleteItemById = (id) => {
     deleteItem(id, () => {
@@ -76,18 +73,6 @@ const ArchiveScreen = ({ navigation }) => {
     const taskToView = items.find((item) => item.id === itemId);
     setViewTaskDetails(taskToView);
     setModalViewVisible(true);
-  };
-
-  const formatDate = (rawDate) => {
-    let date = new Date(rawDate);
-
-    let year = date.getFullYear();
-    let month = date.getMonth() + 1;
-    let day = date.getDate();
-
-    return `${year}-${month < 10 ? "0" : ""}${month}-${
-      day < 10 ? "0" : ""
-    }${day}`;
   };
 
   const renderTodoItem = ({ item, index }) => (
@@ -260,12 +245,10 @@ const ArchiveScreen = ({ navigation }) => {
         </View>
 
         <Calendar
-          style={{ height: 50 }}
-          onMonthChange={(day) => {
-            setSelectedDate(day.dateString);
+          onDayPress={(day) => {
+            console.log("selected day", day);
           }}
         />
-
         <LinearGradient
           colors={["#FC5858", "pink"]}
           style={{
