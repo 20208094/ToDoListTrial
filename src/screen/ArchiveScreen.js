@@ -15,7 +15,7 @@ import { deleteItem, updateItemStatus, getCheckedItems } from "./Database";
 import { LinearGradient } from "expo-linear-gradient";
 import BottomNavigation from "../navigation/BottomNav";
 import { SwipeListView } from "react-native-swipe-list-view";
-import { Calendar, CalendarList, Agenda } from "react-native-calendars";
+import { Calendar } from "react-native-calendars";
 
 const ArchiveScreen = ({ navigation }) => {
   const [items, setItems] = useState([]);

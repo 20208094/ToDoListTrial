@@ -4,42 +4,57 @@ import { LinearGradient } from "expo-linear-gradient";
 
 import { LineChart } from "react-native-chart-kit";
 import CalendarStrip from "react-native-calendar-strip";
+import { getAllItems } from "./Database";
 import BottomNavigation from "../navigation/BottomNav";
 
 const MyLineChart = () => {
+  const [items, setItems] = useState([]);
+  const [selectedWeekData, setSelectedWeekData] = useState([]);
   const [selectedWeekStart, setSelectedWeekStart] = useState(null);
   const [selectedWeekEnd, setSelectedWeekEnd] = useState(null);
-  const chartWidth = Dimensions.get("window").width - 40; // Adjusted width
-  const chartHeight = 200; // Adjusted height
+
+  const chartWidth = Dimensions.get("window").width - 80; // Adjusted width
+  const chartHeight = 500; // Adjusted height
+
+  const fetchItems = useCallback(() => {
+    getAllItems((items) => {
+      setItems(items);
+    });
+  }, []);
+
+  const filterDataByWeek = useCallback(() => {
+    if (selectedWeekStart && selectedWeekEnd) {
+      const filteredData = items.filter((item) => {
+        const itemDate = new Date(item.createdAt.toDate());
+        return (
+          itemDate >= selectedWeekStart &&
+          itemDate <= selectedWeekEnd &&
+          item.status === "checked"
+        );
+      });
+      setSelectedWeekData(filteredData);
+    }
+  }, [items, selectedWeekStart, selectedWeekEnd]);
+
+  useEffect(() => {
+    fetchItems();
+    filterDataByWeek();
+  }, [filterDataByWeek]);
+
   return (
     <>
-      <Text style={styles.header}>Line Chart</Text>
-      <CalendarStrip
-        scrollable
-        style={{ height: 60 }}
-        calendarColor={"white"}
-        calendarHeaderStyle={{ color: "black" }}
-        dateNumberStyle={{ color: "black" }}
-        dateNameStyle={{ color: "black" }}
-        iconContainer={{ flex: 0.1 }}
-        onWeekChanged={(start, end) => {
-          setSelectedWeekStart(start);
-          setSelectedWeekEnd(end);
-        }}
-      />
-
       <LineChart
         data={{
           labels: ["Mon", "Tue", "Wed", "Thurs", "Fri", "Sat", "Sun"],
           datasets: [
             {
-              data: [1, 3, 5, 7, 9, 10],
+              data: selectedWeekData.map((item) => 1),
               strokeWidth: 2,
             },
           ],
         }}
-        width={Dimensions.get("window").width - 80}
-        height={510}
+        width={chartWidth}
+        height={chartHeight}
         chartConfig={{
           backgroundColor: "white",
           backgroundGradientFrom: "white",
@@ -63,24 +78,16 @@ const AnalyticsScreen = ({ navigation }) => {
   return (
     <View style={styles.container}>
       <ScrollView contentContainerStyle={{ flexGrow: 1, paddingTop: "25%" }}>
-        {/* Title Container */}
-        {/* <View style={styles.titleContainer}>
-          <Text style={styles.titleText}>Assignment Apps</Text>
-        </View> */}
-
         {/* Add Task Note Container */}
         <View style={styles.noteContainer}>
           <Text style={styles.noteText}>Analytics</Text>
-          <Text style={styles.noteText}>Activities Done for this Week</Text>
         </View>
-
         {/* New Container */}
         <LinearGradient
           colors={["#FC5858", "pink"]}
           style={styles.newContainer}
         >
-          {/* Title */}
-          <Text style={styles.subtitle}>October</Text>
+          
 
           {/* chart */}
           <View>

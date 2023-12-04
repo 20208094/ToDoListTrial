@@ -14,6 +14,7 @@ DEPENDENCY INSTALLATION:
     npx expo install expo-sqlite
     npm install --save react-native-dropdown-picker
     npm install --save react-native-calendars
+    npm install --save react-native-calendar-strip
     npm install firebase
 ----------------------------------------------------------------------------------
 EXPORT GUIDE:
