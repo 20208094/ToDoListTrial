@@ -14,6 +14,7 @@ const insertItem = (name, description, mins, duedate, duetime, submission) => {
   const timestamp = firebase.firestore.FieldValue.serverTimestamp();
   const container = {
     createdAt: timestamp,
+    updatedAt: timestamp,
     name: name,
     description: description,
     mins: mins,
@@ -46,12 +47,14 @@ const updateItem = (
   submission,
   callback
 ) => {
+  const timestamp = firebase.firestore.FieldValue.serverTimestamp();
   if (!name && !description && !mins && !duedate && !duetime && !submission) {
     alert("Empty fields detected");
     return;
   }
   db.doc(id)
     .update({
+      updatedAt: timestamp,
       name: name,
       description: description,
       mins: mins,
@@ -75,8 +78,10 @@ const updateItemStatus = (
   submission,
   callback
 ) => {
+  const timestamp = firebase.firestore.FieldValue.serverTimestamp();
   db.doc(id)
     .update({
+      updatedAt: timestamp,
       name: name,
       description: description,
       mins: mins,
