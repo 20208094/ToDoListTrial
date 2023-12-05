@@ -260,7 +260,7 @@ const ArchiveScreen = ({ navigation }) => {
         </View>
 
         <Calendar
-          style={{ height: 50 }}
+          style={{ height: 50, borderRadius: 10 }}
           onMonthChange={(day) => {
             setSelectedDate(day.dateString);
           }}
@@ -271,7 +271,7 @@ const ArchiveScreen = ({ navigation }) => {
           style={{
             borderTopRightRadius: 40,
             borderBottomLeftRadius: 40,
-            height: height / 1.5,
+            height: '80%',
             marginTop: 5,
             padding: 20,
             fontSize: 20,
@@ -281,7 +281,7 @@ const ArchiveScreen = ({ navigation }) => {
             style={{
               backgroundColor: "#dbdbdb",
               padding: 10,
-              height: taskCon - 50,
+              height: '100%',
               borderRadius: 6,
               borderColor: "#fff",
               borderWidth: 5,
