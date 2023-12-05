@@ -140,10 +140,6 @@ const EditScreen = ({ route, navigation }) => {
   return (
     <>
       <View style={styles.container}>
-        <View style={styles.noteContainer}>
-          <Text style={styles.noteText}>Edit Task</Text>
-        </View>
-
         <View style={styles.newContainer}>
           {/* TITLE */}
           <Text style={styles.subtitle}>Title</Text>
@@ -212,12 +208,12 @@ const EditScreen = ({ route, navigation }) => {
           {minsError && <Text style={styles.errorText}>{minsError}</Text>}
 
           {/* DESCRIPTION */}
-          <Text style={[styles.subtitle, { marginTop: 10 }]}>
+          <Text style={[styles.subtitle]}>
             Task Description
           </Text>
 
           <TextInput
-            style={[styles.input, { height: 100, textAlignVertical: "top" }]}
+            style={[styles.input, { textAlignVertical: "top" }]}
             placeholder="Enter item description"
             multiline={true}
             value={itemDescription}
@@ -225,7 +221,7 @@ const EditScreen = ({ route, navigation }) => {
           />
 
           {/* Submission */}
-          <Text style={[styles.subtitle, { marginTop: 10 }]}>Submission</Text>
+          <Text style={[styles.subtitle]}>Submission</Text>
           <DropDownPicker
             style={[styles.input]}
             items={submissions}
