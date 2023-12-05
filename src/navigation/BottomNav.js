@@ -19,7 +19,7 @@ const BottomNavigation = ({ navigation }) => {
   });
 
   return (
-    <LinearGradient colors={['#FC5858', 'pink', 'pink', 'pink', '#FC5858']} style={styles.bottomContainer}>
+    <LinearGradient colors={['#FC5858', 'pink', 'pink']} style={styles.bottomContainer}>
       {/* ARCHIVE BUTTON */}
       <TouchableOpacity style={getButtonStyle('Archive')} onPress={() => navigation.navigate('Archive')}>
         <Image source={doubleCheck} style={styles.icon} />
@@ -43,7 +43,8 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     marginTop: 20,
-    borderRadius: 15,
+    borderTopLeftRadius: 15,
+    borderTopRightRadius: 15,
     padding: 10,
     alignItems: 'center',
     position: 'absolute',

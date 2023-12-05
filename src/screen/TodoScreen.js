@@ -391,7 +391,7 @@ const TodoScreen = ({ navigation }) => {
 
         {/* Add Button */}
         <Pressable
-          style={{ position: "absolute", bottom: 35, right: 1 }}
+          style={{ position: "absolute", bottom: 35, right: -23 }}
           onPress={() => navigation.navigate("Add")}
         >
           <View

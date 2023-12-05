@@ -220,8 +220,8 @@ const ArchiveScreen = ({ navigation }) => {
 
   return (
     <>
-      <View style={{ marginHorizontal: 16, marginTop: 200, fontSize: 20 }}>
-        <View
+      <View style={{ marginHorizontal: 16, marginTop: 30, fontSize: 20 }}>
+        {/* <View
           style={{
             flexDirection: "row",
             borderColor: "#FC5858",
@@ -244,7 +244,7 @@ const ArchiveScreen = ({ navigation }) => {
             source={require("../../assets/splash.png")}
             style={{ height: 60, width: 60, marginBottom: 5, marginEnd: 10 }}
           />
-        </View>
+        </View> */}
         <View>
           <Text
             style={{
@@ -271,7 +271,7 @@ const ArchiveScreen = ({ navigation }) => {
           style={{
             borderTopRightRadius: 40,
             borderBottomLeftRadius: 40,
-            height: '80%',
+            height: '75%',
             marginTop: 5,
             padding: 20,
             fontSize: 20,
