@@ -351,7 +351,7 @@ const TodoScreen = ({ navigation }) => {
           style={{
             borderTopRightRadius: 40,
             borderBottomLeftRadius: 40,
-            height: height / 1.5,
+            height: '90%',
             marginTop: 5,
             padding: 20,
             fontSize: 20,
@@ -361,7 +361,7 @@ const TodoScreen = ({ navigation }) => {
             style={{
               backgroundColor: "#dbdbdb",
               padding: 10,
-              height: taskCon - 50,
+              height: "100%",
               borderRadius: 6,
               borderColor: "#fff",
               borderWidth: 5,
@@ -391,7 +391,7 @@ const TodoScreen = ({ navigation }) => {
 
         {/* Add Button */}
         <Pressable
-          style={{ position: "absolute", bottom: 1, right: 1 }}
+          style={{ position: "absolute", bottom: 35, right: 1 }}
           onPress={() => navigation.navigate("Add")}
         >
           <View

@@ -505,7 +505,7 @@ const ArchiveScreen = ({ navigation }) => {
                   </Text>
                   <Text
                     style={{
-                      fontSize: 35,
+                      fontSize: 20,
                       marginBottom: 10,
                       textAlign: "center",
                     }}
@@ -534,7 +534,7 @@ const ArchiveScreen = ({ navigation }) => {
                   </Text>
                   <Text
                     style={{
-                      fontSize: 35,
+                      fontSize: 20,
                       marginBottom: 10,
                       textAlign: "center",
                     }}
@@ -563,7 +563,7 @@ const ArchiveScreen = ({ navigation }) => {
                   </Text>
                   <Text
                     style={{
-                      fontSize: 35,
+                      fontSize: 20,
                       marginBottom: 10,
                       textAlign: "center",
                     }}
@@ -592,7 +592,7 @@ const ArchiveScreen = ({ navigation }) => {
                   </Text>
                   <Text
                     style={{
-                      fontSize: 35,
+                      fontSize: 20,
                       marginBottom: 10,
                       textAlign: "center",
                     }}
@@ -621,7 +621,7 @@ const ArchiveScreen = ({ navigation }) => {
                   </Text>
                   <Text
                     style={{
-                      fontSize: 35,
+                      fontSize: 20,
                       marginBottom: 10,
                       textAlign: "center",
                     }}
@@ -650,7 +650,7 @@ const ArchiveScreen = ({ navigation }) => {
                   </Text>
                   <Text
                     style={{
-                      fontSize: 35,
+                      fontSize: 20,
                       marginBottom: 10,
                       textAlign: "center",
                     }}
