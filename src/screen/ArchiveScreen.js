@@ -121,9 +121,9 @@ const ArchiveScreen = ({ navigation }) => {
                     item.duedate,
                     item.duetime,
                     "unchecked",
+                    item.submission,
                     () => {
                       console.log("Item status updated successfully");
-
                       fetchItems();
                     }
                   );
