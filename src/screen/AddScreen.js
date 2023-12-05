@@ -135,13 +135,6 @@ const AddScreen = ({ navigation }) => {
   return (
     <>
       <View style={styles.container}>
-        {/* Add Task Note Container */}
-        <LinearGradient
-          colors={["#FC5858", "pink"]}
-          style={styles.noteContainer}
-        >
-          <Text style={styles.noteText}>Add Task</Text>
-        </LinearGradient>
 
         {/* New Container */}
         <LinearGradient
@@ -216,18 +209,18 @@ const AddScreen = ({ navigation }) => {
           {minsError && <Text style={styles.errorText}>{minsError}</Text>}
 
           {/* Task Description */}
-          <Text style={[styles.subtitle, { marginTop: 10 }]}>
+          <Text style={[styles.subtitle]}>
             Task Description
           </Text>
           <TextInput
-            style={[styles.input, { height: 100, textAlignVertical: "top" }]}
+            style={[styles.input, { height: 70, textAlignVertical: "top" }]}
             placeholder="Enter item description"
             value={itemDescription}
             onChangeText={(text) => setItemDescription(text)}
           />
 
           {/* Submission */}
-          <Text style={[styles.subtitle, { marginTop: 10 }]}>Submission</Text>
+          <Text style={[styles.subtitle]}>Submission</Text>
           <DropDownPicker
             style={[styles.input]}
             items={submissions}
@@ -280,8 +273,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "white",
-    padding: 20,
-    paddingTop: 40,
+    padding: 15,
     justifyContent: "center", // Center content vertically
     alignItems: "center", // Center content horizontally
   },
