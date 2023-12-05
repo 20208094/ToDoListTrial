@@ -13,10 +13,10 @@ const MyLineChart = () => {
   const chartHeight = 200; // Adjusted height
   return (
     <>
-      <Text style={styles.header}>Line Chart</Text>
+      {/* <Text style={styles.header}>Line Chart</Text> */}
       <CalendarStrip
         scrollable
-        style={{ height: 60 }}
+        style={{ height: 60, borderRadius: 10 }}
         calendarColor={"white"}
         calendarHeaderStyle={{ color: "black" }}
         dateNumberStyle={{ color: "black" }}
@@ -62,17 +62,17 @@ const MyLineChart = () => {
 const AnalyticsScreen = ({ navigation }) => {
   return (
     <View style={styles.container}>
-      <ScrollView contentContainerStyle={{ flexGrow: 1, paddingTop: "25%" }}>
+      <ScrollView contentContainerStyle={{ flexGrow: 1, paddingTop: "10%" }}>
         {/* Title Container */}
         {/* <View style={styles.titleContainer}>
           <Text style={styles.titleText}>Assignment Apps</Text>
         </View> */}
 
-        {/* Add Task Note Container */}
+        {/* Add Task Note Container
         <View style={styles.noteContainer}>
           <Text style={styles.noteText}>Analytics</Text>
           <Text style={styles.noteText}>Activities Done for this Week</Text>
-        </View>
+        </View> */}
 
         {/* New Container */}
         <LinearGradient
@@ -80,7 +80,7 @@ const AnalyticsScreen = ({ navigation }) => {
           style={styles.newContainer}
         >
           {/* Title */}
-          <Text style={styles.subtitle}>October</Text>
+          {/* <Text style={styles.subtitle}>October</Text> */}
 
           {/* chart */}
           <View>
