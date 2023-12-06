@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "ToDoList",
-    "slug": "ToDoList",
+    "name": "AssignmentList",
+    "slug": "AsssignmentList",
     "version": "1.0.0",
     "assetBundlePatterns": [
       "**/*"
