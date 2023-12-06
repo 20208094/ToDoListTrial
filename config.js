@@ -17,7 +17,9 @@ const firebaseConfig = {
 
 //  Checks whether the Firebase application has been initialized or not
 if (!firebase.apps.length) {
-  firebase.initializeApp(firebaseConfig);
+  firebase.initializeApp(firebaseConfig, {
+    persistence: true,
+  });
 }
 // const app = initializeApp(firebaseConfig)
 export { firebase };

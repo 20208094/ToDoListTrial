@@ -10,6 +10,7 @@
     "gradlew": "cd android && ./gradlew"
   },
   "dependencies": {
+    "@expo/webpack-config": "^19.0.0",
     "@react-native-async-storage/async-storage": "1.18.2",
     "@react-native-community/checkbox": "^0.5.16",
     "@react-native-community/datetimepicker": "7.2.0",
@@ -41,10 +42,10 @@
     "react-native-push-notification": "^8.1.1",
     "react-native-safe-area-context": "4.6.3",
     "react-native-screens": "~3.22.0",
+    "react-native-svg": "^14.1.0",
     "react-native-swipe-list-view": "^3.2.9",
     "react-native-web": "~0.19.6",
-    "react-time-range": "^1.0.4",
-    "@expo/webpack-config": "^19.0.0"
+    "react-time-range": "^1.0.4"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0"
