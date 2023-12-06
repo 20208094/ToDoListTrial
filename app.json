@@ -1,11 +1,10 @@
 {
   "expo": {
     "name": "AssignmentList",
+    "displayName": "AssignmentList",
     "slug": "AsssignmentList",
     "version": "1.0.0",
-    "assetBundlePatterns": [
-      "**/*"
-    ],
+    "assetBundlePatterns": ["**/*"],
     "notification": {
       "icon": "./assets/splash.png"
     },
@@ -13,6 +12,11 @@
       "image": "./assets/pink.png",
       "resizeMode": "cover",
       "backgroundColor": "#FFC0CB"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "388daecd-89e8-4f98-964b-bb193c75b73c"
+      }
     }
   },
   "extra": {
