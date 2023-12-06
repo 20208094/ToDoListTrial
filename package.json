@@ -28,6 +28,7 @@
     "expo-task-manager": "~11.3.0",
     "firebase": "^10.7.0",
     "react": "18.2.0",
+    "react-dom": "^18.2.0",
     "react-native": "0.72.5",
     "react-native-calendar-strip": "^2.2.6",
     "react-native-calendars": "^1.1302.0",
@@ -41,7 +42,9 @@
     "react-native-safe-area-context": "4.6.3",
     "react-native-screens": "~3.22.0",
     "react-native-swipe-list-view": "^3.2.9",
-    "react-time-range": "^1.0.4"
+    "react-native-web": "~0.19.6",
+    "react-time-range": "^1.0.4",
+    "@expo/webpack-config": "^19.0.0"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0"
