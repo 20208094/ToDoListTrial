@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "AssignmentList",
-    "displayName": "AssignmentList",
+    "name": "Assignment List App",
+    "displayName": "Assignment List App",
     "slug": "AsssignmentList",
     "version": "1.0.0",
     "assetBundlePatterns": ["**/*"],
@@ -12,11 +12,6 @@
       "image": "./assets/pink.png",
       "resizeMode": "cover",
       "backgroundColor": "#FFC0CB"
-    },
-    "extra": {
-      "eas": {
-        "projectId": "388daecd-89e8-4f98-964b-bb193c75b73c"
-      }
     }
   },
   "extra": {
@@ -24,5 +19,5 @@
       "handleNotifications": false
     }
   },
-  "name": "AssignmentList"
+  "name": "Assignment List App"
 }
