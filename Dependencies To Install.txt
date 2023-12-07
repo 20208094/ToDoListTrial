@@ -1,4 +1,10 @@
 ----------------------------------------------------------------------------------
+
+FIREBASE ACCOUNT:
+Email: assignmentlist9@gmail.com
+Password: assignmentMOBCOM1**
+
+----------------------------------------------------------------------------------
 DEPENDENCY INSTALLATION:
     npm install
     npx expo install react-native-screens react-native-safe-area-context
