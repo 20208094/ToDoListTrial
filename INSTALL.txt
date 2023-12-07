@@ -15,8 +15,10 @@ DEPENDENCY INSTALLATION:
     npm install --save react-native-dropdown-picker
     npm install --save react-native-calendars
     npm install --save react-native-calendar-strip
+    npm install react-native-svg
     npm install firebase
 ----------------------------------------------------------------------------------
+
 EXPORT GUIDE:
     WATCH:
         https://www.youtube.com/watch?v=cmXZNGXjXPM
